@@ -8,7 +8,7 @@
 
 ## shapes
 
-### gyroelegonated bipyramids
+### gyroelegonated dipyramids
 
 top: pyramid
 
@@ -16,15 +16,17 @@ middle: anti-prism
 
 bottom: pyramid
 
-### gyroelongated triangular bipryamid
+### gyroelongated triangular dipyramid
 
-### [gyroelongated square bipryamid](http://mathworld.wolfram.com/GyroelongatedSquareDipyramid.html)
+### [gyroelongated square dipyramid](http://mathworld.wolfram.com/GyroelongatedSquareDipyramid.html)
 
-### gyroelongated pentagonal bipryamid
+### gyroelongated pentagonal dipyramid
 
 - [pentagonal pyramid](http://mathworld.wolfram.com/PentagonalPyramid.html)
 
-### gyroelongated hexagonal bipryamid
+![gryoelegonated pentagonal dipyramid](./images/gryoelegonated-pentagonal-dipyramid.png]
+
+### gyroelongated hexagonal dipyramid
 
 ## resources
 

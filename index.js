@@ -1,11 +1,27 @@
 var createScene = require('gl-plot3d')
 var createMesh = require('gl-mesh3d')
+var range = require('just-range')
+var sc = require('simplicial-complex')
 
 var scene = createScene()
 
 function geoelongatedPentagonalDipyramid (length) {
+  var height = (1/2) * Math.sqrt(3) * length
+
   var shape = {
-    positions: [],
+    positions: [
+      // top of upper pyramid: 0
+      [0, 0, 0],
+
+      // bottom of upper pyramid / top of antiprism: 1-5
+      ...range(5).map(index => [...polygon({ sides: 5, radius: length, index }), height]),
+
+      // top of lower pyramid / bottom of antiprism: 6-10
+      ...range(5).map(index => [...polygon({ sides: 5, radius: length, index, rotation: Math.PI/5 }), height * 2]),
+
+      // bottom of lower pyramid: 11
+      [0, 0, height * 3]
+    ],
     cells: [
       // upper pyramid
       [0, 1, 2],
@@ -35,30 +51,6 @@ function geoelongatedPentagonalDipyramid (length) {
     ]
   }
 
-  const height = (1/2) * Math.sqrt(3) * length
-
-  // top of upper pyramid: 0
-  shape.positions.push([0, 0, 0])
-
-  // bottom of upper pyramid / top of antiprism: 1-5
-  polygon(
-    { n: 5, r: 1, center: { x: 0, y: 0 } },
-    ({ i, x, y }) => {
-      shape.positions.push([x, y, height])
-    }
-  )
-
-  // top of lower pyramid / bottom of antiprism: 6-10
-  polygon(
-    { n: 5, r: 1, center: { x: 0, y: 0 } },
-    ({ i, x, y }) => {
-      shape.positions.push([x, y, height * 2])
-    }
-  )
-
-  // bottom of lower pyramid: 11
-  shape.positions.push([0, 0, height * 3])
-
   console.log('shape', shape)
 
   return shape
@@ -68,9 +60,9 @@ var shape = geoelongatedPentagonalDipyramid(1)
 
 var mesh = createMesh({
   gl: scene.gl,
-  cells: shape.cells,
+  cells: sc.skeleton(shape.cells, 1),
   positions: shape.positions,
-  colormap: 'jet'
+  colormap: 'rainbow-soft'
 })
 
 scene.add(mesh)
@@ -81,4 +73,20 @@ function polygon ({ n, r, center }, cb) {
     const y = center.y + r * Math.sin(2 * Math.PI * i / n)
     cb({ i, x, y })
   }
+}
+
+// returns single point on polygon
+function polygon (options) {
+  const {
+    sides,
+    index,
+    radius,
+    center = [0, 0],
+    rotation = 0
+  } = options
+
+  const x = center[0] + radius * Math.cos(2 * Math.PI * (index / sides) + rotation)
+  const y = center[1] + radius * Math.sin(2 * Math.PI * (index / sides) + rotation)
+
+  return [x, y]
 }

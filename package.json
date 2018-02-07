@@ -12,7 +12,9 @@
   "dependencies": {
     "bunny": "^1.0.1",
     "gl-mesh3d": "^1.3.2",
-    "gl-plot3d": "^1.5.5"
+    "gl-plot3d": "^1.5.5",
+    "just-range": "^2.0.0",
+    "simplicial-complex": "^1.0.0"
   },
   "devDependencies": {
     "budo": "^11.1.0"

@@ -1,0 +1,20 @@
+{
+  "name": "chandeliedrons",
+  "version": "1.0.0",
+  "description": "[chandeliers](https://en.wikipedia.org/wiki/Chandelier) from [polyhedra](https://en.wikipedia.org/wiki/Polyhedron)",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo index.js --live"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bunny": "^1.0.1",
+    "gl-mesh3d": "^1.3.2",
+    "gl-plot3d": "^1.5.5"
+  },
+  "devDependencies": {
+    "budo": "^11.1.0"
+  }
+}

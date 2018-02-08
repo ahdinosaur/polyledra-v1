@@ -33,15 +33,15 @@ an icosahedron is a 20-sided shape which regular angle patterns and uniform leng
 
 it's also a gyroelgonated pentagonal dipryamid (my original understanding of the shape): on the top and bottom is a [pentagonal pyramid](http://mathworld.wolfram.com/PentagonalPyramid.html), in the middle is an [pentagonal antiprism](https://en.wikipedia.org/wiki/Pentagonal_antiprism)
 
-![icosahedron](./images/icosahedron.png)
+![icosahedron](./shapes/images/icosahedron.png)
 
 ### [octahedron](https://en.wikipedia.org/wiki/Octahedron)
 
-![octahedron](./images/octahedron.png)
+![octahedron](./shapes/images/octahedron.png)
 
 ### [tetrahedron](https://en.wikipedia.org/wiki/Tetrahedron)
 
-![tetrahedron](./images/tetrahedron.png)
+![tetrahedron](./shapes/images/tetrahedron.png)
 
 ## plan
 

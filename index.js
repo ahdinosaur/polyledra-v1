@@ -5,7 +5,63 @@ var sc = require('simplicial-complex')
 
 var scene = createScene()
 
-function geoelongatedPentagonalDipyramid (length) {
+function tetrahedron (length) {
+  // https://en.wikipedia.org/wiki/Tetrahedron#Formulas_for_a_regular_tetrahedron
+
+  const a = 1 / Math.sqrt(8/3)
+  return {
+    positions: [
+      [0, 0, 1 * a],
+      [Math.sqrt(8/9) * a, 0 , -1/3 * a],
+      [-Math.sqrt(2/9) * a, Math.sqrt(2/3) * a, -1/3 * a],
+      [-Math.sqrt(2/9) * a, -Math.sqrt(2/3) * a, -1/3 * a]
+    ],
+    cells: [
+      [0, 1, 2],
+      [0, 2, 3],
+      [0, 3, 1],
+      [1, 2, 3]
+    ]
+  }
+}
+
+function octahedron (length) {
+  // https://en.wikipedia.org/wiki/Octahedron#Cartesian_coordinates
+
+  const a = 1 / Math.sqrt(2)
+  return {
+    positions: [
+      // top: 0
+      [0, 0, 1 * a],
+
+      // middle square: 1-4
+      [1 * a, 0, 0],
+      [0, 1 * a, 0],
+      [-1 * a, 0, 0],
+      [0, -1 * a, 0],
+
+      // bottom: 5
+      [0, 0, -1 * a]
+    ],
+    cells: [
+      // top
+      [0, 1, 2],
+      [0, 2, 3],
+      [0, 3, 4],
+      [0, 4, 1],
+      
+      // bottom
+      [5, 1, 2],
+      [5, 2, 3],
+      [5, 3, 4],
+      [5, 4, 1]
+    ]
+  }
+}
+
+function icosahedron (length) {
+  // implemented as a gyroelongated pentagonal dipyramid
+
   var height = (1/2) * Math.sqrt(3) * length
 
   var shape = {
@@ -56,7 +112,7 @@ function geoelongatedPentagonalDipyramid (length) {
   return shape
 }
 
-var shape = geoelongatedPentagonalDipyramid(1)
+var shape = tetrahedron(1)
 
 var mesh = createMesh({
   gl: scene.gl,

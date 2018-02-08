@@ -9,25 +9,26 @@ after playing with [aburndance](https://github.com/ahdinosaur/aburndance), i tho
 - i want to go [back to the BeagleBone](https://github.com/ahdinosaur/pixelbeat/tree/bbb), but this time using Rust instead of JavaScript
 - i want to get [back into 3d printing](https://github.com/ahdinosaur/prusa-mendel) for enclosures and structures
 - i want to upgrade from breadboards to protoboards to custom pcb circuits, out-source soldering!
+- i want to play with graphics code
 
-i was sitting on a hill listening to music at a festival (sober!), when i saw a 20-sided shape hanging over a stage, with fairy lights strung around the edges. :sparkles:
+i was sitting on a hill listening to music at a gathering in the forest last weekend, when i saw a 20-sided shape hanging over a stage, with fairy lights strung around the edges. :sparkles:
 
 i thought "what if i did the same with leds"? :rainbow:
 
-i then continued to spend the rest of the festival obssessing, which led into this project. :cat:
+i then continued to spend the rest of the festival obsessing about the shape, leds, and rust interfaces, which led to here. :cat:
 
-## design constraints
+## shapes
+
+### design constraints
 
 to simplify production, we want:
 
 - MUST HAVE uniform length edges (easy for buying led strip channels)
 - COULD HAVE uniform angle patterns  (easier for making 3d printed joints)
 
-## shapes
-
 ### [icosahedron](https://en.wikipedia.org/wiki/Regular_icosahedron)
 
-the original gansta shape!
+the original gansta shape from the festival!
 
 an icosahedron is a 20-sided shape which regular angle patterns and uniform length edges.
 
@@ -42,6 +43,22 @@ it's also a gyroelgonated pentagonal dipryamid (my original understanding of the
 ### [tetrahedron](https://en.wikipedia.org/wiki/Tetrahedron)
 
 ![tetrahedron](./shapes/images/tetrahedron.png)
+
+### star
+
+led strips that start a single center point and explode outwards
+
+### candle
+
+wrap led matrix (grids) into a cylinder
+
+### loops
+
+many concentric circles, like a visualization of an atom: protons in the center, electrons around
+
+### vines
+
+hang led strips from the top, maybe uniform to form a 3d space
 
 ## plan
 
@@ -94,7 +111,6 @@ simple strategy to daisy chain around shape: start at top, go down to bottom, ba
 
 ## resources
 
-- "led aluminum channel"
 - [Platonic solid](https://en.wikipedia.org/wiki/Platonic_solid)
 - [Johnson Solids](http://mathworld.wolfram.com/JohnsonSolid.html): regular faces, uniform length edges
 - [CGAL](https://doc.cgal.org/latest/Manual/packages.html#PkgPolyhedronSummary)

@@ -1,0 +1,7 @@
+[package]
+name = "pixelctl"
+version = "0.1.0"
+authors = ["Michael Williams <michael.williams@enspiral.com>"]
+
+[dependencies]
+fps_clock = "2.0"

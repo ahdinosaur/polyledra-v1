@@ -4,4 +4,6 @@ version = "0.1.0"
 authors = ["Michael Williams <michael.williams@enspiral.com>"]
 
 [dependencies]
+kiss3d = "0.13"
+nalgebra = "0.14"
 fps_clock = "2.0"

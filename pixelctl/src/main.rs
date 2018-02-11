@@ -7,6 +7,7 @@ use std::thread;
 use std::sync::mpsc::{channel, Sender, Receiver, Iter};
 use na::{Translation3};
 use kiss3d::window::Window;
+use kiss3d::scene::SceneNode;
 use kiss3d::light::Light;
 
 type Time = f32;
@@ -77,6 +78,8 @@ fn create_display_tx() -> Sender<DisplayMessage> {
             let DisplayMessage { pixel_shape } = display_message;
             let PixelShape { points, colors } = pixel_shape;
 
+            let mut pixels: Vec<SceneNode> = Vec::with_capacity(points.len());
+
             for (index, point) in points.iter().enumerate() {
                 let position = &point.position;
                 let color = colors.get(index).unwrap();
@@ -89,6 +92,10 @@ fn create_display_tx() -> Sender<DisplayMessage> {
 
             if !window.render() {
               panic!("window did not render!");
+            }
+
+            for pixel in pixels.iter_mut() {
+                window.remove(pixel);
             }
         }
     });

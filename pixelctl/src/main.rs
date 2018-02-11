@@ -132,7 +132,7 @@ fn main() {
     for clock_message in clock_iter {
         let render_message = RenderMessage {
             time: clock_message.time,
-            point_shape: point_shape
+            point_shape: point_shape.clone()
         };
         render_tx.send(render_message).unwrap();
     }
@@ -154,9 +154,9 @@ fn create_point_shape (options: PointShapeOptions) -> PointShape {
     let mut points = Vec::with_capacity(edges.len() * (num_pixels_per_edge as usize));
 
     for edge in edges.iter() {
-        let &(aIndex, bIndex) = edge;
-        let a = vertices.get(aIndex).unwrap();
-        let b = vertices.get(bIndex).unwrap();
+        let &(a_index, b_index) = edge;
+        let a = vertices.get(a_index).unwrap();
+        let b = vertices.get(b_index).unwrap();
 
         let diff_x = b.x - a.x;
         let diff_y = b.y - a.y;
@@ -184,18 +184,21 @@ fn create_point_shape (options: PointShapeOptions) -> PointShape {
     return point_shape
 }
 
+#[derive(Clone, Copy)]
 struct RGB {
     pub red: f32,
     pub green: f32,
     pub blue: f32
 }
 
+#[derive(Clone, Copy)]
 struct Position {
     pub x: f32,
     pub y: f32,
     pub z: f32
 }
 
+#[derive(Clone)]
 struct AbstractShape {
     pub vertices: Vec<Position>,
     pub edges: Vec<(usize, usize)>
@@ -207,14 +210,17 @@ struct PointShapeOptions {
     pub pixel_density: f32
 }
 
+#[derive(Clone, Copy)]
 struct Point {
     pub position: Position
 }
 
+#[derive(Clone)]
 struct PointShape {
     pub points: Vec<Point>
 }
 
+#[derive(Clone)]
 struct PixelShape {
     pub points: Vec<Point>,
     pub colors: Vec<RGB>

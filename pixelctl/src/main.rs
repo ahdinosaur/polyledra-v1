@@ -17,16 +17,16 @@ fn main() {
     let dot_shape = shape::create_dot_shape(shape::DotShapeOptions {
         abstract_shape,
         edge_length: 1.0,
-        pixel_density: 10.0
+        pixel_density: 60.0
     });
+
+    let render_dot_shape = render::RenderMessage::DotShape(dot_shape);
+    render_tx.send(render_dot_shape).unwrap();
 
     let clock_iter: Iter<clock::ClockMessage> = clock_rx.iter();
     for clock_message in clock_iter {
-        let render_message = render::RenderMessage {
-            time: clock_message.time,
-            dot_shape: dot_shape.clone()
-        };
-        render_tx.send(render_message).unwrap();
+        let render_time = render::RenderMessage::Time(clock_message.time);
+        render_tx.send(render_time).unwrap();
     }
 }
 

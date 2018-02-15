@@ -30,6 +30,14 @@ pub struct DotShape {
     pub dots: Vec<Dot>
 }
 
+impl DotShape {
+    pub fn none() -> Self {
+        DotShape {
+            dots: Vec::new()
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct PixelShape {
     pub dots: Vec<Dot>,

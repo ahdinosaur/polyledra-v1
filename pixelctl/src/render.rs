@@ -7,9 +7,9 @@ use shape;
 use color;
 use color::Color;
 
-pub struct RenderMessage {
-    pub time: clock::Time,
-    pub dot_shape: shape::DotShape
+pub enum RenderMessage {
+    Time(clock::Time),
+    DotShape(shape::DotShape)
 }
 
 pub fn create_render_tx() -> Sender<RenderMessage> {
@@ -17,25 +17,40 @@ pub fn create_render_tx() -> Sender<RenderMessage> {
 
     let (render_tx, render_rx) = channel::<RenderMessage>();
     thread::spawn(move|| {
+        let mut time;
+        let mut dot_shape = shape::DotShape::none();
+
         for render_message in render_rx {
-            let dot_shape = render_message.dot_shape;
-            let dots = dot_shape.dots;
-            let colors = dots
-                .iter()
-                .map(|_dot| {
-                    return color::RGB { red: 0.0, green: 1.0, blue: 0.0 };
-                })
-                .map(|color| color.to_rgb())
-                .collect();
-            let pixel_shape = shape::PixelShape {
-                dots: dots,
-                colors: colors
-            };
-            let display_message = display::DisplayMessage {
-                pixel_shape: pixel_shape
-            };
-            display_tx.send(display_message).unwrap();
+            match render_message {
+                RenderMessage::Time(value) => {
+                    time = value;
+                    render(&display_tx, time, &dot_shape);
+                },
+                RenderMessage::DotShape(value) => {
+                    dot_shape = value;
+                }
+            }
         }
     });
     return render_tx;
+}
+
+fn render (display_tx : &Sender<display::DisplayMessage>, _time: clock::Time, dot_shape: &shape::DotShape) {
+    let dots = &dot_shape.dots;
+    let colors = dots
+        .iter()
+        .map(|dot| {
+            let position = dot.position;
+            return color::RGB { red: position.x, green: position.y, blue: position.z };
+        })
+        .map(|color| color.to_rgb())
+        .collect();
+    let pixel_shape = shape::PixelShape {
+        dots: dots.clone(),
+        colors: colors
+    };
+    let display_message = display::DisplayMessage {
+        pixel_shape: pixel_shape
+    };
+    display_tx.send(display_message).unwrap();
 }

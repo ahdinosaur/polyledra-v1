@@ -14,7 +14,7 @@ fn main() {
     let render_tx = render::create_render_tx();
 
     let abstract_shape = shape::create_tetrahedron(1.0);
-    let point_shape = shape::create_point_shape(shape::PointShapeOptions {
+    let dot_shape = shape::create_dot_shape(shape::DotShapeOptions {
         abstract_shape,
         edge_length: 1.0,
         pixel_density: 10.0
@@ -24,7 +24,7 @@ fn main() {
     for clock_message in clock_iter {
         let render_message = render::RenderMessage {
             time: clock_message.time,
-            point_shape: point_shape.clone()
+            dot_shape: dot_shape.clone()
         };
         render_tx.send(render_message).unwrap();
     }

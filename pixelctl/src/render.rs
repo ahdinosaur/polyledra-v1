@@ -1,3 +1,5 @@
+use std::f32;
+use std::f32::consts::PI;
 use std::thread;
 use std::sync::mpsc::{channel, Sender};
 
@@ -35,13 +37,22 @@ pub fn create_render_tx() -> Sender<RenderMessage> {
     return render_tx;
 }
 
-fn render (display_tx : &Sender<display::DisplayMessage>, _time: clock::Time, dot_shape: &shape::DotShape) {
+fn render (display_tx : &Sender<display::DisplayMessage>, time: clock::Time, dot_shape: &shape::DotShape) {
+    let ms_per_s = 1.0e9; // microseconds_per_second
+
+    let amp_red = ((time / ms_per_s).sin() - 1.0).abs();
+    let amp_green = ((((time / ms_per_s)) + ((1.0/3.0) * (2.0 * PI))).sin() - 1.0).abs();
+    let amp_blue = ((((time / ms_per_s)) + ((2.0/3.0) * (2.0 * PI))).sin() - 1.0).abs();
     let dots = &dot_shape.dots;
     let colors = dots
         .iter()
         .map(|dot| {
             let position = dot.position;
-            return color::RGB { red: position.x, green: position.y, blue: position.z };
+            return color::RGB {
+                red: position.x * amp_red,
+                green: position.y * amp_green,
+                blue: position.z * amp_blue
+            };
         })
         .map(|color| color.to_rgb())
         .collect();

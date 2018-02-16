@@ -1,3 +1,5 @@
+#[macro_use] extern crate log;
+extern crate env_logger;
 extern crate kiss3d;
 extern crate nalgebra as na;
 
@@ -10,6 +12,8 @@ mod shape;
 mod color;
 
 fn main() {
+    env_logger::init();
+
     let clock_rx = clock::create_clock_rx(60);
     let render_tx = render::create_render_tx();
 

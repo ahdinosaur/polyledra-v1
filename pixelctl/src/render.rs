@@ -43,6 +43,8 @@ fn render (display_tx : &Sender<display::DisplayMessage>, time: clock::Time, dot
     let amp_red = ((time / ms_per_s).sin() - 1.0).abs();
     let amp_green = ((((time / ms_per_s)) + ((1.0/3.0) * (2.0 * PI))).sin() - 1.0).abs();
     let amp_blue = ((((time / ms_per_s)) + ((2.0/3.0) * (2.0 * PI))).sin() - 1.0).abs();
+    debug!("time: {} {} {} {}", time, amp_red, amp_green, amp_blue);
+
     let dots = &dot_shape.dots;
     let colors = dots
         .iter()

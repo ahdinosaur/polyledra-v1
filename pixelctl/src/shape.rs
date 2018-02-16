@@ -39,9 +39,8 @@ impl DotShape {
 }
 
 #[derive(Clone)]
-pub struct PixelShape {
-    pub dots: Vec<Dot>,
-    pub colors: Vec<color::RGB>
+pub struct DotColors {
+    pub colors: Vec<color::Color>
 }
 
 // https://en.wikipedia.org/wiki/Tetrahedron#Formulas_f32or_a_regular_tetrahedron

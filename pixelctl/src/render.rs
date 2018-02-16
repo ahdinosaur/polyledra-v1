@@ -1,4 +1,3 @@
-use std::f32;
 use std::f32::consts::PI;
 use std::thread;
 use std::sync::mpsc::{channel, Sender};
@@ -7,7 +6,6 @@ use clock;
 use display;
 use shape;
 use color;
-use color::Color;
 
 pub enum RenderMessage {
     Time(clock::Time),
@@ -30,6 +28,8 @@ pub fn create_render_tx() -> Sender<RenderMessage> {
                 },
                 RenderMessage::DotShape(value) => {
                     dot_shape = value;
+                    let display_message = display::DisplayMessage::DotShape(dot_shape.clone());
+                    display_tx.send(display_message).unwrap();
                 }
             }
         }
@@ -50,20 +50,13 @@ fn render (display_tx : &Sender<display::DisplayMessage>, time: clock::Time, dot
         .iter()
         .map(|dot| {
             let position = dot.position;
-            return color::RGB {
+            return color::Color::RGB(color::RGB {
                 red: position.x * amp_red,
                 green: position.y * amp_green,
                 blue: position.z * amp_blue
-            };
+            });
         })
-        .map(|color| color.to_rgb())
         .collect();
-    let pixel_shape = shape::PixelShape {
-        dots: dots.clone(),
-        colors: colors
-    };
-    let display_message = display::DisplayMessage {
-        pixel_shape: pixel_shape
-    };
+    let display_message = display::DisplayMessage::DotColors(shape::DotColors { colors });
     display_tx.send(display_message).unwrap();
 }

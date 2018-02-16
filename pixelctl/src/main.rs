@@ -3,8 +3,6 @@ extern crate env_logger;
 extern crate kiss3d;
 extern crate nalgebra as na;
 
-use std::sync::mpsc::{Iter};
-
 mod clock;
 mod render;
 mod display;
@@ -27,10 +25,14 @@ fn main() {
     let render_dot_shape = render::RenderMessage::DotShape(dot_shape);
     render_tx.send(render_dot_shape).unwrap();
 
-    let clock_iter: Iter<clock::ClockMessage> = clock_rx.iter();
-    for clock_message in clock_iter {
-        let render_time = render::RenderMessage::Time(clock_message.time);
-        render_tx.send(render_time).unwrap();
+    for clock_message in clock_rx {
+        let mut render_message;
+        match clock_message {
+            clock::ClockMessage::Time(value) => {
+                render_message = render::RenderMessage::Time(value);
+            }
+        }
+        render_tx.send(render_message).unwrap();
     }
 }
 

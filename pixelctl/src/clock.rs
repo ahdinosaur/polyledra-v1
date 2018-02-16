@@ -5,8 +5,8 @@ use std::sync::mpsc::{channel, Receiver};
 
 pub type Time = f32;
 
-pub struct ClockMessage {
-    pub time: Time
+pub enum ClockMessage {
+    Time(Time)
 }
 
 pub fn create_clock_rx(fps: u32) -> Receiver<ClockMessage> {
@@ -18,8 +18,8 @@ pub fn create_clock_rx(fps: u32) -> Receiver<ClockMessage> {
         loop {
             nanosecs_since_last_tick = fps_clock.tick();
             nanosecs_since_start += nanosecs_since_last_tick;
-            let clock_message = ClockMessage { time: nanosecs_since_start };
-            clock_tx.send(clock_message).unwrap();
+            let clock_time = ClockMessage::Time(nanosecs_since_start);
+            clock_tx.send(clock_time).unwrap();
         }
     });
     return clock_rx;

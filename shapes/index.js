@@ -112,7 +112,7 @@ function icosahedron (length) {
   return shape
 }
 
-var shape = tetrahedron(1)
+var shape = icosahedron(1)
 
 var mesh = createMesh({
   gl: scene.gl,

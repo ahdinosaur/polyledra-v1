@@ -3,6 +3,7 @@ use std::f32::consts::PI;
 use scene;
 use color;
 
+#[derive(Debug)]
 pub struct Rgb;
 impl scene::Scene for Rgb {
     fn new () -> Self where Self:Sized {

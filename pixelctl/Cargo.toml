@@ -6,6 +6,7 @@ authors = ["Michael Williams <michael.williams@enspiral.com>"]
 [dependencies]
 log = "0.4"
 env_logger = "0.5.3"
+glfw = "0.19"
 kiss3d = "0.13"
 nalgebra = "0.14"
 fps_clock = "2.0"

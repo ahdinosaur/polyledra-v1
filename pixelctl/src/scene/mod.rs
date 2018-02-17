@@ -33,7 +33,26 @@ impl SceneManager {
     }
 
     pub fn render(&self, input: RenderInput) -> RenderOutput {
-        let current_scene = self.scenes.get(self.current_scene_index).unwrap();
-        return current_scene.render(input);
+        return self.current_scene().render(input);
+    }
+
+    fn current_scene(&self) -> &Box<Scene> {
+        return self.scenes.get(self.current_scene_index).unwrap();
+    }
+
+    pub fn prev_mode(&mut self) {
+        self.current_scene_index =
+            if self.current_scene_index == 0
+            { self.scenes.len() - 1 }
+            else { self.current_scene_index - 1 };
+        info!("current scene index: {}", self.current_scene_index);
+    }
+
+    pub fn next_mode(&mut self) {
+        self.current_scene_index =
+            if self.current_scene_index == self.scenes.len() - 1
+            { 0 }
+            else { self.current_scene_index + 1 };
+        info!("current scene index: {}", self.current_scene_index);
     }
 }

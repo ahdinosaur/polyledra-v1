@@ -4,7 +4,6 @@ use std::sync::mpsc::{channel, Sender};
 use clock;
 use display;
 use scene;
-use scene::Scene;
 use shape;
 
 pub enum RenderMessage {
@@ -14,11 +13,11 @@ pub enum RenderMessage {
 
 pub fn create_render_tx() -> Sender<RenderMessage> {
     let display_tx = display::create_display_tx();
+    let scene_manager = scene::SceneManager::new();
 
     let (render_tx, render_rx) = channel::<RenderMessage>();
     thread::spawn(move|| {
         let mut shape = shape::Shape::none();
-        let scene = scene::Rgb::new();
 
         for render_message in render_rx {
             let display_message;
@@ -30,7 +29,7 @@ pub fn create_render_tx() -> Sender<RenderMessage> {
                         time,
                         shape: &shape
                     };
-                    let render_output = scene.render(render_input);
+                    let render_output = scene_manager.render(render_input);
                     display_message = display::DisplayMessage::Colors(render_output);
                 },
                 RenderMessage::Shape(value) => {

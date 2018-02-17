@@ -5,7 +5,7 @@ use color;
 
 pub struct Rgb;
 impl scene::Scene for Rgb {
-    fn new () -> Rgb {
+    fn new () -> Self where Self:Sized {
         return Rgb {}
     }
     fn render (&self, input: scene::RenderInput) -> scene::RenderOutput {

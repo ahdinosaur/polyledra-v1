@@ -17,32 +17,23 @@ pub trait Scene {
 pub use self::rgb::Rgb;
 mod rgb;
 
-pub enum SceneId {
-    Rgb
-}
-
 pub struct SceneManager {
-    current_scene_id: SceneId,
-    rgb: rgb::Rgb
+    scenes: Vec<Box<Scene>>,
+    current_scene_index: usize
 }
 
 impl SceneManager {
     pub fn new() -> SceneManager {
-        let current_scene_id = SceneId::Rgb;
-        let rgb = rgb::Rgb::new();
-
         return SceneManager {
-            current_scene_id,
-            rgb
+            scenes: vec![
+                Box::new(rgb::Rgb::new())
+            ],
+            current_scene_index: 0
         }
     }
+
     pub fn render(&self, input: RenderInput) -> RenderOutput {
-        let current_scene;
-        match self.current_scene_id {
-            SceneId::Rgb => {
-                current_scene = &self.rgb;
-            }
-        }
+        let current_scene = self.scenes.get(self.current_scene_index).unwrap();
         return current_scene.render(input);
     }
 }

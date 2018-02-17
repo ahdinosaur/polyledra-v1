@@ -13,10 +13,10 @@ pub enum RenderMessage {
 
 pub fn create_render_tx() -> Sender<RenderMessage> {
     let display_tx = display::create_display_tx();
-    let scene_manager = scene::SceneManager::new();
 
     let (render_tx, render_rx) = channel::<RenderMessage>();
     thread::spawn(move|| {
+        let scene_manager = scene::SceneManager::new();
         let mut shape = shape::Shape::none();
 
         for render_message in render_rx {

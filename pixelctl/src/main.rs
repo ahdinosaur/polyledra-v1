@@ -1,5 +1,6 @@
 #[macro_use] extern crate log;
 extern crate env_logger;
+extern crate modulo;
 extern crate glfw;
 extern crate kiss3d;
 extern crate nalgebra as na;

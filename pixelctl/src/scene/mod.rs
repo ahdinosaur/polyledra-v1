@@ -17,6 +17,9 @@ pub trait Scene {
 pub use self::rgb::Rgb;
 mod rgb;
 
+pub use self::rainbow::Rainbow;
+mod rainbow;
+
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
     current_scene_index: usize
@@ -26,7 +29,8 @@ impl SceneManager {
     pub fn new() -> SceneManager {
         return SceneManager {
             scenes: vec![
-                Box::new(rgb::Rgb::new())
+                Box::new(rgb::Rgb::new()),
+                Box::new(rainbow::Rainbow::new())
             ],
             current_scene_index: 0
         }

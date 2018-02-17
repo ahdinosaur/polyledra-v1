@@ -16,7 +16,7 @@ pub trait AbstractShapeCreator {
     fn new(length: f32) -> AbstractShape;
 }
 
-// https://en.wikipedia.org/wiki/Tetrahedron#Formulas_f32or_a_regular_tetrahedron
+// https://en.wikipedia.org/wiki/Tetrahedron#Formulas_for_a_regular_tetrahedron
 pub struct Tetrahedron;
 impl AbstractShapeCreator for Tetrahedron {
     fn new(length: f32) -> AbstractShape {
@@ -30,12 +30,12 @@ impl AbstractShapeCreator for Tetrahedron {
                 Position::new(-(2_f32/9_f32).sqrt() * a, -(2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a)
             ],
             edges: vec![
-                (0, 1),
+                (3, 1),
+                (1, 0),
                 (0, 2),
-                (0, 3),
-                (1, 2),
                 (2, 3),
-                (3, 1)
+                (3, 0),
+                (1, 2)
             ]
         };
     }

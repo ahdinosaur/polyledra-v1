@@ -25,7 +25,7 @@ fn main() {
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
         edge_length: 1.0,
-        pixel_density: 60.0
+        pixel_density: 30.0
     });
 
     let render_shape = render::RenderMessage::Shape(shape);

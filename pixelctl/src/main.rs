@@ -4,11 +4,12 @@ extern crate kiss3d;
 extern crate nalgebra as na;
 
 mod clock;
-mod render;
+mod color;
 mod display;
+mod render;
+mod scene;
 mod shape;
 use shape::AbstractShapeCreator;
-mod color;
 
 fn main() {
     env_logger::init();

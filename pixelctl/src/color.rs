@@ -1,6 +1,6 @@
 
 #[derive(Clone)]
-pub struct RGB {
+pub struct Rgb {
     pub red: f32,
     pub green: f32,
     pub blue: f32
@@ -8,15 +8,15 @@ pub struct RGB {
 
 #[derive(Clone)]
 pub enum Color {
-    RGB(RGB)
+    Rgb(Rgb)
 }
 
 pub type Colors = Vec<Color>;
 
 impl Color {
-    pub fn to_rgb(&self) -> RGB {
+    pub fn to_rgb(&self) -> Rgb {
         match *self {
-            Color::RGB(ref value) => value.clone()
+            Color::Rgb(ref value) => value.clone()
         }
     }
 }

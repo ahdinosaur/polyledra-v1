@@ -9,10 +9,11 @@ use kiss3d::window::Window;
 use kiss3d::light::Light;
 
 use shape;
+use color;
 
 pub enum DisplayMessage {
-    DotShape(shape::DotShape),
-    DotColors(shape::DotColors)
+    Shape(shape::Shape),
+    Colors(color::Colors)
 }
 
 pub fn create_display_tx() -> Sender<DisplayMessage> {
@@ -27,15 +28,15 @@ pub fn create_display_tx() -> Sender<DisplayMessage> {
 
         for display_message in display_rx {
             match display_message {
-                DisplayMessage::DotShape(value) => {
+                DisplayMessage::Shape(value) => {
                     // clear existing pixels
                     for pixel in pixels.iter_mut() {
                         window.remove(pixel);
                     }
 
                     // add new pixels
-                    let dot_shape = value;
-                    for dot in dot_shape.dots {
+                    let shape = value;
+                    for dot in shape.dots {
                         let mut pixel = window.add_cube(0.01, 0.01, 0.01);
                         let position = dot.position;
                         let translation = Translation3::new(position.x, position.y, position.z);
@@ -43,10 +44,10 @@ pub fn create_display_tx() -> Sender<DisplayMessage> {
                         pixels.push(pixel);
                     }
                 }
-                DisplayMessage::DotColors(value) => {
+                DisplayMessage::Colors(value) => {
                     // update colors of existing pixels
-                    let dot_colors = value;
-                    for (index, color) in dot_colors.colors.iter().enumerate() {
+                    let colors = value;
+                    for (index, color) in colors.iter().enumerate() {
                         let rgb = color.to_rgb();
                         let mut pixel = pixels.get_mut(index).unwrap();
                         pixel.set_color(rgb.red, rgb.green, rgb.blue);

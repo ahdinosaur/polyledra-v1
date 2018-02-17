@@ -11,6 +11,8 @@ pub enum Color {
     RGB(RGB)
 }
 
+pub type Colors = Vec<Color>;
+
 impl Color {
     pub fn to_rgb(&self) -> RGB {
         match *self {

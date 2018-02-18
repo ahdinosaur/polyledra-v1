@@ -8,7 +8,10 @@ use kiss3d::light::Light;
 use na::{Translation3};
 use std::process;
 use std::thread;
+use std::iter;
+use std::vec;
 use std::sync::mpsc::{channel, Sender};
+use std::sync::mpsc;
 
 use color;
 use control;
@@ -29,16 +32,41 @@ pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<Display
 
         let mut pixel_nodes: Vec<SceneNode> = Vec::new();
 
-        for display_message in display_rx {
-            match display_message {
-                DisplayMessage::Shape(value) => {
+        loop {
+            let mut next_shape = None;
+            let mut next_pixels = None;
+
+            // block on first message
+            let first_display_message = display_rx.recv().unwrap();
+            let first_display_messages = vec![first_display_message];
+            // unblocking read of next messages
+            // (to stay up-to-date and batch displays)
+            let next_display_messages: iter::Chain<vec::IntoIter<DisplayMessage>, mpsc::TryIter<DisplayMessage>>  = first_display_messages
+                .into_iter()
+                .chain(
+                    display_rx.try_iter()
+                );
+
+            for display_message in next_display_messages {
+                match display_message {
+                    DisplayMessage::Shape(value) => {
+                        next_shape = Some(value);
+                    },
+                    DisplayMessage::Pixels(value) => {
+                        next_pixels = Some(value);
+                    }
+                }
+            }
+
+            match next_shape {
+                None => {},
+                Some(shape) => {
                     // clear existing pixels
                     for pixel_node in pixel_nodes.iter_mut() {
                         window.remove(pixel_node);
                     }
 
                     // add new pixels
-                    let shape = value;
                     for dot in shape.dots {
                         let mut pixel_node = window.add_cube(0.01, 0.01, 0.01);
                         let position = dot.position;
@@ -46,11 +74,13 @@ pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<Display
                         pixel_node.set_local_translation(translation);
                         pixel_nodes.push(pixel_node);
                     }
-                },
-                DisplayMessage::Pixels(value) => {
-                    // update colors of existing pixels
-                    let pixels = value;
+                }
+            }
 
+            match next_pixels {
+                None => {},
+                Some(pixels) => {
+                    // update colors of existing pixels
                     for (index, rgb) in pixels.iter().enumerate() {
                         let mut pixel_node = pixel_nodes.get_mut(index).unwrap();
                         pixel_node.set_color(rgb.red, rgb.green, rgb.blue);

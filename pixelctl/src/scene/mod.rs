@@ -18,6 +18,9 @@ pub trait Scene {
     fn scene(&self, input: SceneInput) -> SceneOutput;
 }
 
+pub use self::test::Test;
+mod test;
+
 pub use self::rgb::Rgb;
 mod rgb;
 
@@ -33,6 +36,7 @@ impl SceneManager {
     pub fn new() -> SceneManager {
         return SceneManager {
             scenes: vec![
+                Box::new(test::Test::new()),
                 Box::new(rgb::Rgb::new()),
                 Box::new(rainbow::Rainbow::new())
             ],
@@ -41,7 +45,7 @@ impl SceneManager {
     }
 
     pub fn scene(&self, input: SceneInput) -> SceneOutput { 
-        self.current_scene()
+        self.get_current_scene()
             .scene(input)
     }
 
@@ -52,7 +56,7 @@ impl SceneManager {
             .collect()
     }
 
-    fn current_scene(&self) -> &Box<Scene> {
+    fn get_current_scene(&self) -> &Box<Scene> {
         return self.scenes.get(self.current_scene_index).unwrap();
     }
 

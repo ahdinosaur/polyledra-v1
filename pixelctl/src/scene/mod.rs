@@ -1,5 +1,5 @@
 use std::iter;
-use rayon::iter::{ParallelIterator};
+use rayon::prelude::*;
 
 use color;
 use control;
@@ -10,13 +10,16 @@ pub struct SceneInput<'a> {
     pub shape: &'a shape::Shape
 }
 
-pub type SceneOutput<'a> = Box<ParallelIterator<Item=color::Color> + 'a>;
+//std::iter::Map<'static, (int, int), int, std::iter::Iterate<'static, (int, int)>> {
+//    rayon::iter::Map<rayon::range::Iter<usize>, [closure@src/scene/rainbow.rs:29:18: 35:14 start:_, length:_]>
+
+pub type SceneOutput = Vec<color::Color>;
 
 pub type RenderOutput = Vec<color::Rgb>;
 
 pub trait Scene {
     fn new () -> Self where Self: Sized;
-    fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a>;
+    fn scene(&self, input: SceneInput) -> SceneOutput;
 }
 
 pub use self::rgb::Rgb;
@@ -41,13 +44,14 @@ impl SceneManager {
         }
     }
 
-    pub fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a> { 
+    pub fn scene(&self, input: SceneInput) -> SceneOutput { 
         self.current_scene()
             .scene(input)
     }
 
     pub fn render(&self, input: SceneInput) -> RenderOutput {
         self.scene(input)
+            .par_iter()
             .map(|color| color.to_rgb())
             .collect()
     }

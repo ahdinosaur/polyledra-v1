@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::f32::consts::PI;
 
 use scene;
@@ -9,7 +10,7 @@ impl scene::Scene for Rgb {
     fn new () -> Self where Self:Sized {
         return Rgb {}
     }
-    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
+    fn scene (&self, input: scene::SceneInput) -> scene::SceneOutput {
         let time = input.time;
         let shape = input.shape;
 
@@ -32,6 +33,6 @@ impl scene::Scene for Rgb {
                 });
             });
 
-        return Box::new(colors);
+        return colors.collect();
     }
 }

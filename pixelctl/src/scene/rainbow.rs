@@ -11,7 +11,7 @@ impl scene::Scene for Rainbow {
     fn new () -> Self where Self:Sized {
         return Rainbow {}
     }
-    fn render (&self, input: scene::RenderInput) -> scene::RenderOutput {
+    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
         let time = input.time;
         let shape = input.shape;
 
@@ -25,16 +25,15 @@ impl scene::Scene for Rainbow {
         debug!("rainbow: {} {} {} {}", time, speed, start, step);
 
         let colors = (0..length)
-            .into_par_iter()
+            .par_iter()
             .map(|index| {
                 return color::Color::Hsl(color::Hsl {
                     hue: start + (index as f32 / length as f32),
                     saturation: 1_f32,
                     lightness: 0.5_f32
                 })
-            })
-            .collect();
+            });
 
-        return colors;
+        return Box::new(colors);
     }
 }

@@ -7,6 +7,9 @@ pub struct Rgb {
     pub blue: f32
 }
 
+pub type Pixels = Vec<Rgb>;
+pub type LazyPixels = Iterator<Item=Rgb>;
+
 #[derive(Clone, Debug)]
 pub struct Hsl {
     pub hue: f32,

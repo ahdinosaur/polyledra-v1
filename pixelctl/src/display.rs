@@ -9,7 +9,7 @@ use na::{Translation3};
 use rayon::prelude::*;
 use std::process;
 use std::thread;
-use std::sync::mpsc::{channel, Sender, TryRecvError};
+use std::sync::mpsc::{channel, Sender};
 
 use color;
 use control;
@@ -17,7 +17,7 @@ use shape;
 
 pub enum DisplayMessage {
     Shape(shape::Shape),
-    Colors(color::Colors)
+    Pixels(color::Pixels)
 }
 
 pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<DisplayMessage> {
@@ -28,43 +28,34 @@ pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<Display
 
         window.set_light(Light::StickToCamera);
 
-        let mut pixels: Vec<SceneNode> = Vec::new();
+        let mut pixel_nodes: Vec<SceneNode> = Vec::new();
 
-        loop {
-            let display_message_result = display_rx.try_recv();
-            match display_message_result {
-                Ok(DisplayMessage::Shape(value)) => {
+        for display_message in display_rx {
+            match display_message {
+                DisplayMessage::Shape(value) => {
                     // clear existing pixels
-                    for pixel in pixels.iter_mut() {
-                        window.remove(pixel);
+                    for pixel_node in pixel_nodes.iter_mut() {
+                        window.remove(pixel_node);
                     }
 
                     // add new pixels
                     let shape = value;
                     for dot in shape.dots {
-                        let mut pixel = window.add_cube(0.01, 0.01, 0.01);
+                        let mut pixel_node = window.add_cube(0.01, 0.01, 0.01);
                         let position = dot.position;
                         let translation = Translation3::new(position.x, position.y, position.z);
-                        pixel.set_local_translation(translation);
-                        pixels.push(pixel);
+                        pixel_node.set_local_translation(translation);
+                        pixel_nodes.push(pixel_node);
                     }
                 },
-                Ok(DisplayMessage::Colors(value)) => {
+                DisplayMessage::Pixels(value) => {
                     // update colors of existing pixels
-                    let colors = value;
+                    let pixels = value;
 
-                    let rgbs: Vec<color::Rgb> = colors.par_iter()
-                        .map(|color| color.to_rgb())
-                        .collect();
-
-                    for (index, rgb) in rgbs.iter().enumerate() {
-                        let mut pixel = pixels.get_mut(index).unwrap();
-                        pixel.set_color(rgb.red, rgb.green, rgb.blue);
+                    for (index, rgb) in pixels.iter().enumerate() {
+                        let mut pixel_node = pixel_nodes.get_mut(index).unwrap();
+                        pixel_node.set_color(rgb.red, rgb.green, rgb.blue);
                     }
-                },
-                Err(TryRecvError::Empty) => {},
-                Err(TryRecvError::Disconnected) => {
-                    panic!("{:?}", TryRecvError::Disconnected);
                 }
             }
 

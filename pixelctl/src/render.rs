@@ -63,12 +63,12 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
 }
 
 fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &scene::SceneManager, time: control::Time, shape: &shape::Shape) {
-    let render_input = scene::RenderInput {
+    let scene_input = scene::SceneInput {
         time,
         shape: &shape
     };
-    let render_output = scene_manager.render(render_input);
-    let display_message = display::DisplayMessage::Colors(render_output);
+    let render_output = scene_manager.render(scene_input);
+    let display_message = display::DisplayMessage::Pixels(render_output);
     display_tx.send(display_message).unwrap();
 }
 

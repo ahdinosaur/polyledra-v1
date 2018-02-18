@@ -9,7 +9,7 @@ impl scene::Scene for Rgb {
     fn new () -> Self where Self:Sized {
         return Rgb {}
     }
-    fn render (&self, input: scene::RenderInput) -> scene::RenderOutput {
+    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
         let time = input.time;
         let shape = input.shape;
 
@@ -22,7 +22,7 @@ impl scene::Scene for Rgb {
 
         let dots = &shape.dots;
         let colors = dots
-            .iter()
+            .par_iter()
             .map(|dot| {
                 let position = dot.position;
                 return color::Color::Rgb(color::Rgb {
@@ -30,9 +30,8 @@ impl scene::Scene for Rgb {
                     green: position.y * amp_green,
                     blue: position.z * amp_blue
                 });
-            })
-            .collect();
+            });
 
-        return colors;
+        return Box::new(colors);
     }
 }

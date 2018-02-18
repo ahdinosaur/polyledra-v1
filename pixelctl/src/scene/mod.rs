@@ -1,17 +1,22 @@
+use std::iter;
+use rayon::iter::{ParallelIterator};
+
 use color;
 use control;
 use shape;
 
-pub struct RenderInput<'a> {
+pub struct SceneInput<'a> {
     pub time: control::Time,
     pub shape: &'a shape::Shape
 }
 
-pub type RenderOutput = color::Colors;
+pub type SceneOutput<'a> = Box<ParallelIterator<Item=color::Color> + 'a>;
+
+pub type RenderOutput = Vec<color::Rgb>;
 
 pub trait Scene {
     fn new () -> Self where Self: Sized;
-    fn render(&self, input: RenderInput) -> RenderOutput;
+    fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a>;
 }
 
 pub use self::rgb::Rgb;
@@ -36,8 +41,15 @@ impl SceneManager {
         }
     }
 
-    pub fn render(&self, input: RenderInput) -> RenderOutput {
-        return self.current_scene().render(input);
+    pub fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a> { 
+        self.current_scene()
+            .scene(input)
+    }
+
+    pub fn render(&self, input: SceneInput) -> RenderOutput {
+        self.scene(input)
+            .map(|color| color.to_rgb())
+            .collect()
     }
 
     fn current_scene(&self) -> &Box<Scene> {

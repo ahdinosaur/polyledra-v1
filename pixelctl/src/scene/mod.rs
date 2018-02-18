@@ -1,9 +1,9 @@
-use clock;
 use color;
+use control;
 use shape;
 
 pub struct RenderInput<'a> {
-    pub time: clock::Time,
+    pub time: control::Time,
     pub shape: &'a shape::Shape
 }
 

@@ -1,3 +1,5 @@
+use rayon::prelude::*;
+
 use scene;
 use color;
 
@@ -16,13 +18,14 @@ impl scene::Scene for Rainbow {
         let dots = &shape.dots;
 
         let length = dots.len();
-        let speed = 1_f32 / 4_f32 / MS_PER_S;
+        let speed = (0.25_f32) / MS_PER_S;
         let start = time * speed;
         let step = 1_f32 / length as f32;
 
         debug!("rainbow: {} {} {} {}", time, speed, start, step);
 
         let colors = (0..length)
+            .into_par_iter()
             .map(|index| {
                 return color::Color::Hsl(color::Hsl {
                     hue: start + (index as f32 / length as f32),

@@ -6,6 +6,8 @@ use kiss3d::scene::SceneNode;
 use kiss3d::window::Window;
 use kiss3d::light::Light;
 use na::{Translation3};
+use rayon::prelude::*;
+use std::process;
 use std::thread;
 use std::sync::mpsc::{channel, Sender, TryRecvError};
 
@@ -18,7 +20,7 @@ pub enum DisplayMessage {
     Colors(color::Colors)
 }
 
-pub fn create_display_tx(control_tx: Sender<control::ControlMessage>) -> Sender<DisplayMessage> {
+pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<DisplayMessage> {
     let (display_tx, display_rx) = channel::<DisplayMessage>();
 
     thread::spawn(move|| {
@@ -50,8 +52,12 @@ pub fn create_display_tx(control_tx: Sender<control::ControlMessage>) -> Sender<
                 Ok(DisplayMessage::Colors(value)) => {
                     // update colors of existing pixels
                     let colors = value;
-                    for (index, color) in colors.iter().enumerate() {
-                        let rgb = color.to_rgb();
+
+                    let rgbs: Vec<color::Rgb> = colors.par_iter()
+                        .map(|color| color.to_rgb())
+                        .collect();
+
+                    for (index, rgb) in rgbs.iter().enumerate() {
                         let mut pixel = pixels.get_mut(index).unwrap();
                         pixel.set_color(rgb.red, rgb.green, rgb.blue);
                     }
@@ -63,7 +69,7 @@ pub fn create_display_tx(control_tx: Sender<control::ControlMessage>) -> Sender<
             }
 
             if !window.render() {
-              panic!("window did not render!");
+                process::exit(1);
             }
 
             for mut event in window.events().iter() {
@@ -74,8 +80,8 @@ pub fn create_display_tx(control_tx: Sender<control::ControlMessage>) -> Sender<
                         event.inhibited = true; // override the default keyboard handler
 
                         match code {
-                            Key::Left => control_tx.send(control::ControlMessage::ChangeMode(control::ChangeMode::Prev)).unwrap(),
-                            Key::Right => control_tx.send(control::ControlMessage::ChangeMode(control::ChangeMode::Next)).unwrap(),
+                            Key::Left => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev)).unwrap(),
+                            Key::Right => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next)).unwrap(),
                             _ => {}
                         }
                     },

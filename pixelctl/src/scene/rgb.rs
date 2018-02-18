@@ -1,4 +1,5 @@
 use rayon::prelude::*;
+
 use std::f32::consts::PI;
 
 use scene;

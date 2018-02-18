@@ -6,7 +6,6 @@ use kiss3d::scene::SceneNode;
 use kiss3d::window::Window;
 use kiss3d::light::Light;
 use na::{Translation3};
-use rayon::prelude::*;
 use std::process;
 use std::thread;
 use std::sync::mpsc::{channel, Sender};
@@ -67,7 +66,6 @@ pub fn create_display_tx(control_tx: Sender<control::Control>) -> Sender<Display
                 match event.value {
                     WindowEvent::Key(code, _, Action::Press, _) => {
                         println!("You pressed the key with code: {:?}", code);
-                        println!("Do not try to press escape: the event is inhibited!");
                         event.inhibited = true; // override the default keyboard handler
 
                         match code {

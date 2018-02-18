@@ -32,6 +32,3 @@ pub fn connect_clock(fps: u32, control_tx: Sender<Control>) {
         }
     });
 }
-
-
-

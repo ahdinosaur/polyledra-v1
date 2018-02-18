@@ -1,4 +1,3 @@
-use std::iter;
 use rayon::prelude::*;
 
 use color;
@@ -9,9 +8,6 @@ pub struct SceneInput<'a> {
     pub time: control::Time,
     pub shape: &'a shape::Shape
 }
-
-//std::iter::Map<'static, (int, int), int, std::iter::Iterate<'static, (int, int)>> {
-//    rayon::iter::Map<rayon::range::Iter<usize>, [closure@src/scene/rainbow.rs:29:18: 35:14 start:_, length:_]>
 
 pub type SceneOutput = Vec<color::Color>;
 

@@ -24,6 +24,7 @@ pub enum Color {
 }
 
 pub type Colors = Vec<Color>;
+pub type LazyColors = Iterator<Item=Color>;
 
 impl Color {
     pub fn to_rgb(&self) -> Rgb {

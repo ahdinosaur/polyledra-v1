@@ -1,3 +1,5 @@
+use std::iter;
+
 use scene;
 use color;
 
@@ -12,6 +14,7 @@ impl scene::Scene for Test {
 
         let dots = &shape.dots;
         let length = dots.len();
+        
         let colors = (0..length)
             .map(|_index| {
                 return color::Color::Rgb(color::Rgb {
@@ -21,6 +24,6 @@ impl scene::Scene for Test {
                 });
             });
 
-        return colors.collect();
+        return Box::new(colors);
     }
 }

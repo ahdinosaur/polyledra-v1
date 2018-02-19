@@ -34,6 +34,6 @@ impl scene::Scene for Rgb {
                 });
             });
 
-        return colors.collect();
+        return Box::new(colors);
     }
 }

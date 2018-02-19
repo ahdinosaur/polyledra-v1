@@ -9,7 +9,7 @@ pub struct SceneInput<'a> {
     pub shape: &'a shape::Shape
 }
 
-pub type SceneOutput = Vec<color::Color>;
+pub type SceneOutput = Box<Iterator<Item=color::Color>>;
 
 pub type RenderOutput = Vec<color::Rgb>;
 
@@ -21,11 +21,11 @@ pub trait Scene {
 pub use self::test::Test;
 mod test;
 
-pub use self::rgb::Rgb;
-mod rgb;
+// pub use self::rgb::Rgb;
+// mod rgb;
 
-pub use self::rainbow::Rainbow;
-mod rainbow;
+// pub use self::rainbow::Rainbow;
+// mod rainbow;
 
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
@@ -37,8 +37,8 @@ impl SceneManager {
         return SceneManager {
             scenes: vec![
                 Box::new(test::Test::new()),
-                Box::new(rgb::Rgb::new()),
-                Box::new(rainbow::Rainbow::new())
+//                Box::new(rgb::Rgb::new()),
+//                Box::new(rainbow::Rainbow::new())
             ],
             current_scene_index: 0
         }
@@ -50,8 +50,8 @@ impl SceneManager {
     }
 
     pub fn render(&self, input: SceneInput) -> RenderOutput {
-        self.scene(input)
-            .par_iter()
+        (*self.scene(input))
+            .into_iter()
             .map(|color| color.to_rgb())
             .collect()
     }

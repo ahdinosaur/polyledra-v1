@@ -8,7 +8,6 @@ pub struct Rgb {
 }
 
 pub type Pixels = Vec<Rgb>;
-pub type LazyPixels = Iterator<Item=Rgb>;
 
 #[derive(Clone, Debug)]
 pub struct Hsl {
@@ -23,8 +22,7 @@ pub enum Color {
     Hsl(Hsl)
 }
 
-pub type Colors = Vec<Color>;
-pub type LazyColors = Iterator<Item=Color>;
+// pub type Colors = Iterator<Item=Color>;
 
 impl Color {
     pub fn to_rgb(&self) -> Rgb {

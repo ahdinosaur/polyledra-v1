@@ -16,6 +16,7 @@ impl scene::Scene for Test {
         let length = dots.len();
         
         let colors = (0..length)
+            .into_par_iter()
             .map(|_index| {
                 return color::Color::Rgb(color::Rgb {
                     red: 1_f32,

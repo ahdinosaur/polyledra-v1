@@ -9,7 +9,7 @@ pub struct SceneInput<'a> {
     pub shape: &'a shape::Shape
 }
 
-pub type SceneOutput = Box<Iterator<Item=color::Color>>;
+pub type SceneOutput = Box<ParallelIterator<Item=color::Color>>;
 
 pub type RenderOutput = Vec<color::Rgb>;
 

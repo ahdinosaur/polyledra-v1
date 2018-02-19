@@ -1,5 +1,3 @@
-use rayon::prelude::*;
-
 use std::f32::consts::PI;
 
 use scene;
@@ -11,7 +9,7 @@ impl scene::Scene for Rgb {
     fn new () -> Self where Self:Sized {
         return Rgb {}
     }
-    fn scene (&self, input: scene::SceneInput) -> scene::SceneOutput {
+    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
         let time = input.time;
         let shape = input.shape;
 
@@ -24,8 +22,8 @@ impl scene::Scene for Rgb {
 
         let dots = &shape.dots;
         let colors = dots
-            .par_iter()
-            .map(|dot| {
+            .iter()
+            .map(move |dot| {
                 let position = dot.position;
                 return color::Color::Rgb(color::Rgb {
                     red: position.x * amp_red,

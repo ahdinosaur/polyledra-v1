@@ -4,7 +4,6 @@ extern crate kiss3d;
 #[macro_use] extern crate log;
 extern crate modulo;
 extern crate nalgebra as na;
-extern crate rayon;
 
 mod color;
 mod control;

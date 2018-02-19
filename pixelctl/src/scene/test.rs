@@ -1,5 +1,3 @@
-use std::iter;
-
 use scene;
 use color;
 
@@ -9,14 +7,13 @@ impl scene::Scene for Test {
     fn new () -> Self where Self:Sized {
         return Test {}
     }
-    fn scene (&self, input: scene::SceneInput) -> scene::SceneOutput {
+    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
         let shape = input.shape;
 
         let dots = &shape.dots;
         let length = dots.len();
         
         let colors = (0..length)
-            .into_par_iter()
             .map(|_index| {
                 return color::Color::Rgb(color::Rgb {
                     red: 1_f32,

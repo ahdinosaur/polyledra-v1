@@ -1,5 +1,3 @@
-use rayon::prelude::*;
-
 use scene;
 use color;
 
@@ -11,7 +9,7 @@ impl scene::Scene for Rainbow {
     fn new () -> Self where Self:Sized {
         return Rainbow {}
     }
-    fn scene (&self, input: scene::SceneInput) -> scene::SceneOutput {
+    fn scene<'a> (&self, input: scene::SceneInput<'a>) -> scene::SceneOutput<'a> {
         let time = input.time;
         let shape = input.shape;
 
@@ -25,8 +23,7 @@ impl scene::Scene for Rainbow {
         debug!("rainbow: {} {} {} {}", time, speed, start, step);
 
         let colors = (0..length)
-            .into_par_iter()
-            .map(|index| {
+            .map(move |index| {
                 return color::Color::Hsl(color::Hsl {
                     hue: start + (index as f32 / length as f32),
                     saturation: 1_f32,
@@ -34,6 +31,6 @@ impl scene::Scene for Rainbow {
                 })
             });
 
-        return colors.collect();
+        return Box::new(colors);
     }
 }

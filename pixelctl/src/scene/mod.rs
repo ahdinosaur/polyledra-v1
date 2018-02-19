@@ -1,5 +1,3 @@
-use rayon::prelude::*;
-
 use color;
 use control;
 use shape;
@@ -9,23 +7,23 @@ pub struct SceneInput<'a> {
     pub shape: &'a shape::Shape
 }
 
-pub type SceneOutput = Box<ParallelIterator<Item=color::Color>>;
+pub type SceneOutput<'a> = Box<Iterator<Item=color::Color> + 'a>;
 
 pub type RenderOutput = Vec<color::Rgb>;
 
 pub trait Scene {
     fn new () -> Self where Self: Sized;
-    fn scene(&self, input: SceneInput) -> SceneOutput;
+    fn scene<'a> (&self, input: SceneInput<'a>) -> SceneOutput<'a>;
 }
 
 pub use self::test::Test;
 mod test;
 
-// pub use self::rgb::Rgb;
-// mod rgb;
+pub use self::rgb::Rgb;
+mod rgb;
 
-// pub use self::rainbow::Rainbow;
-// mod rainbow;
+pub use self::rainbow::Rainbow;
+mod rainbow;
 
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
@@ -37,19 +35,19 @@ impl SceneManager {
         return SceneManager {
             scenes: vec![
                 Box::new(test::Test::new()),
-//                Box::new(rgb::Rgb::new()),
-//                Box::new(rainbow::Rainbow::new())
+                Box::new(rgb::Rgb::new()),
+                Box::new(rainbow::Rainbow::new())
             ],
             current_scene_index: 0
         }
     }
 
-    pub fn scene(&self, input: SceneInput) -> SceneOutput { 
+    pub fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a> { 
         self.get_current_scene()
             .scene(input)
     }
 
-    pub fn render(&self, input: SceneInput) -> RenderOutput {
+    pub fn render<'a>(&self, input: SceneInput<'a>) -> RenderOutput {
         (*self.scene(input))
             .into_iter()
             .map(|color| color.to_rgb())

@@ -2,6 +2,9 @@
 
 [light-emitting](https://en.wikipedia.org/wiki/Light-emitting_diode) [polyhedron](https://en.wikipedia.org/wiki/Polyhedron) [chandeliers](https://en.wikipedia.org/wiki/Chandelier)
 
+- [shapes](./shapes)
+- [pixelctl](./pixelctl)
+
 ## background
 
 after playing with [aburndance](https://github.com/ahdinosaur/aburndance), i thought about my learning objectives for the [next stage of portable rainbow exploration](https://viewer.scuttlebot.io/%25sO9UYU8pod1sS7JlpX15rfEtGMZ6znMxZEySYql221Q%3D.sha256):

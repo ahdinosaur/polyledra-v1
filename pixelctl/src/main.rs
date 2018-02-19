@@ -21,7 +21,7 @@ fn main() {
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
         edge_length: 1.0,
-        pixel_density: 60.0
+        pixel_density: 120.0
     });
 
     let (control_tx, control_rx) = control::create_control_channel();

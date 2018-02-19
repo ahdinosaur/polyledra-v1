@@ -1,7 +1,3 @@
-use rayon::prelude::*;
-
-use std::f32::consts::PI;
-
 use scene;
 use color;
 
@@ -12,7 +8,6 @@ impl scene::Scene for Test {
         return Test {}
     }
     fn scene (&self, input: scene::SceneInput) -> scene::SceneOutput {
-        let time = input.time;
         let shape = input.shape;
 
         let dots = &shape.dots;

@@ -22,7 +22,7 @@ pub enum Color {
     Hsl(Hsl)
 }
 
-// pub type Colors = Iterator<Item=Color>;
+pub type Colors<'a> = Box<Iterator<Item=Color> + 'a>;
 
 impl Color {
     pub fn to_rgb(&self) -> Rgb {

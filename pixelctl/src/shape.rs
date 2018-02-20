@@ -53,7 +53,7 @@ pub struct Bounds {
     pub max: Position
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Shape {
     pub dots: Vec<Dot>,
     pub bounds: Bounds

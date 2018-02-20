@@ -10,7 +10,7 @@ pub struct RainbowLine {
     length: usize
 }
 impl<'a> scene::Scene<'a> for RainbowLine {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+    fn new (shape: &'a shape::Shape) -> Self where Self:Sized {
         return RainbowLine {
             length: shape.dots.len()
         }
@@ -38,11 +38,11 @@ impl<'a> scene::Scene<'a> for RainbowLine {
 }
 
 #[derive(Debug)]
-pub struct Rainbow {
-    shape: shape::Shape
+pub struct Rainbow<'a> {
+    shape: &'a shape::Shape
 }
-impl<'a> scene::Scene<'a> for Rainbow {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+impl<'a> scene::Scene<'a> for Rainbow<'a> {
+    fn new (shape: &'a shape::Shape) -> Self where Self:Sized {
         Rainbow {
             shape
         }

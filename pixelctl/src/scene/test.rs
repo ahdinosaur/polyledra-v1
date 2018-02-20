@@ -9,7 +9,7 @@ pub struct Test {
 }
 
 impl<'a> scene::Scene<'a> for Test {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+    fn new (shape: &'a shape::Shape) -> Self where Self:Sized {
         Test {
             length: shape.dots.len()
         }

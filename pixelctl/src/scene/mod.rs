@@ -5,7 +5,7 @@ use control;
 use shape;
 
 pub trait Scene<'a> {
-    fn new (shape: shape::Shape) -> Self where Self: Sized;
+    fn new (shape: &'a shape::Shape) -> Self where Self: Sized;
     fn scene (&self, time: control::Time) -> color::Colors<'a>;
 }
 
@@ -22,12 +22,12 @@ pub struct SceneManager<'a> {
 }
 
 impl<'a> SceneManager<'a> {
-    pub fn new(shape: shape::Shape) -> SceneManager<'a> {
+    pub fn new(shape: &'a shape::Shape) -> SceneManager<'a> {
         return SceneManager {
             scenes: vec![
-                Box::new(test::Test::new(shape.clone())),
-                Box::new(rainbow::RainbowLine::new(shape.clone())),
-                Box::new(rainbow::Rainbow::new(shape.clone())),
+                Box::new(test::Test::new(shape)),
+                Box::new(rainbow::RainbowLine::new(shape)),
+                Box::new(rainbow::Rainbow::new(shape)),
                 // TODO twinkle
                 // TODO ripple
                 // TODO walk

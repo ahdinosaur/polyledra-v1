@@ -22,6 +22,7 @@ mod test;
 pub use self::rgb::Rgb;
 mod rgb;
 
+pub use self::rainbow::RainbowLine;
 pub use self::rainbow::Rainbow;
 mod rainbow;
 
@@ -36,7 +37,8 @@ impl SceneManager {
             scenes: vec![
                 Box::new(test::Test::new()),
                 Box::new(rgb::Rgb::new()),
-                Box::new(rainbow::Rainbow::new())
+                Box::new(rainbow::RainbowLine::new()),
+                Box::new(rainbow::Rainbow::new()),
             ],
             current_scene_index: 0
         }

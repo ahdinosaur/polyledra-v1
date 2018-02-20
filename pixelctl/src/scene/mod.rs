@@ -39,6 +39,11 @@ impl SceneManager {
                 Box::new(rgb::Rgb::new()),
                 Box::new(rainbow::RainbowLine::new()),
                 Box::new(rainbow::Rainbow::new()),
+                // TODO twinkle
+                // TODO ripple
+                // TODO walk
+                // TODO orbit (turn on closest shape point)
+                // TODO flame
             ],
             current_scene_index: 0
         }

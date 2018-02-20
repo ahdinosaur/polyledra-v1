@@ -4,9 +4,9 @@ use color;
 use control;
 use shape;
 
-pub trait Scene<'a> {
+pub trait Scene {
     fn new (shape: shape::Shape) -> Self where Self: Sized;
-    fn scene (&self, time: control::Time) -> color::Colors<'a>;
+    fn scene<'a> (&self, time: control::Time) -> color::Colors<'a>;
 }
 
 pub use self::test::Test;
@@ -16,13 +16,13 @@ pub use self::rainbow::RainbowLine;
 pub use self::rainbow::Rainbow;
 mod rainbow;
 
-pub struct SceneManager<'a> {
-    scenes: Vec<Box<Scene<'a> + 'a>>,
+pub struct SceneManager {
+    scenes: Vec<Box<Scene>>,
     current_scene_index: usize
 }
 
-impl<'a> SceneManager<'a> {
-    pub fn new(shape: shape::Shape) -> SceneManager<'a> {
+impl SceneManager {
+    pub fn new(shape: shape::Shape) -> SceneManager {
         return SceneManager {
             scenes: vec![
                 Box::new(test::Test::new(shape.clone())),
@@ -38,7 +38,7 @@ impl<'a> SceneManager<'a> {
         }
     }
 
-    pub fn scene(&self, time: control::Time) -> color::Colors<'a> { 
+    pub fn scene<'a>(&self, time: control::Time) -> color::Colors<'a> { 
         self.get_current_scene()
             .scene(time)
     }
@@ -50,7 +50,7 @@ impl<'a> SceneManager<'a> {
             .collect()
     }
 
-    fn get_current_scene(&self) -> &Box<Scene<'a> + 'a> {
+    fn get_current_scene(&self) -> &Box<Scene > {
         return self.scenes.get(self.current_scene_index).unwrap();
     }
 

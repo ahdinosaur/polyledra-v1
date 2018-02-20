@@ -9,14 +9,14 @@ static MS_PER_S: f32 = 1.0e9; // microseconds_per_second
 pub struct RainbowLine {
     length: usize
 }
-impl<'a> scene::Scene<'a> for RainbowLine {
+impl scene::Scene for RainbowLine {
     fn new (shape: shape::Shape) -> Self where Self:Sized {
         return RainbowLine {
             length: shape.dots.len()
         }
     }
 
-    fn scene (&self, time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&self, time: control::Time) -> color::Colors<'a> {
         let length = self.length;
         let speed = (0.25_f32) / MS_PER_S;
         let start = time * speed;
@@ -42,14 +42,14 @@ impl<'a> scene::Scene<'a> for RainbowLine {
 pub struct Rainbow {
     shape: shape::Shape
 }
-impl<'a> scene::Scene<'a> for Rainbow {
+impl scene::Scene for Rainbow {
     fn new (shape: shape::Shape) -> Self where Self:Sized {
         Rainbow {
             shape
         }
     }
 
-    fn scene (&self, time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&self, time: control::Time) -> color::Colors<'a> {
         let shape = &self.shape;
 
         let dots = &shape.dots;

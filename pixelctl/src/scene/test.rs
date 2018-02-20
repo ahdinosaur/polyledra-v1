@@ -8,14 +8,14 @@ pub struct Test {
     length: usize
 }
 
-impl scene::Scene for Test {
+impl<'a> scene::Scene<'a> for Test {
     fn new (shape: shape::Shape) -> Self where Self:Sized {
         Test {
             length: shape.dots.len()
         }
     }
 
-    fn scene<'a> (&self, _time: control::Time) -> color::Colors<'a> {
+    fn scene (&self, _time: control::Time) -> color::Colors<'a> {
         let colors = (0..self.length)
             .map(|_index| {
                 return color::Color::Rgb(color::Rgb {

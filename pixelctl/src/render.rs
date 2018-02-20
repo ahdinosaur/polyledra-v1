@@ -30,9 +30,9 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
     let (render_tx, render_rx) = channel::<RenderMessage>();
 
     thread::spawn(move|| {
-        let mut scene_manager = scene::SceneManager::new();
         let mut time = 0.0;
         let mut shape = shape::Shape::none();
+        let mut scene_manager = scene::SceneManager::new(shape);
 
         loop {
             let mut should_render = false;
@@ -56,8 +56,12 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
                     },
                     RenderMessage::Shape(value) => {
                         shape = value;
+
+                        scene_manager = scene::SceneManager::new(shape);
+
                         let display_message = display::DisplayMessage::Shape(shape.clone());
                         display_tx.send(display_message).unwrap();
+
                     },
                     RenderMessage::ChangeMode(control::ChangeMode::Prev) => {
                         scene_manager.prev_mode();
@@ -71,20 +75,16 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
             }
 
             if should_render {
-                render(&display_tx, &scene_manager, time, &shape);
+                render(&display_tx, &scene_manager, time);
             }
         }
     });
     return render_tx;
 }
 
-fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &scene::SceneManager, time: control::Time, shape: &shape::Shape) {
-    let scene_input = scene::SceneInput {
-        time,
-        shape: &shape
-    };
-    let render_output = scene_manager.render(scene_input);
-    let display_message = display::DisplayMessage::Pixels(render_output);
+fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &scene::SceneManager, time: control::Time) {
+    let pixels = scene_manager.render(time);
+    let display_message = display::DisplayMessage::Pixels(pixels);
     display_tx.send(display_message).unwrap();
 }
 

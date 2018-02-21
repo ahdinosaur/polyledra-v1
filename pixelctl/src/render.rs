@@ -32,7 +32,7 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
     thread::spawn(move|| {
         let mut time = 0.0;
         let mut shape = shape::Shape::none();
-        let mut scene_manager = scene::SceneManager::new(&shape);
+        let mut scene_manager = scene::SceneManager::new(shape);
 
         loop {
             let mut should_render = false;
@@ -56,7 +56,7 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
                     },
                     RenderMessage::Shape(value) => {
                         shape = value;
-                        scene_manager = scene::SceneManager::new(&shape);
+                        scene_manager = scene::SceneManager::new(shape.clone());
                         let display_message = display::DisplayMessage::Shape(shape.clone());
                         display_tx.send(display_message).unwrap();
 

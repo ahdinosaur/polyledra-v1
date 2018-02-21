@@ -17,17 +17,19 @@ pub use self::rainbow::Rainbow;
 mod rainbow;
 
 pub struct SceneManager<'a> {
+    shape: shape::Shape,
     scenes: Vec<Box<Scene<'a> + 'a>>,
     current_scene_index: usize
 }
 
 impl<'a> SceneManager<'a> {
-    pub fn new(shape: &'a shape::Shape) -> SceneManager<'a> {
-        return SceneManager {
+    pub fn new(shape: shape::Shape) -> SceneManager<'a> {
+        let mut scene_manager = SceneManager {
+            shape: shape::Shape::none(),
             scenes: vec![
-                Box::new(test::Test::new(shape)),
-                Box::new(rainbow::RainbowLine::new(shape)),
-                Box::new(rainbow::Rainbow::new(shape)),
+                Box::new(test::Test::new(&shape)),
+                Box::new(rainbow::RainbowLine::new(&shape)),
+                Box::new(rainbow::Rainbow::new(&shape)),
                 // TODO twinkle
                 // TODO ripple
                 // TODO walk
@@ -35,7 +37,9 @@ impl<'a> SceneManager<'a> {
                 // TODO flame
             ],
             current_scene_index: 0
-        }
+        };
+        scene_manager.shape = shape;
+        return scene_manager;
     }
 
     pub fn scene(&self, time: control::Time) -> color::Colors<'a> { 

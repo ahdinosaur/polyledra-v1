@@ -24,21 +24,21 @@ pub struct SceneManager<'a> {
 
 impl<'a> SceneManager<'a> {
     pub fn new(shape: shape::Shape) -> SceneManager<'a> {
-        let mut scene_manager = SceneManager {
-            shape: shape::Shape::none(),
-            scenes: vec![
-                Box::new(test::Test::new(&shape)),
-                Box::new(rainbow::RainbowLine::new(&shape)),
-                Box::new(rainbow::Rainbow::new(&shape)),
-                // TODO twinkle
-                // TODO ripple
-                // TODO walk
-                // TODO orbit (turn on closest shape point)
-                // TODO flame
-            ],
+        let scenes: Vec<Box<Scene>> = vec![
+            Box::new(test::Test::new(&shape)),
+            Box::new(rainbow::RainbowLine::new(&shape)),
+            Box::new(rainbow::Rainbow::new(&shape)),
+            // TODO twinkle
+            // TODO ripple
+            // TODO walk
+            // TODO orbit (turn on closest shape point)
+            // TODO flame
+        ];
+        let scene_manager = SceneManager {
+            shape,
+            scenes,
             current_scene_index: 0
         };
-        scene_manager.shape = shape;
         return scene_manager;
     }
 

@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use color;
 use control;
 use scene;
@@ -9,7 +11,7 @@ pub struct Test {
 }
 
 impl scene::Scene for Test {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+    fn new (shape: Rc<shape::Shape>) -> Self where Self:Sized {
         Test {
             length: shape.dots.len()
         }

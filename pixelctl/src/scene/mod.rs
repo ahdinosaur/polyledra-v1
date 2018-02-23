@@ -1,11 +1,12 @@
 use modulo::Mod;
+use std::rc::Rc;
 
 use color;
 use control;
 use shape;
 
 pub trait Scene {
-    fn new (shape: shape::Shape) -> Self where Self: Sized;
+    fn new (shape: Rc<shape::Shape>) -> Self where Self: Sized;
     fn scene<'a> (&'a self, time: control::Time) -> color::Colors<'a>;
 }
 
@@ -23,16 +24,18 @@ pub struct SceneManager {
 
 impl SceneManager {
     pub fn new(shape: shape::Shape) -> SceneManager {
+        let scene_shape = Rc::new(shape);
         let scenes: Vec<Box<Scene>> = vec![
-            Box::new(test::Test::new(shape.clone())),
-            Box::new(rainbow::RainbowLine::new(shape.clone())),
-            Box::new(rainbow::Rainbow::new(shape.clone())),
+            Box::new(test::Test::new(scene_shape.clone())),
+            Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
+            Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             // TODO twinkle
             // TODO ripple
             // TODO walk
             // TODO orbit (turn on closest shape point)
             // TODO flame
         ];
+        drop(scene_shape);
         let scene_manager = SceneManager {
             scenes,
             current_scene_index: 0

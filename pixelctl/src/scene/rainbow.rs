@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use color;
 use control;
 use scene;
@@ -10,7 +12,7 @@ pub struct RainbowLine {
     length: usize
 }
 impl scene::Scene for RainbowLine {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+    fn new (shape: Rc<shape::Shape>) -> Self where Self:Sized {
         return RainbowLine {
             length: shape.dots.len()
         }
@@ -39,10 +41,10 @@ impl scene::Scene for RainbowLine {
 
 #[derive(Debug)]
 pub struct Rainbow {
-    shape: shape::Shape
+    shape: Rc<shape::Shape>
 }
 impl scene::Scene for Rainbow {
-    fn new (shape: shape::Shape) -> Self where Self:Sized {
+    fn new (shape: Rc<shape::Shape>) -> Self where Self:Sized {
         Rainbow {
             shape
         }

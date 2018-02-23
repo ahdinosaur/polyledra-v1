@@ -2,29 +2,20 @@ use color;
 use control;
 use shape;
 
-pub struct SceneInput<'a> {
-    pub time: control::Time,
-    pub shape: &'a shape::Shape
-}
-
-pub type SceneOutput<'a> = Box<Iterator<Item=color::Color> + 'a>;
-
-pub type RenderOutput = Vec<color::Rgb>;
-
 pub trait Scene {
-    fn new () -> Self where Self: Sized;
-    fn scene<'a> (&self, input: SceneInput<'a>) -> SceneOutput<'a>;
+    fn new<'a> (shape: &'a shape::Shape) -> Self where Self: Sized;
+    fn reset<'a> (&mut self, shape: &'a shape::Shape);
+    fn scene<'a> (&self, shape: &'a shape::Shape, time: control::Time) -> color::Colors<'a>;
 }
 
 pub use self::test::Test;
 mod test;
 
-pub use self::rgb::Rgb;
-mod rgb;
-
+/*
 pub use self::rainbow::RainbowLine;
 pub use self::rainbow::Rainbow;
 mod rainbow;
+*/
 
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
@@ -32,13 +23,12 @@ pub struct SceneManager {
 }
 
 impl SceneManager {
-    pub fn new() -> SceneManager {
+    pub fn new<'a>(shape: &'a shape::Shape) -> SceneManager {
         return SceneManager {
             scenes: vec![
-                Box::new(test::Test::new()),
-                Box::new(rgb::Rgb::new()),
-                Box::new(rainbow::RainbowLine::new()),
-                Box::new(rainbow::Rainbow::new()),
+                Box::new(test::Test::new(shape)),
+                // Box::new(rainbow::RainbowLine::new()),
+                // Box::new(rainbow::Rainbow::new()),
                 // TODO twinkle
                 // TODO ripple
                 // TODO walk
@@ -49,13 +39,13 @@ impl SceneManager {
         }
     }
 
-    pub fn scene<'a>(&self, input: SceneInput<'a>) -> SceneOutput<'a> { 
+    pub fn scene<'a>(&self, shape: &'a shape::Shape, time: control::Time) -> color::Colors<'a> {
         self.get_current_scene()
-            .scene(input)
+            .scene(shape, time)
     }
 
-    pub fn render<'a>(&self, input: SceneInput<'a>) -> RenderOutput {
-        (*self.scene(input))
+    pub fn render<'a>(&self, shape: &'a shape::Shape, time: control::Time) -> color::Pixels {
+        (*self.scene(shape, time))
             .into_iter()
             .map(|color| color.to_rgb())
             .collect()
@@ -63,6 +53,13 @@ impl SceneManager {
 
     fn get_current_scene(&self) -> &Box<Scene> {
         return self.scenes.get(self.current_scene_index).unwrap();
+    }
+
+    pub fn reset (&self, shape: &shape::Shape) {
+        self.scenes.iter()
+            .for_each(|scene| {
+                scene.reset(shape);
+            });
     }
 
     pub fn prev_mode(&mut self) {

@@ -17,7 +17,7 @@ impl scene::Scene for Test {
         }
     }
 
-    fn scene<'a> (&'a self, _time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&'a mut self, _time: control::Time) -> color::Colors<'a> {
         let colors = (0..self.length)
             .map(|_index| {
                 return color::Color::Rgb(color::Rgb {

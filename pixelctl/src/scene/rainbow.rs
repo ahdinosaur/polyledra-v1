@@ -18,7 +18,7 @@ impl scene::Scene for RainbowLine {
         }
     }
 
-    fn scene<'a> (&'a self, time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a> {
         let length = self.length;
         let speed = (0.25_f32) / MS_PER_S;
         let start = time * speed;
@@ -50,7 +50,7 @@ impl scene::Scene for Rainbow {
         }
     }
 
-    fn scene<'a> (&'a self, time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a> {
         let shape = &self.shape;
 
         let dots = &shape.dots;

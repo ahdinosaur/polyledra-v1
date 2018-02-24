@@ -4,10 +4,11 @@ version = "0.1.0"
 authors = ["Michael Williams <michael.williams@enspiral.com>"]
 
 [dependencies]
-kiss3d = "0.13"
 env_logger = "0.5.3"
 fps_clock = "2.0"
 glfw = "0.19"
+kiss3d = "0.13"
 log = "0.4"
 modulo = "0.1.2"
 nalgebra = "0.14"
+rand = "0.4"

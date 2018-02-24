@@ -1,3 +1,4 @@
+extern crate rand;
 extern crate env_logger;
 extern crate glfw;
 extern crate kiss3d;

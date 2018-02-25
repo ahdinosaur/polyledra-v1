@@ -9,6 +9,8 @@ use control;
 use scene;
 use shape;
 
+static MS_PER_S: f32 = 1.0e9; // microseconds_per_second
+
 #[derive(Debug)]
 pub struct Walk {
     shape: Rc<shape::Shape>,
@@ -60,7 +62,7 @@ impl scene::Scene for Walk {
         }
     }
 
-    fn scene<'a> (&'a mut self, _time: control::Time) -> color::Colors<'a> {
+    fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a> {
         let shape = &self.shape;
         let dots = &shape.dots;
         let vertices = &shape.vertices;
@@ -81,6 +83,9 @@ impl scene::Scene for Walk {
 
         let speed = 0.05_f32;
         let tail_length = 2_f32;
+
+        let hue_speed = (0.25_f32) / MS_PER_S;
+        let hue_start = time * hue_speed;
 
         // clone for moving to closure (TODO no clone?)
         let prev_vertex_ids_clone = prev_vertex_ids.clone();
@@ -151,10 +156,10 @@ impl scene::Scene for Walk {
 
                 debug!("distance from current {}", distance_from_current);
 
-                color::Color::Rgb(color::Rgb {
-                    red: 0_f32.max(1_f32 - distance_from_current),
-                    green: 0_f32.max(1_f32 - distance_from_current),
-                    blue: 0_f32.max(1_f32 - distance_from_current)
+                color::Color::Hsl(color::Hsl {
+                    hue: hue_start + (distance_from_current / tail_length),
+                    saturation: 1_f32,
+                    lightness: 0_f32.max(0.5_f32 - (distance_from_current / 4_f32)),
                 })
             });
 

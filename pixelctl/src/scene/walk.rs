@@ -21,20 +21,23 @@ pub struct Walk {
 impl scene::Scene for Walk {
     fn new (shape: Rc<shape::Shape>) -> Self where Self:Sized {
         // create vertex adjacency mapping
-        let mut vertex_adjacencies = HashMap::new();
-        shape.edges.iter()
-            .for_each(|edge| {
-                let a_id = edge.source_id;
-                let b_id = edge.target_id;
-                if !vertex_adjacencies.contains_key(&a_id) {
-                    vertex_adjacencies.insert(a_id, HashSet::new());
-                }
-                vertex_adjacencies.get_mut(&a_id).unwrap().insert(b_id);
-                if !vertex_adjacencies.contains_key(&b_id) {
-                    vertex_adjacencies.insert(b_id, HashSet::new());
-                }
-                vertex_adjacencies.get_mut(&b_id).unwrap().insert(a_id);
-            });
+        let vertex_adjacencies = {
+            let mut value = HashMap::new();
+            shape.edges.iter()
+                .for_each(|edge| {
+                    let a_id = edge.source_id;
+                    let b_id = edge.target_id;
+                    if !value.contains_key(&a_id) {
+                        value.insert(a_id, HashSet::new());
+                    }
+                    value.get_mut(&a_id).unwrap().insert(b_id);
+                    if !value.contains_key(&b_id) {
+                        value.insert(b_id, HashSet::new());
+                    }
+                    value.get_mut(&b_id).unwrap().insert(a_id);
+                });
+            value
+        };
         debug!("vertex adjacencies {:?}", vertex_adjacencies);
 
         let default_edge = shape::Edge::new(0, 0);

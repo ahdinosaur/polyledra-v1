@@ -6,10 +6,47 @@ use std::f32;
 
 pub type Position = Point3<f32>;
 
-#[derive(Clone)]
+pub type Vertex = Position;
+pub type VertexId = usize;
+pub type Vertices = Vec<Vertex>;
+
+#[derive(Clone, Debug)]
+pub struct Edge {
+    pub source_id: VertexId,
+    pub target_id: VertexId
+}
+
+impl Edge {
+    pub fn new(source_id: VertexId, target_id: VertexId) -> Edge {
+        return Edge {
+            source_id,
+            target_id
+        }
+    }
+    fn reverse(&self) -> Edge {
+        return Edge {
+            source_id: (&self.target_id).clone(),
+            target_id: (&self.source_id).clone()
+        }
+    }
+}
+
+pub type EdgeId = usize;
+pub type Edges = Vec<Edge>;
+
+#[derive(Clone, Debug)]
 pub struct AbstractShape {
-    pub vertices: Vec<Position>,
-    pub edges: Vec<(usize, usize)>
+    pub vertices: Vertices,
+    pub edges: Edges
+}
+
+impl AbstractShape {
+    fn none() -> AbstractShape {
+        AbstractShape {
+            vertices: Vec::new(),
+            edges: Vec::new()
+        }
+    }
 }
 
 pub trait AbstractShapeCreator {
@@ -24,27 +61,30 @@ impl AbstractShapeCreator for Tetrahedron {
 
         return AbstractShape {
             vertices: vec![
-                Position::new(0_f32, 0_f32, a),
-                Position::new((8_f32/9_f32).sqrt() * a, 0_f32, -(1_f32/3_f32) * a),
-                Position::new(-(2_f32/9_f32).sqrt() * a, (2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a),
-                Position::new(-(2_f32/9_f32).sqrt() * a, -(2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a)
+                Vertex::new(0_f32, 0_f32, a),
+                Vertex::new((8_f32/9_f32).sqrt() * a, 0_f32, -(1_f32/3_f32) * a),
+                Vertex::new(-(2_f32/9_f32).sqrt() * a, (2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a),
+                Vertex::new(-(2_f32/9_f32).sqrt() * a, -(2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a)
             ],
             edges: vec![
-                (3, 1),
-                (1, 0),
-                (0, 2),
-                (2, 3),
-                (3, 0),
-                (1, 2)
+                Edge::new(3, 1),
+                Edge::new(1, 0),
+                Edge::new(0, 2),
+                Edge::new(2, 3),
+                Edge::new(3, 0),
+                Edge::new(1, 2)
             ]
         };
     }
 }
 
+pub type EdgeIndex = usize;
 
 #[derive(Clone, Debug)]
 pub struct Dot {
-    pub position: Position
+    pub position: Position,
+    pub edge_id: EdgeId,
+    pub edge_index: EdgeIndex
 }
 
 #[derive(Clone, Debug)]
@@ -55,6 +95,8 @@ pub struct Bounds {
 
 #[derive(Clone, Debug)]
 pub struct Shape {
+    pub vertices: Vertices,
+    pub edges: Edges,
     pub dots: Vec<Dot>,
     pub bounds: Bounds
 }
@@ -68,6 +110,8 @@ pub struct ShapeOptions {
 impl Shape {
     pub fn none() -> Self {
         Shape {
+            vertices: Vec::new(),
+            edges: Vec::new(),
             dots: Vec::new(),
             bounds: Bounds {
                 min: Point3::new(0_f32, 0_f32, 0_f32),
@@ -99,10 +143,11 @@ impl Shape {
         let mut max_y = f32::NEG_INFINITY;
         let mut max_z = f32::NEG_INFINITY;
 
-        for edge in edges.iter() {
-            let &(a_index, b_index) = edge;
-            let a = vertices.get(a_index).unwrap();
-            let b = vertices.get(b_index).unwrap();
+        for (edge_id, edge) in edges.iter().enumerate() {
+            let a_id = edge.source_id;
+            let b_id = edge.target_id;
+            let a = vertices.get(a_id).unwrap();
+            let b = vertices.get(b_id).unwrap();
 
             let diff_x = b.x - a.x;
             let diff_y = b.y - a.y;
@@ -116,10 +161,10 @@ impl Shape {
             let half_interval_y = interval_y / 2_f32;
             let half_interval_z = interval_z / 2_f32;
 
-            for i in 0..num_pixels_per_edge {
-                let x = half_interval_x + a.x + interval_x * (i as f32);
-                let y = half_interval_y + a.y + interval_y * (i as f32);
-                let z = half_interval_z + a.z + interval_z * (i as f32);
+            for edge_index in 0..(num_pixels_per_edge as usize) {
+                let x = half_interval_x + a.x + interval_x * (edge_index as f32);
+                let y = half_interval_y + a.y + interval_y * (edge_index as f32);
+                let z = half_interval_z + a.z + interval_z * (edge_index as f32);
 
                 if x < min_x { min_x = x; } else if x > max_x { max_x = x; }
                 if y < min_y { min_y = y; } else if y > max_y { max_y = y; }
@@ -127,7 +172,11 @@ impl Shape {
 
                 let position = Position::new(x, y, z);
 
-                let dot = Dot { position };
+                let dot = Dot {
+                    position,
+                    edge_id,
+                    edge_index
+                };
                 dots.push(dot);
             }
         }
@@ -137,9 +186,11 @@ impl Shape {
             max: Point3::new(max_x, max_y, max_z)
         };
 
-        println!("bounds: {:?}", bounds);
+        debug!("bounds: {:?}", bounds);
 
         let shape = Shape {
+            vertices,
+            edges,
             dots,
             bounds
         };

@@ -72,14 +72,14 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
             }
 
             if should_render {
-                render(&display_tx, &scene_manager, time);
+                render(&display_tx, &mut scene_manager, time);
             }
         }
     });
     return render_tx;
 }
 
-fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &scene::SceneManager, time: control::Time) {
+fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &mut scene::SceneManager, time: control::Time) {
     let pixels = scene_manager.render(time);
     let display_message = display::DisplayMessage::Pixels(pixels);
     display_tx.send(display_message).unwrap();

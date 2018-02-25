@@ -7,7 +7,7 @@ use shape;
 
 pub trait Scene {
     fn new (shape: Rc<shape::Shape>) -> Self where Self: Sized;
-    fn scene<'a> (&'a self, time: control::Time) -> color::Colors<'a>;
+    fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a>;
 }
 
 pub use self::test::Test;
@@ -16,6 +16,9 @@ mod test;
 pub use self::rainbow::RainbowLine;
 pub use self::rainbow::Rainbow;
 mod rainbow;
+
+pub use self::walk::Walk;
+mod walk;
 
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
@@ -29,6 +32,7 @@ impl SceneManager {
             Box::new(test::Test::new(scene_shape.clone())),
             Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
+            Box::new(walk::Walk::new(scene_shape.clone())),
             // TODO twinkle
             // TODO ripple
             // TODO walk
@@ -43,20 +47,19 @@ impl SceneManager {
         return scene_manager;
     }
 
-    pub fn scene<'a>(&'a self, time: control::Time) -> color::Colors<'a> { 
-        self.get_current_scene()
-            .scene(time)
+    pub fn scene<'a>(&'a mut self, time: control::Time) -> color::Colors<'a> { 
+        self.get_current_scene().scene(time)
     }
 
-    pub fn render(&self, time: control::Time) -> color::Pixels {
+    pub fn render(&mut self, time: control::Time) -> color::Pixels {
         (*self.scene(time))
             .into_iter()
             .map(|color| color.to_rgb())
             .collect()
     }
 
-    fn get_current_scene(&self) -> &Box<Scene> {
-        return self.scenes.get(self.current_scene_index).unwrap();
+    fn get_current_scene(&mut self) -> &mut Box<Scene> {
+        self.scenes.get_mut(self.current_scene_index).unwrap()
     }
 
     pub fn prev_mode(&mut self) {

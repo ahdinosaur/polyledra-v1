@@ -3,18 +3,20 @@ echo(version=version());
 ROT = 360;
 HEIGHT = 1000;
 
+// 30, 30
+
 color("red")
-    rotate(a = [0, -30, -60])
+    rotate(a = [0, 30, 30])
         linear_extrude(height = HEIGHT)
             circle(r=5);
 
 color("green")
-    rotate(a = [0, -30, 60])
+    rotate(a = [0, -30, -30])
         linear_extrude(height = HEIGHT)
             circle(r=5);
             
   color("blue")
-    rotate(a = [0, 30, 0])
+    rotate(a = [0, 30, -90])
         linear_extrude(height = HEIGHT)
             circle(r=5);
             

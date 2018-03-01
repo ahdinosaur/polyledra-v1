@@ -25,13 +25,13 @@ fn main() {
     });
 
     let (control_tx, control_rx) = control::create_control_channel();
-    let render_shape = render::RenderMessage::Shape(shape);
 
     control::connect_clock(60, control_tx.clone());
 
     let display_tx = display::create_display_tx(control_tx.clone());
     let render_tx = render::create_render_tx(display_tx);
 
+    let render_shape = render::RenderMessage::Shape(shape);
     render_tx.send(render_shape).unwrap();
     
     for control_message in control_rx {

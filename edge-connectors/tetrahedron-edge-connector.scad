@@ -1,9 +1,11 @@
 echo(version=version());
 
 ROT = 360;
-HEIGHT = 50;
-RADIUS = 30;
-DEPTH = 5;
+HEIGHT = 30;
+CHANNEL_DEPTH = 10;
+CHANNEL_LENGTH = 16;
+ROD_RADIUS = 2;
+ARM_RADIUS = CHANNEL_LENGTH + 1;
 INFINITESIMAL = 0.01;
 
 // https://en.wikipedia.org/wiki/Tetrahedron
@@ -33,21 +35,24 @@ echo(rotation(-sqrt(2/9), -sqrt(2/3), -4/3 ));
 color("red")
     rotate(a = rotation(sqrt(8/9), 0, -4/3))
         linear_extrude(height = HEIGHT)
-            circle(r=RADIUS);
+            circle(r=ARM_RADIUS);
 
 color("green")
     rotate(a = rotation(-sqrt(2/9), sqrt(2/3), -4/3 ))
         linear_extrude(height = HEIGHT)
-            circle(r=RADIUS);
+            circle(r=ARM_RADIUS);
             
   color("blue")
       rotate(a = rotation(-sqrt(2/9), -sqrt(2/3), -4/3 ))
         difference () {
             linear_extrude(height = HEIGHT)
-              circle(r=RADIUS);
- 
-            translate([0, 0, HEIGHT - DEPTH])
-                cube([100,100, DEPTH + INFINITESIMAL]);
+            circle(r=ARM_RADIUS + ROD_RADIUS);
+            
+            for (i = [0 : 2]) {
+                rotate(a = [0, 0, 120 * i])
+                translate([2, 2, HEIGHT - CHANNEL_DEPTH])
+                cube([CHANNEL_LENGTH,CHANNEL_LENGTH, CHANNEL_DEPTH + INFINITESIMAL]);
+            }
         }
     
             

@@ -18,13 +18,15 @@ echo(version=version());
 //    inclination = acos(z / r);
 //    azimuth = atan2(y, x);
 
-ROT=360;
 CAP_RADIUS=19;
 CHANNEL_DEPTH = 10;
 CHANNEL_LENGTH = 16;
 ROD_RADIUS = 2;
 ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 1;
+
+ROT=360;
+RESOLUTION = 100;
 INFINITESIMAL = 0.01;
 
 function radius (x, y, z) = pow(x, 2) + pow(y, 2) + pow(z, 2);
@@ -42,8 +44,7 @@ for (arm_point = arm_points) {
   
   rotate(a = arm_rotation)
   difference () {
-    linear_extrude(height = ARM_HEIGHT)
-    circle(r=ARM_RADIUS + ROD_RADIUS);
+    cylinder(r=ARM_RADIUS + ROD_RADIUS, h= ARM_HEIGHT, $fn=RESOLUTION);
         
     for (i = [0 : 2]) {
       rotate(a = [0, 0, (1/3) * ROT * i])
@@ -53,4 +54,4 @@ for (arm_point = arm_points) {
   }
 }
 
-sphere(r=CAP_RADIUS);
+sphere(r=CAP_RADIUS, $fn = RESOLUTION);

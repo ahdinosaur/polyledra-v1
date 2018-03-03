@@ -1,23 +1,9 @@
 echo(version=version());
 
-// https://en.wikipedia.org/wiki/Tetrahedron
+ROT=360;
+INFINITESIMAL = 0.01;
 
-// v1 = ( sqrt(8/9), 0 , -1/3 )
-// v2 = ( -sqrt(2/9), sqrt(2/3), -1/3 )
-// v3 = ( -sqrt(2/9), -sqrt(2/3), -1/3 )
-// v4 = ( 0 , 0 , 1 )
-
-// https://en.wikipedia.org/wiki/Spherical_coordinate_system
-
-// radius = sqrt(a^2 + b^2 + c^2)
-// inclination = arccos(z/r)
-// azimuth = arctan(y/x)
-
-// cartesian coordinate to spherical rotation
- //   radius = pow(x, 2) + pow(y, 2) + pow(z, 2);
-//    inclination = acos(z / r);
-//    azimuth = atan2(y, x);
-
+EDGES_PER_VERTEX = 3;
 CAP_RADIUS=19;
 CHANNEL_DEPTH = 10;
 CHANNEL_LENGTH = 16;
@@ -25,26 +11,18 @@ ROD_RADIUS = 2;
 ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 1;
 
-ROT=360;
-RESOLUTION = 100;
-INFINITESIMAL = 0.01;
+FILAMENT_WIDTH = 3;
+MIN_ARC_FRAGMENT_ANGLE = 6;
+MIN_ARC_FRAGMENT_SIZE = FILAMENT_WIDTH / 2;
 
-function radius (x, y, z) = pow(x, 2) + pow(y, 2) + pow(z, 2);
-function rotation (x, y, z) = [0, acos(z / radius(x, y, z)), atan2(y, x)];
+arm_theta = 60;
 
-arm_points = [
-  [sqrt(8/9), 0, -4/3],
-  [-sqrt(2/9), sqrt(2/3), -4/3],
-  [-sqrt(2/9), -sqrt(2/3), -4/3]
-];
-
-for (arm_point = arm_points) {
-  arm_rotation = rotation(arm_point[0], arm_point[1], arm_point[2]);
-  echo(arm_rotation);
-  
-  rotate(a = arm_rotation)
+for (arm_index = [0 : EDGES_PER_VERTEX]) {
+  arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+    
+  rotate(a = [0, arm_theta, arm_phi])
   difference () {
-    cylinder(r=ARM_RADIUS + ROD_RADIUS, h= ARM_HEIGHT, $fn=RESOLUTION);
+    cylinder(r=ARM_RADIUS + ROD_RADIUS, h= ARM_HEIGHT, $fa=MIN_ARC_FRAGMENT_ANGLE, $fs = MIN_ARC_FRAGMENT_SIZE);
         
     for (i = [0 : 2]) {
       rotate(a = [0, 0, (1/3) * ROT * i])
@@ -54,4 +32,4 @@ for (arm_point = arm_points) {
   }
 }
 
-sphere(r=CAP_RADIUS, $fn = RESOLUTION);
+sphere(r=CAP_RADIUS, $fa = MIN_ARC_FRAGMENT_ANGLE, $fs = MIN_ARC_FRAGMENT_SIZE);

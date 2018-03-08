@@ -1,8 +1,9 @@
 extern crate nalgebra as na;
 
 use na::{Point3};
-
 use std::f32;
+
+use util::compute_edge_lengths::*;
 
 pub type Position = Point3<f32>;
 
@@ -103,7 +104,6 @@ pub struct Shape {
 
 pub struct ShapeOptions {
     pub abstract_shape: AbstractShape,
-    pub edge_length: f32,
     pub pixel_density: f32
 }
 
@@ -123,8 +123,7 @@ impl Shape {
     pub fn new (options: ShapeOptions) -> Shape {
         let ShapeOptions {
             abstract_shape,
-            edge_length,
-            pixel_density
+            pixel_density,
         } = options;
 
         let AbstractShape {
@@ -132,8 +131,9 @@ impl Shape {
             edges
         } = abstract_shape;
 
-        let num_pixels_per_edge = (edge_length * pixel_density) as i32;
-        let mut dots = Vec::with_capacity(edges.len() * (num_pixels_per_edge as usize));
+        let edge_lengths = compute_edge_lengths(&edges, &vertices);
+        let total_edge_length: f32 = edge_lengths.iter().sum();
+        let mut dots = Vec::with_capacity((total_edge_length * pixel_density) as usize);
 
         let mut min_x = f32::INFINITY;
         let mut min_y = f32::INFINITY;
@@ -144,6 +144,9 @@ impl Shape {
         let mut max_z = f32::NEG_INFINITY;
 
         for (edge_id, edge) in edges.iter().enumerate() {
+            let edge_length = edge_lengths.get(edge_id).unwrap();
+            let num_pixels_per_edge = (edge_length * pixel_density) as i32;
+
             let a_id = edge.source_id;
             let b_id = edge.target_id;
             let a = vertices.get(a_id).unwrap();
@@ -198,3 +201,4 @@ impl Shape {
         return shape
     }
 }
+

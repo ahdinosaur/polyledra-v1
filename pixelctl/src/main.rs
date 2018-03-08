@@ -13,6 +13,7 @@ mod render;
 mod scene;
 mod shape;
 use shape::AbstractShapeCreator;
+mod util;
 
 fn main() {
     env_logger::init();
@@ -20,7 +21,6 @@ fn main() {
     let abstract_shape = shape::Tetrahedron::new(1.0);
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
-        edge_length: 1.0,
         pixel_density: 120.0
     });
 

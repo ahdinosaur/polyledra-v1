@@ -1,7 +1,7 @@
 {
-  "name": "chandeliedrons",
+  "name": "chandeledra-shapes",
   "version": "1.0.0",
-  "description": "[chandeliers](https://en.wikipedia.org/wiki/Chandelier) from [polyhedra](https://en.wikipedia.org/wiki/Polyhedron)",
+  "description": "playing with chandeledra shapes",
   "main": "index.js",
   "scripts": {
     "start": "budo index.js --live"

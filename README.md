@@ -2,8 +2,7 @@
 
 [light-emitting](https://en.wikipedia.org/wiki/Light-emitting_diode) [polyhedron](https://en.wikipedia.org/wiki/Polyhedron) [chandeliers](https://en.wikipedia.org/wiki/Chandelier)
 
-- [shapes](./shapes)
-- [pixelctl](./pixelctl)
+![rainbow-tetrahedron](./controller-app/images/rainbow-tetrahedron.gif)
 
 ## background
 
@@ -20,100 +19,10 @@ i thought "what if i did the same with leds"? :rainbow:
 
 i then continued to spend the rest of the festival obsessing about the shape, leds, and rust interfaces, which led to here. :cat:
 
-## shapes
+## sub-projects
 
-### design constraints
-
-to simplify production, we want:
-
-- MUST HAVE uniform length edges (easy for buying led strip channels)
-- COULD HAVE uniform angle patterns  (easier for making 3d printed joints)
-
-### [icosahedron](https://en.wikipedia.org/wiki/Regular_icosahedron)
-
-the original gansta shape from the festival!
-
-an icosahedron is a 20-sided shape which regular angle patterns and uniform length edges.
-
-it's also a gyroelgonated pentagonal dipryamid (my original understanding of the shape): on the top and bottom is a [pentagonal pyramid](http://mathworld.wolfram.com/PentagonalPyramid.html), in the middle is an [pentagonal antiprism](https://en.wikipedia.org/wiki/Pentagonal_antiprism)
-
-![icosahedron](./shapes/images/icosahedron.png)
-
-### [octahedron](https://en.wikipedia.org/wiki/Octahedron)
-
-![octahedron](./shapes/images/octahedron.png)
-
-### [tetrahedron](https://en.wikipedia.org/wiki/Tetrahedron)
-
-![tetrahedron](./shapes/images/tetrahedron.png)
-
-### star
-
-led strips that start a single center point and explode outwards
-
-### candle
-
-wrap led matrix (grids) into a cylinder
-
-### loops
-
-many concentric circles, like a visualization of an atom: protons in the center, electrons around
-
-### vines
-
-hang led strips from the top, maybe uniform to form a 3d space
-
-## plan
-
-### controller hardware
-
-- [pocketbeagle](https://github.com/beagleboard/pocketbeagle)
-- 1x rotary encoder (eQEP)
-  - with reset button
-- param selector buttons (+ and -)
-- mode selector buttons (+ and -)
-- brightness potentiometer
-- apa102 spi out
-
-nice to have:
-
-- microphone sensitivity potentiometer
-- microphone in
-- audio jack in
-
-### software
-
-- apa102 spi interface (like [fastled](https://github.com/FastLED/FastLED))
-- params interface
-- graphics (glsl) interface
-  - input
-    - time
-    - params (param name, encoder value)
-    - pixel position [x, y, z]
-    - pixel rotation?
-  - output: pixel color
-
-### development setup
-
-simulate hardware controller with gtk interface
-
-simulate leds with graphics renderer
-
-### led hardware
-
-have 3d printed joint (like geodesic dome joint) which can connect many "aluminum led channel"s together.
-
-have custom circuit with many 4 pin jst inputs and 4 pin jst outputs.
-
-simple strategy to daisy chain around shape: start at top, go down to bottom, back up and down. save extra edges for final "edge case" run.
-
-### power hardware
-
-- led power protection (like [AllPixel Power Tap Kit](https://www.seeedstudio.com/AllPixel-Power-Tap-Kit-p-2380.html))
-
-
-## resources
-
-- [Platonic solid](https://en.wikipedia.org/wiki/Platonic_solid)
-- [Johnson Solids](http://mathworld.wolfram.com/JohnsonSolid.html): regular faces, uniform length edges
-- [CGAL](https://doc.cgal.org/latest/Manual/packages.html#PkgPolyhedronSummary)
+- [`shapes`](./shapes): playing with polyhedra shapes
+- [`controller-app`](./controller-app): a rust app to control the led pixels by rendering scenes
+- [`controller-circuit`](./controller-circuit): a circuit for the BeagleBone controller
+- [`vertex-structure`](./vertex-structure): a 3d model for the vertex structure(s) that connect the polyhedron's edge channels
+- [`vertex-circuit`](./vertex-circuit): a circuit to daisy chain the leds and inject power

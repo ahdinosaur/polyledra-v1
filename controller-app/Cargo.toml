@@ -1,5 +1,5 @@
 [package]
-name = "pixelctl"
+name = "controller-app"
 version = "0.1.0"
 authors = ["Michael Williams <michael.williams@enspiral.com>"]
 

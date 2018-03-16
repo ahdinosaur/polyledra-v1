@@ -1,5 +1,11 @@
 # chandeledra vertex circuit
 
+## notes
+
+make test pads / holes
+
+pcb-zone
+
 ## design
 
 each vertex should inject power like [AllPixel Power Tap Kit](https://www.seeedstudio.com/AllPixel-Power-Tap-Kit-p-2380.html)

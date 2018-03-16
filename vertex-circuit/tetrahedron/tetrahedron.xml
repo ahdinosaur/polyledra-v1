@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/dinosaur/repos/ahdinosaur/chandeledra/vertex-circuit/tetrahedron/tetrahedron.sch</source>
+    <date>Sat 17 Mar 2018 02:52:05 NZDT</date>
+    <tool>Eeschema 4.0.5+dfsg1-4</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>tetrahedron.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="J1">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB3FE0</tstamp>
+    </comp>
+    <comp ref="J5">
+      <value>JACK-DC-005</value>
+      <footprint>SeeedOPL-Connector-2016:3P-L14.2_W11.0_H9.0MM</footprint>
+      <fields>
+        <field name="SKU">320120003</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="JACK-DC-005"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB40C8</tstamp>
+    </comp>
+    <comp ref="J6">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB4269</tstamp>
+    </comp>
+    <comp ref="J7">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB4646</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB46C3</tstamp>
+    </comp>
+    <comp ref="J8">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB4767</tstamp>
+    </comp>
+    <comp ref="J4">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB4893</tstamp>
+    </comp>
+    <comp ref="J3">
+      <value>DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB48CC</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>CP</value>
+      <footprint>Discret:CP16</footprint>
+      <libsource lib="device" part="CP"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AAB4BC5</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="device" part="CP">
+      <description>Polarised capacitor</description>
+      <footprints>
+        <fp>CP*</fp>
+        <fp>C_Axial*</fp>
+        <fp>C_Radial*</fp>
+        <fp>TantalC*</fp>
+        <fp>C*elec</fp>
+        <fp>c_elec*</fp>
+        <fp>SMD*_Pol</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CP</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="SeeedOPL-Connector-2016" part="DIP-BLACK-MALE-HEADER-VERT_4P-2.54_">
+      <footprints>
+        <fp>*H4-2.54*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DIP-BLACK-MALE-HEADER-VERT_4P-2.54_</field>
+        <field name="MPN">P125-1104A0BS116A1</field>
+        <field name="SKU">320020017</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P$1" type="BiDi"/>
+        <pin num="2" name="P$2" type="BiDi"/>
+        <pin num="3" name="P$3" type="BiDi"/>
+        <pin num="4" name="P$4" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="SeeedOPL-Connector-2016" part="JACK-DC-005">
+      <footprints>
+        <fp>*3P-L14.2*W11.0*H9.0MM*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">JACK-DC-005</field>
+        <field name="SKU">320120003</field>
+      </fields>
+      <pins>
+        <pin num="+" name="+" type="BiDi"/>
+        <pin num="-1" name="-" type="BiDi"/>
+        <pin num="-2" name="CDN" type="BiDi"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="SeeedOPL-Connector-2016">
+      <uri>/home/dinosaur/repos/ahdinosaur/chandeledra/circuit-libraries/SeeedOPL-Connector-2016.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>/usr/share/kicad/library/device.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(J4-Pad4)">
+      <node ref="J4" pin="4"/>
+    </net>
+    <net code="2" name="Net-(J2-Pad3)">
+      <node ref="J2" pin="3"/>
+      <node ref="J7" pin="3"/>
+    </net>
+    <net code="3" name="Net-(J2-Pad2)">
+      <node ref="J7" pin="2"/>
+      <node ref="J2" pin="2"/>
+    </net>
+    <net code="4" name="Net-(J1-Pad3)">
+      <node ref="J1" pin="3"/>
+      <node ref="J6" pin="3"/>
+    </net>
+    <net code="5" name="Net-(J1-Pad2)">
+      <node ref="J1" pin="2"/>
+      <node ref="J6" pin="2"/>
+    </net>
+    <net code="6" name="Net-(J3-Pad4)">
+      <node ref="J8" pin="4"/>
+      <node ref="J3" pin="4"/>
+    </net>
+    <net code="7" name="Net-(J2-Pad4)">
+      <node ref="J2" pin="4"/>
+      <node ref="J7" pin="4"/>
+    </net>
+    <net code="8" name="Net-(J1-Pad4)">
+      <node ref="J1" pin="4"/>
+      <node ref="J6" pin="4"/>
+    </net>
+    <net code="11" name="Net-(J3-Pad2)">
+      <node ref="J3" pin="2"/>
+      <node ref="J8" pin="2"/>
+    </net>
+    <net code="12" name="Net-(J4-Pad1)">
+      <node ref="J4" pin="1"/>
+    </net>
+    <net code="13" name="Net-(C1-Pad1)">
+      <node ref="C1" pin="1"/>
+    </net>
+    <net code="14" name="Net-(C1-Pad2)">
+      <node ref="C1" pin="2"/>
+    </net>
+    <net code="32" name="Net-(J3-Pad3)">
+      <node ref="J8" pin="3"/>
+      <node ref="J3" pin="3"/>
+    </net>
+    <net code="33" name="Net-(J3-Pad1)">
+      <node ref="J8" pin="1"/>
+      <node ref="J3" pin="1"/>
+    </net>
+    <net code="34" name="Net-(J2-Pad1)">
+      <node ref="J2" pin="1"/>
+      <node ref="J7" pin="1"/>
+    </net>
+    <net code="35" name="Net-(J1-Pad1)">
+      <node ref="J1" pin="1"/>
+      <node ref="J6" pin="1"/>
+    </net>
+    <net code="36" name="Net-(J5-Pad-2)">
+      <node ref="J5" pin="-2"/>
+    </net>
+    <net code="37" name="Net-(J5-Pad-1)">
+      <node ref="J5" pin="-1"/>
+    </net>
+    <net code="38" name="Net-(J5-Pad+)">
+      <node ref="J5" pin="+"/>
+    </net>
+    <net code="39" name="Net-(J4-Pad3)">
+      <node ref="J4" pin="3"/>
+    </net>
+    <net code="40" name="Net-(J4-Pad2)">
+      <node ref="J4" pin="2"/>
+    </net>
+  </nets>
+</export>

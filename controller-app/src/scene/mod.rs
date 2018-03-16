@@ -33,6 +33,9 @@ impl SceneManager {
             Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
+            // TODO pulse
+            //   - pulse travels out from edges, meets next edge, goes back
+            //   - uniform cyclic value to represent "pulse", sine wave
             // TODO twinkle
             // TODO ripple
             // TODO walk

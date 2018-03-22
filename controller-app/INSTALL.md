@@ -1,27 +1,30 @@
 ```
-# get bbb image (http://elinux.org/Beagleboard:BeagleBoneBlack_Debian)
-wget https://rcn-ee.com/rootfs/bb.org/release/2015-11-03/console/BBB-eMMC-flasher-debian-7.9-console-armhf-2015-11-03-2gb.img.xz
-sha256sum BBB-eMMC-flasher-debian-7.9-console-armhf-2015-11-03-2gb.img.xz 
-  ebdd2938253e179a36a1b9b1f1def2a04595f9e0ee94776988c490ea317e97bc BBB-eMMC-flasher-debian-7.9-console-armhf-2015-11-03-2gb.img.xz
+# get pocketbeagle image
+# - http://beagleboard.org/latest-images
+# - http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+wget http://debian.beagleboard.org/images/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
+sha256sum bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
+  33fc557f32005c811bd449a59264da6b4a9b4ea9f87a1ee0aa43ae651c7f33d1  /home/dinosaur/Downloads/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
 
 # flash image to sd card
-unxz -c BBB-eMMC-flasher-debian-7.9-console-armhf-2015-11-03-2gb.img.xz | sudo dd bs=1M of=/dev/sdb
+unxz -c bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz | sudo dd bs=1M of=/dev/sdb
 
+# IGNORE
 # edit sd card /etc/network/interfaces
-iface eth0 inet static
-  address 192.168.7.2
-  netmask 255.255.255.252
-  network 192.168.7.0
-  gateway 192.168.7.1
+# iface usb0 inet static
+#  address 192.168.7.2
+#  netmask 255.255.255.252
+#  network 192.168.7.0
+#  gateway 192.168.7.1
+# /IGNORE
 
 # flash sd card to bbb
 
-# setup host to masquerade for bbb (eth1 is bbb to host, wlan0 is host to internet)
+# setup host to masquerade for bbb (enx985dad35b559 is bbb to host, wlp4s0 is host to internet)
 sudo -i
-ifconfig eth1 up 192.168.7.1 netmask 255.255.255.252
-iptables --table nat --append POSTROUTING --out-interface wlan0 -j MASQUERADE
-iptables --append FORWARD --in-interface eth1
-iptables --append FORWARD --in-interface eth1 -j ACCEPT
+ifconfig enx985dad35b556 up 192.168.7.1
+iptables --table nat --append POSTROUTING --out-interface wlp4s0 -j MASQUERADE
+iptables --append FORWARD --in-interface enx985dad35b556 -j ACCEPT
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
 # connect to bbb
@@ -29,9 +32,6 @@ ssh debian@192.168.7.2
 sudo -i
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 route add default gw 192.168.7.1
-
-# upgrade to jessie
-sed -i 's/wheezy/jessie/g' /etc/apt/sources.list
 
 # update
 sudo apt-get update
@@ -45,27 +45,15 @@ pkill ntpd
 ntpdate pool.ntp.org
 systemctl start ntp.service
 
-# nodejs
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.25.4/install.sh | bash
-nvm install iojs
-nvm use iojs
-nvm alias default iojs
+# rust
+curl https://sh.rustup.rs -sSf | sh
 
-# ledscape
-git clone https://github.com/Yona-Appletree/LEDscape
-cd LEDscape
-cp /boot/dtbs/3.8.13-bone70/am335x-boneblack.dtb{,.preledscape_bk}
-cp am335x-boneblack.dtb /boot/dtbs/3.8.13-bone70/
-modprobe uio_pruss
-sudo sed -i 's/^#cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN$/cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN'/g /boot/uEnv.txt
-reboot
+# install chandeledra controller app
+git clone git://github.com/ahdinosaur/chandeledra
+cd chandeledra/controller-app
+# TODO ./install
 
-ssh debian@192.168.7.2
-sudo -i
-echo "nameserver 8.8.8.8" >> /etc/resolv.conf
-route add default gw 192.168.7.1
-
-cd LEDSCAPE
-make
-./install-service.sh
+# enable interfaces
+# TODO sudo sed -i 's/^#cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN$/cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN'/g /boot/uEnv.txt
+# TODO reboot
 ```

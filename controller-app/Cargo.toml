@@ -3,11 +3,15 @@ name = "controller-app"
 version = "0.1.0"
 authors = ["Michael Williams <michael.williams@enspiral.com>"]
 
+[features]
+gl = ["glfw", "kiss3d"]
+spi = []
+
 [dependencies]
 env_logger = "0.5.3"
 fps_clock = "2.0"
-glfw = "0.19"
-kiss3d = "0.13"
+glfw = { version = "0.19", optional = true }
+kiss3d = { version = "0.13", optional = true }
 log = "0.4"
 modulo = "0.1.2"
 nalgebra = "0.14"

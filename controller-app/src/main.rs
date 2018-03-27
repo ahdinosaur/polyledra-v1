@@ -1,6 +1,8 @@
 extern crate rand;
 extern crate env_logger;
+#[cfg(feature = "gl")]
 extern crate glfw;
+#[cfg(feature = "gl")]
 extern crate kiss3d;
 #[macro_use] extern crate log;
 extern crate modulo;

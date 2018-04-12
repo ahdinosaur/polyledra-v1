@@ -8,7 +8,7 @@ CHANNEL_DEPTH = 10;
 CHANNEL_TOLERANCE = 1;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ROD_RADIUS = 2;
-ARM_HEIGHT= 32;
+ARM_HEIGHT= 50;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
 CAP_RADIUS=ARM_RADIUS + 2;
 
@@ -16,10 +16,33 @@ FILAMENT_WIDTH = 3;
 MIN_ARC_FRAGMENT_ANGLE = 6;
 MIN_ARC_FRAGMENT_SIZE = FILAMENT_WIDTH / 2;
 
-arm_theta = 60;
+// sin(phi) = x
+// sin^-1(x) = phi
+
+// h^2 + (1/2)^2 = 1^2
+// h = sqrt(3) / 2
+
+// h = x + w
+
+// tan(30) = w / (1/2)
+// w = (1/2)tan(30)
+
+// phi = sin^-1((sqrt(3)/2) - (1/2)tan(30))
+
+arm_theta = 35.26439;
+
+// 30 from vertical
+// 120 around vertical axis
+// 120 again
+
+// nominate an axis as the pole
+// rotate your point towards the normal = latitude
+// rotate around the pole = longitude
 
 for (arm_index = [0 : EDGES_PER_VERTEX]) {
   arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+  
+  echo(arm_theta, arm_phi);
     
   rotate(
     a = [

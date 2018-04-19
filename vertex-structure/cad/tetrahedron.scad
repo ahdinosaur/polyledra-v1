@@ -40,16 +40,27 @@ arm_theta = 35.26439;
 // rotate your point towards the normal = latitude
 // rotate around the pole = longitude
 
-for (arm_index = [0 : EDGES_PER_VERTEX]) {
-  arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
-    
-  rotate(
-    a = [
-      0,
-      arm_theta,
-      arm_phi
-    ]
-  )
+
+main();
+
+module main () {
+  union () {
+    for (arm_index = [0 : EDGES_PER_VERTEX]) {
+      arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+        
+      rotate(
+        a = [
+          0,
+          arm_theta,
+          arm_phi
+        ]
+      )
+      arm();
+    }
+  }
+}
+
+module arm () {
   translate(
     [
       0,
@@ -73,40 +84,40 @@ for (arm_index = [0 : EDGES_PER_VERTEX]) {
           (1/3) * ROT * i + (3/8) * ROT
         ]
       )
-      union () {
-        translate(
-          [
-            ROD_RADIUS,
-            ROD_RADIUS,
-            ARM_HEIGHT - CHANNEL_DEPTH
-          ]
-        )
-        linear_extrude(
-          height = CHANNEL_DEPTH + INFINITESIMAL
-        )
-        channel_shape(
-          width = CHANNEL_LENGTH
-        );
-        
-        translate(
-          [
-            ROD_RADIUS,
-            ROD_RADIUS,
-            -INFINITESIMAL
-          ]
-        )
-        linear_extrude(
-          height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITESIMAL
-        )
-        led_shape(
-          width = CHANNEL_LENGTH
-        );
-      };
+      channel();
     }
   };
 }
 
-module channel_shape (width) {
+module channel () {
+  union () {
+    translate(
+      [
+        ROD_RADIUS,
+        ROD_RADIUS,
+        ARM_HEIGHT - CHANNEL_DEPTH
+      ]
+    )
+    linear_extrude(
+      height = CHANNEL_DEPTH + INFINITESIMAL
+    )
+    channel_shape();
+    
+    translate(
+      [
+        ROD_RADIUS,
+        ROD_RADIUS,
+        -INFINITESIMAL
+      ]
+    )
+    linear_extrude(
+      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITESIMAL
+    )
+    channel_led_shape();
+  };
+}
+
+module channel_shape () {
   intersection () {
     square(CHANNEL_LENGTH);
     circle(
@@ -117,7 +128,7 @@ module channel_shape (width) {
   };
 }
 
-module led_shape (width) {
+module channel_led_shape () {
   intersection () {
     channel_shape(
       width = CHANNEL_LENGTH

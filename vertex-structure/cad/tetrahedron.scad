@@ -8,10 +8,12 @@ CHANNEL_DEPTH = 10;
 CHANNEL_TOLERANCE = 1;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ROD_RADIUS = 2;
-ARM_OFFSET = 20;
+ARM_OFFSET = 10;
 ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
-CAP_RADIUS=ARM_RADIUS + 2;
+CAP_RADIUS= 30;
+CAP_OFFSET = 0;
+BEYOND = 100;
 
 FILAMENT_WIDTH = 3;
 MIN_ARC_FRAGMENT_ANGLE = 6;
@@ -44,38 +46,77 @@ arm_theta = 35.26439;
 main();
 
 module main () {
-  union () {
-    for (arm_index = [0 : EDGES_PER_VERTEX]) {
-      arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+  intersection () {
+    positive_z();
+  
+    difference () {
+      union () {
+        translate(
+          [
+            0,
+            0,
+            CAP_OFFSET
+          ]
+        )
+        sphere(
+          r = CAP_RADIUS,
+          $fa = MIN_ARC_FRAGMENT_ANGLE,
+          $fs = MIN_ARC_FRAGMENT_SIZE
+        );
         
-      rotate(
-        a = [
-          0,
-          arm_theta,
-          arm_phi
-        ]
-      )
-      arm();
-    }
-  }
+        for (arm_index = [0 : EDGES_PER_VERTEX]) {
+          arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+        
+          rotate(
+            a = [
+              0,
+              arm_theta,
+              arm_phi
+            ]
+          )
+          translate(
+            [
+              0,
+              0,
+              ARM_OFFSET
+            ]
+          )
+          cylinder(
+            r = ARM_RADIUS + ROD_RADIUS,
+            h = ARM_HEIGHT,
+            $fa = MIN_ARC_FRAGMENT_ANGLE,
+            $fs = MIN_ARC_FRAGMENT_SIZE
+          );
+        }
+      };
+    
+      for (arm_index = [0 : EDGES_PER_VERTEX]) {
+        arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
+        
+        rotate(
+          a = [
+            0,
+            arm_theta,
+            arm_phi
+          ]
+        )
+        translate(
+          [
+            0,
+            0,
+            ARM_OFFSET
+          ]
+        )
+        arm();
+      }
+    };
+  };
 }
 
 module arm () {
-  translate(
-    [
-      0,
-      0,
-      ARM_OFFSET
-    ]
-  )
   difference () {
-    cylinder(
-      r = ARM_RADIUS + ROD_RADIUS,
-      h = ARM_HEIGHT,
-      $fa = MIN_ARC_FRAGMENT_ANGLE,
-      $fs = MIN_ARC_FRAGMENT_SIZE
-    );
-        
+
+
     for (i = [0 : 2]) {
       rotate(
         a = [
@@ -99,7 +140,7 @@ module channel () {
       ]
     )
     linear_extrude(
-      height = CHANNEL_DEPTH + INFINITESIMAL
+      height = CHANNEL_DEPTH + INFINITESIMAL + BEYOND
     )
     channel_shape();
     
@@ -107,11 +148,11 @@ module channel () {
       [
         ROD_RADIUS,
         ROD_RADIUS,
-        -INFINITESIMAL
+        -BEYOND
       ]
     )
     linear_extrude(
-      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITESIMAL
+      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * BEYOND
     )
     channel_led_shape();
   };
@@ -146,4 +187,15 @@ module channel_led_shape () {
       center = true
     );
   };
+}
+
+module positive_z () {
+  translate(
+    [
+      -BEYOND / 2,
+      -BEYOND / 2,,
+      0
+    ]
+  )
+  cube(BEYOND);
 }

@@ -8,7 +8,8 @@ CHANNEL_DEPTH = 10;
 CHANNEL_TOLERANCE = 1;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ROD_RADIUS = 2;
-ARM_HEIGHT= 50;
+ARM_OFFSET = 20;
+ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
 CAP_RADIUS=ARM_RADIUS + 2;
 
@@ -41,14 +42,19 @@ arm_theta = 35.26439;
 
 for (arm_index = [0 : EDGES_PER_VERTEX]) {
   arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
-  
-  echo(arm_theta, arm_phi);
     
   rotate(
     a = [
       0,
       arm_theta,
       arm_phi
+    ]
+  )
+  translate(
+    [
+      0,
+      0,
+      ARM_OFFSET
     ]
   )
   difference () {
@@ -67,34 +73,37 @@ for (arm_index = [0 : EDGES_PER_VERTEX]) {
           (1/3) * ROT * i + (3/8) * ROT
         ]
       )
-      translate(
-        [
-          ROD_RADIUS,
-          ROD_RADIUS,
-          ARM_HEIGHT - CHANNEL_DEPTH
-        ]
-      )
-      intersection () {
-        cube(
+      union () {
+        translate(
           [
-            CHANNEL_LENGTH,
-            CHANNEL_LENGTH,
-            CHANNEL_DEPTH + INFINITESIMAL
+            ROD_RADIUS,
+            ROD_RADIUS,
+            ARM_HEIGHT - CHANNEL_DEPTH
           ]
-        );
-        cylinder(
-          r = CHANNEL_LENGTH,
-          h = CHANNEL_DEPTH + INFINITESIMAL,
-          $fa = MIN_ARC_FRAGMENT_ANGLE,
-          $fs = MIN_ARC_FRAGMENT_SIZE
+        )
+        linear_extrude(
+          height = CHANNEL_DEPTH + INFINITESIMAL
+        )
+        channel_shape(
+          width = CHANNEL_LENGTH
         );
       };
     }
   };
 }
 
-sphere(
-  r = CAP_RADIUS,
-  $fa = MIN_ARC_FRAGMENT_ANGLE,
-  $fs = MIN_ARC_FRAGMENT_SIZE
-);
+module channel_shape (width) {
+  intersection () {
+    square(
+      [
+        CHANNEL_LENGTH,
+        CHANNEL_LENGTH
+      ]
+    );
+    circle(
+      r = CHANNEL_LENGTH,
+      $fa = MIN_ARC_FRAGMENT_ANGLE,
+      $fs = MIN_ARC_FRAGMENT_SIZE
+    );
+  };
+}

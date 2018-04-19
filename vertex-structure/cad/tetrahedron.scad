@@ -87,6 +87,20 @@ for (arm_index = [0 : EDGES_PER_VERTEX]) {
         channel_shape(
           width = CHANNEL_LENGTH
         );
+        
+        translate(
+          [
+            ROD_RADIUS,
+            ROD_RADIUS,
+            -INFINITESIMAL
+          ]
+        )
+        linear_extrude(
+          height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITESIMAL
+        )
+        led_shape(
+          width = CHANNEL_LENGTH
+        );
       };
     }
   };
@@ -94,16 +108,31 @@ for (arm_index = [0 : EDGES_PER_VERTEX]) {
 
 module channel_shape (width) {
   intersection () {
-    square(
-      [
-        CHANNEL_LENGTH,
-        CHANNEL_LENGTH
-      ]
-    );
+    square(CHANNEL_LENGTH);
     circle(
       r = CHANNEL_LENGTH,
       $fa = MIN_ARC_FRAGMENT_ANGLE,
       $fs = MIN_ARC_FRAGMENT_SIZE
+    );
+  };
+}
+
+module led_shape (width) {
+  intersection () {
+    channel_shape(
+      width = CHANNEL_LENGTH
+    );
+    
+    translate(
+      [
+        CHANNEL_LENGTH,
+        CHANNEL_LENGTH
+      ]
+    )
+    rotate((1/8) * ROT)
+    square(
+      CHANNEL_LENGTH * 2,
+      center = true
     );
   };
 }

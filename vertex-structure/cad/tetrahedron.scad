@@ -64,7 +64,7 @@ for (arm_index = [0 : EDGES_PER_VERTEX]) {
         a = [
           0,
           0,
-          (1/3) * ROT * i
+          (1/3) * ROT * i + (3/8) * ROT
         ]
       )
       translate(

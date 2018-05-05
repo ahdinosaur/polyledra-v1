@@ -75,6 +75,7 @@ impl scene::Scene for Walk {
         let prev_vertices: Vec<shape::Vertex> = prev_vertex_ids.iter()
             .map(|id| *vertices.get(*id).unwrap())
             .collect();
+        let last_vertex_id = prev_vertex_ids.iter().last().unwrap().clone();
         let last_vertex = prev_vertices.last().unwrap();
 
         debug!("prev_vertices {:?} {:?}", prev_vertex_ids, prev_vertices);
@@ -172,7 +173,10 @@ impl scene::Scene for Walk {
             let current_vertex = next_vertex;
 
             // set next vertex
-            let possible_next_vertex_ids = &self.vertex_adjacencies.get(&current_vertex_id).unwrap();
+            let possible_next_vertex_ids: Vec<shape::VertexId> = self.vertex_adjacencies.get(&current_vertex_id).unwrap().clone()
+                .into_iter()
+                .filter(|vertex_id| *vertex_id != last_vertex_id)
+                .collect();
             let mut rng = thread_rng();
             let next_vertex_id = **seq::sample_iter(&mut rng, possible_next_vertex_ids.iter(), 1).unwrap().first().unwrap();
             self.next_vertex_id = next_vertex_id;

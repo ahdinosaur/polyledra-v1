@@ -20,15 +20,17 @@ unxz -c bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz | sudo dd bs=1M of=/dev/
 
 # flash sd card to bbb
 
-# setup host to masquerade for bbb (enx985dad35b559 is bbb to host, wlp4s0 is host to internet)
+# setup host to masquerade for bbb
+# (enx985dad35b556 is bbb to host, wlp4s0 is host to internet)
 sudo -i
-ifconfig enx985dad35b556 up 192.168.7.1
+sysctl net.ipv4.ip_forward=1
+# ifconfig enx985dad35b556 up 192.168.7.1
 iptables --table nat --append POSTROUTING --out-interface wlp4s0 -j MASQUERADE
-iptables --append FORWARD --in-interface enx985dad35b556 -j ACCEPT
-echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables --append FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables --append FORWARD --in-interface enx985dad35b556 --out-interface wlp4s0 -j ACCEPT
 
 # connect to bbb
-ssh debian@192.168.7.2
+ssh debian@192.168.6.2 # default password is temppwd
 sudo -i
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 route add default gw 192.168.7.1
@@ -44,6 +46,8 @@ ln -s /usr/share/zoneinfo/Pacific/Auckland /etc/localtime
 pkill ntpd
 ntpdate pool.ntp.org
 systemctl start ntp.service
+
+exit
 
 # rust
 curl https://sh.rustup.rs -sSf | sh

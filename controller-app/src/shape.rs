@@ -1,6 +1,6 @@
 extern crate nalgebra as na;
 
-use na::{Point3};
+use na::{Point3, distance};
 use std::f32;
 
 use util::compute_edge_lengths::*;
@@ -47,6 +47,31 @@ impl AbstractShape {
             vertices: Vec::new(),
             edges: Vec::new()
         }
+    }
+
+    pub fn edge_source(&self, edge_id: EdgeId) -> &Vertex {
+        let edges = &self.edges;
+        let vertices = &self.vertices;
+        let edge = edges.get(edge_id).unwrap();
+        vertices.get(edge.source_id).unwrap()
+    }
+
+    pub fn edge_target(&self, edge_id: EdgeId) -> &Vertex {
+        let edges = &self.edges;
+        let vertices = &self.vertices;
+        let edge = edges.get(edge_id).unwrap();
+        vertices.get(edge.target_id).unwrap()
+    }
+
+    pub fn edge_length(&self, edge_id: EdgeId) -> f32 {
+        let edges = &self.edges;
+        let vertices = &self.vertices;
+
+        let edge = edges.get(edge_id).unwrap();
+        let source = &self.edge_source(edge_id);
+        let target = &self.edge_target(edge_id);
+
+        distance(*source, *target)
     }
 }
 
@@ -96,8 +121,7 @@ pub struct Bounds {
 
 #[derive(Clone, Debug)]
 pub struct Shape {
-    pub vertices: Vertices,
-    pub edges: Edges,
+    pub abstract_shape: AbstractShape,
     pub dots: Vec<Dot>,
     pub bounds: Bounds
 }
@@ -110,8 +134,7 @@ pub struct ShapeOptions {
 impl Shape {
     pub fn none() -> Self {
         Shape {
-            vertices: Vec::new(),
-            edges: Vec::new(),
+            abstract_shape: AbstractShape::none(),
             dots: Vec::new(),
             bounds: Bounds {
                 min: Point3::new(0_f32, 0_f32, 0_f32),
@@ -126,10 +149,8 @@ impl Shape {
             pixel_density,
         } = options;
 
-        let AbstractShape {
-            vertices,
-            edges
-        } = abstract_shape;
+        let vertices = abstract_shape.vertices.clone();
+        let edges = abstract_shape.edges.clone();
 
         let edge_lengths = compute_edge_lengths(&edges, &vertices);
         let total_edge_length: f32 = edge_lengths.iter().sum();
@@ -192,8 +213,7 @@ impl Shape {
         debug!("bounds: {:?}", bounds);
 
         let shape = Shape {
-            vertices,
-            edges,
+            abstract_shape,
             dots,
             bounds
         };

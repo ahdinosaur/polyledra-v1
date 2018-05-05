@@ -25,7 +25,7 @@ impl scene::Scene for Walk {
         // create vertex adjacency mapping
         let vertex_adjacencies = {
             let mut value = HashMap::new();
-            shape.edges.iter()
+            shape.abstract_shape.edges.iter()
                 .for_each(|edge| {
                     let a_id = edge.source_id;
                     let b_id = edge.target_id;
@@ -43,12 +43,12 @@ impl scene::Scene for Walk {
         debug!("vertex adjacencies {:?}", vertex_adjacencies);
 
         let default_edge = shape::Edge::new(0, 0);
-        let edges_clone = &shape.clone().edges;
+        let edges_clone = &shape.clone().abstract_shape.edges;
         let initial_edge = edges_clone.get(0).unwrap_or(&default_edge);
         let last_vertex_id = initial_edge.source_id.clone();
         let next_vertex_id = initial_edge.target_id.clone();
         let default_position = shape::Position::new(0_f32, 0_f32, 0_f32);
-        let current_position = shape.vertices.get(last_vertex_id).unwrap_or(&default_position).clone();
+        let current_position = shape.abstract_shape.vertices.get(last_vertex_id).unwrap_or(&default_position).clone();
 
         let mut prev_vertex_ids = VecDeque::new();
         prev_vertex_ids.push_back(last_vertex_id);
@@ -65,8 +65,8 @@ impl scene::Scene for Walk {
     fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a> {
         let shape = &self.shape;
         let dots = &shape.dots;
-        let vertices = &shape.vertices;
-        let edges = &shape.edges;
+        let vertices = &shape.abstract_shape.vertices;
+        let edges = &shape.abstract_shape.edges;
 
         let current_position = self.current_position;
         let next_vertex_id = self.next_vertex_id;

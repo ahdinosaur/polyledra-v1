@@ -20,6 +20,9 @@ mod rainbow;
 pub use self::walk::Walk;
 mod walk;
 
+pub use self::spark::Spark;
+mod spark;
+
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
     current_scene_index: usize
@@ -33,6 +36,7 @@ impl SceneManager {
             Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
+            Box::new(spark::Spark::new(scene_shape.clone())),
             // TODO pulse
             //   - pulse travels out from edges, meets next edge, goes back
             //   - uniform cyclic value to represent "pulse", sine wave

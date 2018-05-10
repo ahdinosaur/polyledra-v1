@@ -4,6 +4,8 @@ extern crate env_logger;
 extern crate glfw;
 #[cfg(feature = "gl")]
 extern crate kiss3d;
+#[cfg(feature = "hal")]
+extern crate linux_embedded_hal as hal;
 #[macro_use] extern crate log;
 extern crate modulo;
 extern crate nalgebra as na;

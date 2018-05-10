@@ -1,4 +1,3 @@
-use modulo::Mod;
 use na::{distance};
 
 use std::rc::Rc;

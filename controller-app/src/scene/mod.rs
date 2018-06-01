@@ -45,7 +45,7 @@ impl SceneManager {
         drop(scene_shape);
         let scene_manager = SceneManager {
             scenes,
-            current_scene_index: 0
+            current_scene_index: 4 // spark
         };
         return scene_manager;
     }

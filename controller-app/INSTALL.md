@@ -61,3 +61,7 @@ cd chandeledra/controller-app
 # TODO sudo sed -i 's/^#cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN$/cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN'/g /boot/uEnv.txt
 # TODO reboot
 ```
+
+notes:
+
+- if cargo build fails, `cargo clean`: https://github.com/japaric/cross/issues/39

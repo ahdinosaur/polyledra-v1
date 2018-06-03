@@ -31,7 +31,7 @@ fn main() {
 
     let (control_tx, control_rx) = control::create_control_channel();
 
-    control::connect_clock(30, control_tx.clone());
+    control::connect_clock(120, control_tx.clone());
 
     let display_tx = display::create_display_tx(control_tx.clone());
     let render_tx = render::create_render_tx(display_tx);

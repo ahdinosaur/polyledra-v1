@@ -1,0 +1,67 @@
+#!/bin/bash
+
+TARGET="armv7-unknown-linux-gnueabihf"
+IS_RELEASE=true
+
+BONE_USER=debian
+BONE_HOST=192.168.7.2
+BONE_NAME=chandeledra
+BONE_DIR="/home/${BONE_USER}/${BONE_NAME}"
+BONE_BIN="bin"
+BONE_SERVICE="${BONE_NAME}.service"
+BONE_SSH="${BONE_USER}@${BONE_HOST}"
+
+# https://stackoverflow.com/a/90441
+set -e
+set -o pipefail
+
+CROSS_ARGS="build --target ${TARGET} --features hal"
+MODE="debug"
+
+# https://serverfault.com/a/764403
+function quiet_ssh {
+    local connection="$1"
+    local commands="$2"
+    if [ -z "${commands}" ]; then
+        commands=`cat`
+    fi
+    ssh -T "${connection}" "${commands}"
+}
+
+if [ ${IS_RELEASE} = true ]
+then
+  CROSS_ARGS="${CROSS_ARGS} --release"
+  MODE="release"
+fi
+
+cross ${CROSS_ARGS}
+
+quiet_ssh ${BONE_SSH} <<EOF
+mkdir -p ${BONE_NAME}
+systemctl --user is-active --quiet ${BONE_SERVICE} && \
+  systemctl --user stop ${BONE_SERVICE}
+EOF
+
+scp "target/${TARGET}/${MODE}/controller-app" "${BONE_SSH}:${BONE_DIR}/${BONE_BIN}"
+
+quiet_ssh ${BONE_SSH} tee ${BONE_DIR}/${BONE_SERVICE} > /dev/null <<EOF
+[Unit]
+Description=${BONE_NAME}
+AssertPathExists=${BONE_DIR}
+
+[Service]
+WorkingDirectory=${BONE_DIR}
+ExecStart=${BONE_DIR}/${BONE_BIN}
+Restart=always
+KillMode=control-group
+
+[Install]
+WantedBy=default.target
+EOF
+
+# https://serverfault.com/a/841150
+quiet_ssh ${BONE_SSH} <<EOF
+systemctl --user enable ${BONE_DIR}/${BONE_SERVICE} || exit -1
+systemctl --user start ${BONE_SERVICE}
+systemctl --user status ${BONE_SERVICE}
+EOF

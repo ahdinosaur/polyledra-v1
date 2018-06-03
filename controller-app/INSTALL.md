@@ -30,7 +30,9 @@ iptables --append FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables --append FORWARD --in-interface enx985dad35b556 --out-interface wlp4s0 -j ACCEPT
 
 # connect to bbb
-ssh debian@192.168.6.2 # default password is temppwd
+ssh-copy-id debian@192.168.6.2 # default password is temppwd
+
+ssh debian@192.168.6.2
 sudo -i
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 route add default gw 192.168.7.1
@@ -47,19 +49,24 @@ pkill ntpd
 ntpdate pool.ntp.org
 systemctl start ntp.service
 
-exit
+# https://serverfault.com/a/841150
+sudo loginctl enable-linger debian
 
 # rust
-curl https://sh.rustup.rs -sSf | sh
+# curl https://sh.rustup.rs -sSf | sh
 
 # install chandeledra controller app
-git clone git://github.com/ahdinosaur/chandeledra
-cd chandeledra/controller-app
+# git clone git://github.com/ahdinosaur/chandeledra
+# cd chandeledra/controller-app
 # TODO ./install
 
 # enable interfaces
 # TODO sudo sed -i 's/^#cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN$/cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN'/g /boot/uEnv.txt
 # TODO reboot
+
+exit
+
+./bin/to-bone
 ```
 
 notes:

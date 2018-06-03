@@ -25,12 +25,13 @@ fn main() {
     let abstract_shape = shape::Tetrahedron::new(1.0);
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
-        pixel_density: 30.0
+        pixel_density: 30.0,
+        num_arms: 3
     });
 
     let (control_tx, control_rx) = control::create_control_channel();
 
-    control::connect_clock(60, control_tx.clone());
+    control::connect_clock(30, control_tx.clone());
 
     let display_tx = display::create_display_tx(control_tx.clone());
     let render_tx = render::create_render_tx(display_tx);

@@ -40,8 +40,9 @@ impl Display for HalDisplay {
 
         match display_message {
             &DisplayMessage::Pixels(ref pixels) => {
-                let mut buffer = pixels_to_apa102_buffer(pixels);
-                spidev.write(&mut buffer);
+                let brightness = 10;
+                let mut buffer = pixels_to_apa102_buffer(pixels, Some(brightness));
+                spidev.write(&mut buffer).unwrap();
             }
             &DisplayMessage::Shape(_) => {}
         }
@@ -56,10 +57,10 @@ impl Display for HalDisplay {
     }
 }
 
-fn pixels_to_apa102_buffer(pixels: &color::Pixels) -> Vec<u8> {
-    let num_edges = 1;
+fn pixels_to_apa102_buffer(pixels: &color::Pixels, brightness_option: Option<u8>) -> Vec<u8> {
+    let brightness = brightness_option.unwrap_or(31); // 31 == MAX brightness
     let start_frame_length = 4;
-    let num_led_frames = num_edges * pixels.len();
+    let num_led_frames = pixels.len();
     let led_frame_length = 4;
     let led_frames_length = num_led_frames * led_frame_length;
     let num_end_frames = ((num_led_frames - 1) as f32 / 16_f32).ceil() as usize;
@@ -70,33 +71,31 @@ fn pixels_to_apa102_buffer(pixels: &color::Pixels) -> Vec<u8> {
     let mut buffer: Vec<u8> = vec![0; buffer_length];
 
     // start frame
+    /*
     buffer[0] = 0;
     buffer[1] = 0;
     buffer[2] = 0;
     buffer[3] = 0;
+    */
 
     // led frames
     for (pixel_index, rgb) in pixels.iter().enumerate() {
-        for edge_index in 0..num_edges {
-            let led_frame_index = pixel_index * num_edges + edge_index;
-            let buffer_index = start_frame_length + led_frame_length * led_frame_index;
+        let buffer_index = start_frame_length + led_frame_length * pixel_index;
 
-            // let brightness = 31 // MAX
-            let brightness = 10;
-
-            // 0b11100000 = 0340 = 0xE0 = 224
-            buffer[buffer_index] = brightness | 0xE0;
-            buffer[buffer_index + 1] = (rgb.red * (0xff as f32)) as u8;
-            buffer[buffer_index + 2] = (rgb.green * (0xff as f32)) as u8;
-            buffer[buffer_index + 3] = (rgb.blue * (0xff as f32)) as u8;
-        }
+        // 0b11100000 = 0340 = 0xE0 = 224
+        buffer[buffer_index] = brightness | 0xE0;
+        buffer[buffer_index + 1] = (rgb.red * (0xff as f32)) as u8;
+        buffer[buffer_index + 2] = (rgb.green * (0xff as f32)) as u8;
+        buffer[buffer_index + 3] = (rgb.blue * (0xff as f32)) as u8;
     }
 
     // end frames
+    /*
     for end_index in 0..num_end_frames {
         let buffer_index = start_frame_length + led_frames_length + end_index;
         buffer[buffer_index] = 0;
     }
+    */
 
     buffer
 }
@@ -108,15 +107,30 @@ mod test {
 
     #[test]
     fn red_pixel() {
-        let num_edges = 1;
         let red = Rgb { red: 1_f32, green: 0_f32, blue: 0_f32 };
         let pixels = vec![red];
-        let buffer = pixels_to_apa102_buffer(&pixels);
-        assert_eq!(buffer.len(), (1 + num_edges) * 4 + 1);
-        assert_eq!(&buffer[..4], &[0, 0, 0, 0]);
-        for edge_index in 0..num_edges {
-            assert_eq!(&buffer[4+edge_index*4..8+edge_index*4], &[0xff, 0xff, 0, 0]);
-        }
-        assert_eq!(&buffer[num_edges*4+1..num_edges*4+2], &[0]);
+        let buffer = pixels_to_apa102_buffer(&pixels, None);
+        let expected = vec![
+            0, 0, 0, 0, // start
+            0xff, 0xff, 0, 0 // red
+        ];
+        assert_eq!(&buffer, &expected);
+    }
+
+    #[test]
+    fn rgb_pixels() {
+        let red = Rgb { red: 1_f32, green: 0_f32, blue: 0_f32 };
+        let green = Rgb { red: 0_f32, green: 1_f32, blue: 0_f32 };
+        let blue = Rgb { red: 0_f32, green: 0_f32, blue: 1_f32 };
+        let pixels = vec![red, green, blue];
+        let buffer = pixels_to_apa102_buffer(&pixels, None);
+        let expected = vec![
+            0, 0, 0, 0, // start
+            0xff, 0xff, 0, 0, // red
+            0xff, 0, 0xff, 0, // green
+            0xff, 0, 0, 0xff, // blue
+            0 // end
+        ];
+        assert_eq!(&buffer, &expected);
     }
 }

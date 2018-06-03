@@ -105,12 +105,14 @@ impl AbstractShapeCreator for Tetrahedron {
 }
 
 pub type EdgeIndex = usize;
+pub type ArmIndex = usize;
 
 #[derive(Clone, Debug)]
 pub struct Dot {
     pub position: Position,
     pub edge_id: EdgeId,
-    pub edge_index: EdgeIndex
+    pub edge_index: EdgeIndex,
+    pub arm_index: ArmIndex
 }
 
 #[derive(Clone, Debug)]
@@ -123,11 +125,13 @@ pub struct Bounds {
 pub struct Shape {
     pub abstract_shape: AbstractShape,
     pub dots: Vec<Dot>,
+    pub num_arms: usize,
     pub bounds: Bounds
 }
 
 pub struct ShapeOptions {
     pub abstract_shape: AbstractShape,
+    pub num_arms: usize,
     pub pixel_density: f32
 }
 
@@ -136,6 +140,7 @@ impl Shape {
         Shape {
             abstract_shape: AbstractShape::none(),
             dots: Vec::new(),
+            num_arms: 0,
             bounds: Bounds {
                 min: Point3::new(0_f32, 0_f32, 0_f32),
                 max: Point3::new(0_f32, 0_f32, 0_f32)
@@ -147,6 +152,7 @@ impl Shape {
         let ShapeOptions {
             abstract_shape,
             pixel_density,
+            num_arms
         } = options;
 
         let vertices = abstract_shape.vertices.clone();
@@ -185,23 +191,33 @@ impl Shape {
             let half_interval_y = interval_y / 2_f32;
             let half_interval_z = interval_z / 2_f32;
 
-            for edge_index in 0..(num_pixels_per_edge as usize) {
-                let x = half_interval_x + a.x + interval_x * (edge_index as f32);
-                let y = half_interval_y + a.y + interval_y * (edge_index as f32);
-                let z = half_interval_z + a.z + interval_z * (edge_index as f32);
-
-                if x < min_x { min_x = x; } else if x > max_x { max_x = x; }
-                if y < min_y { min_y = y; } else if y > max_y { max_y = y; }
-                if z < min_z { min_z = z; } else if z > max_z { max_z = z; }
-
-                let position = Position::new(x, y, z);
-
-                let dot = Dot {
-                    position,
-                    edge_id,
-                    edge_index
+            for arm_index in 0..num_arms {
+                let is_even_arm = arm_index % 2 == 0;
+                let edge_index_range = 0..(num_pixels_per_edge as usize);
+                let edge_index_iter: Box<Iterator<Item=usize>> = if is_even_arm {
+                    Box::new(edge_index_range)
+                } else {
+                    Box::new(edge_index_range.rev())
                 };
-                dots.push(dot);
+                for edge_index in edge_index_iter {
+                    let x = half_interval_x + a.x + interval_x * (edge_index as f32);
+                    let y = half_interval_y + a.y + interval_y * (edge_index as f32);
+                    let z = half_interval_z + a.z + interval_z * (edge_index as f32);
+
+                    if x < min_x { min_x = x; } else if x > max_x { max_x = x; }
+                    if y < min_y { min_y = y; } else if y > max_y { max_y = y; }
+                    if z < min_z { min_z = z; } else if z > max_z { max_z = z; }
+
+                    let position = Position::new(x, y, z);
+
+                    let dot = Dot {
+                        position,
+                        edge_id,
+                        edge_index: edge_index as usize,
+                        arm_index
+                    };
+                    dots.push(dot);
+                }
             }
         }
 
@@ -215,6 +231,7 @@ impl Shape {
         let shape = Shape {
             abstract_shape,
             dots,
+            num_arms,
             bounds
         };
 

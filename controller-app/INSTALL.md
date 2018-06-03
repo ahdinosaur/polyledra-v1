@@ -6,6 +6,9 @@ wget http://debian.beagleboard.org/images/bone-debian-9.3-iot-armhf-2018-03-05-4
 sha256sum bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
   33fc557f32005c811bd449a59264da6b4a9b4ea9f87a1ee0aa43ae651c7f33d1  /home/dinosaur/Downloads/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
 
+# TODO https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Stretch_Snapshot_console
+# since iot image has some bloat that slows load
+
 # flash image to sd card
 unxz -c bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz | sudo dd bs=1M of=/dev/sdb
 

@@ -4,12 +4,12 @@ ROT=360;
 INFINITESIMAL = 0.01;
 
 EDGES_PER_VERTEX = 3;
-CHANNEL_DEPTH = 10;
-CHANNEL_TOLERANCE = 1;
+CHANNEL_DEPTH = 18;
+CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ROD_RADIUS = 2;
 ARM_OFFSET = 10;
-ARM_HEIGHT= 30;
+ARM_HEIGHT= 40;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
 CAP_RADIUS= 30;
 CAP_OFFSET = 0;
@@ -116,7 +116,6 @@ module main () {
 module arm () {
   difference () {
 
-
     for (i = [0 : 2]) {
       rotate(
         a = [
@@ -142,7 +141,9 @@ module channel () {
     linear_extrude(
       height = CHANNEL_DEPTH + INFINITESIMAL + BEYOND
     )
-    channel_shape();
+    channel_shape(
+      length = CHANNEL_LENGTH
+    );
     
     translate(
       [
@@ -154,36 +155,38 @@ module channel () {
     linear_extrude(
       height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * BEYOND
     )
-    channel_led_shape();
+    channel_led_shape(
+      length = CHANNEL_LENGTH
+     );
   };
 }
 
-module channel_shape () {
+module channel_shape (length) {
   intersection () {
-    square(CHANNEL_LENGTH);
+    square(length);
     circle(
-      r = CHANNEL_LENGTH,
+      r = length,
       $fa = MIN_ARC_FRAGMENT_ANGLE,
       $fs = MIN_ARC_FRAGMENT_SIZE
     );
   };
 }
 
-module channel_led_shape () {
+module channel_led_shape (length) {
   intersection () {
     channel_shape(
-      width = CHANNEL_LENGTH
+      length = length
     );
     
     translate(
       [
-        CHANNEL_LENGTH,
-        CHANNEL_LENGTH
+        length,
+        length
       ]
     )
     rotate((1/8) * ROT)
     square(
-      CHANNEL_LENGTH * 2,
+      length * 2,
       center = true
     );
   };

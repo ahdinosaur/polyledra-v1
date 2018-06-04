@@ -31,6 +31,17 @@ i then continued to spend the rest of the festival obsessing about the shape, le
 
 copyright (c) Michael Williams 2018
 
-please ask for permission before copying this project.
+licensed under [creative commons cc-by-sa-nc 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-happy to support non-commercial and friendly use cases!
+[![creative commons license](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+you are free to:
+
+- share: copy and redistribute the material in any medium or format 
+- adapt: remix, transform, and build upon the material
+
+under the following terms:
+
+- attribution: you must give appropriate credit, provide a link to the license, and indicate if changes were made. you may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- non-commercial: you may not use the material for commerical purposes.
+- share-alike: if you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.

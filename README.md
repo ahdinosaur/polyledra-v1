@@ -26,3 +26,11 @@ i then continued to spend the rest of the festival obsessing about the shape, le
 - [`controller-circuit`](./controller-circuit): a circuit for the BeagleBone controller
 - [`vertex-structure`](./vertex-structure): a 3d model for the vertex structure(s) that connect the polyhedron's edge channels
 - [`vertex-circuit`](./vertex-circuit): a circuit to daisy chain the leds and inject power
+
+## license
+
+copyright (c) Michael Williams 2018
+
+please ask for permission before copying this project.
+
+happy to support non-commercial and friendly use cases!

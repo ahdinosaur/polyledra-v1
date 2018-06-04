@@ -8,12 +8,13 @@ gl = ["glfw", "kiss3d"]
 hal = ["linux-embedded-hal"]
 
 [dependencies]
-env_logger = "0.5.3"
+clap-verbosity-flag = "0.1"
 fps_clock = "2.0"
 glfw = { version = "0.19", optional = true }
 kiss3d = { version = "0.13", optional = true }
 linux-embedded-hal = { version = "0.1", optional = true }
 log = "0.4"
-modulo = "0.1.2"
+modulo = "0.1"
 nalgebra = "0.14"
 rand = "0.4"
+structopt = "0.2"

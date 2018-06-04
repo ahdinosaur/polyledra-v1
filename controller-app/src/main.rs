@@ -1,14 +1,15 @@
-extern crate rand;
-extern crate env_logger;
-#[cfg(feature = "gl")]
-extern crate glfw;
-#[cfg(feature = "gl")]
-extern crate kiss3d;
-#[cfg(feature = "hal")]
-extern crate linux_embedded_hal as hal;
+extern crate clap_verbosity_flag;
+#[cfg(feature = "gl")] extern crate glfw;
+#[cfg(feature = "gl")] extern crate kiss3d;
+#[cfg(feature = "hal")] extern crate linux_embedded_hal as hal;
 #[macro_use] extern crate log;
 extern crate modulo;
 extern crate nalgebra as na;
+#[macro_use] extern crate structopt;
+extern crate rand;
+
+use structopt::StructOpt;
+use clap_verbosity_flag::Verbosity;
 
 mod color;
 mod control;
@@ -19,8 +20,16 @@ mod shape;
 use shape::AbstractShapeCreator;
 mod util;
 
+#[derive(Debug, StructOpt)]
+struct CliOptions {
+    #[structopt(flatten)]
+    verbose: Verbosity,
+}
+
 fn main() {
-    env_logger::init();
+    let cli_options = CliOptions::from_args();
+
+    cli_options.verbose.setup_env_logger("controller-app").unwrap();
 
     let abstract_shape = shape::Tetrahedron::new(1.0);
     let shape = shape::Shape::new(shape::ShapeOptions {

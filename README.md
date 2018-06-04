@@ -27,6 +27,12 @@ i then continued to spend the rest of the festival obsessing about the shape, le
 - [`vertex-structure`](./vertex-structure): a 3d model for the vertex structure(s) that connect the polyhedron's edge channels
 - [`vertex-circuit`](./vertex-circuit): a circuit to daisy chain the leds and inject power
 
+## installations
+
+if you are playing with `chandeledra`, i'd love to hear about it!
+
+- https://twitter.com/ahdinosaur/status/962158033764691968
+
 ## license
 
 copyright (c) Michael Williams 2018

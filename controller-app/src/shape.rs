@@ -160,7 +160,7 @@ impl Shape {
 
         let edge_lengths = compute_edge_lengths(&edges, &vertices);
         let total_edge_length: f32 = edge_lengths.iter().sum();
-        let mut dots = Vec::with_capacity((total_edge_length * pixel_density) as usize);
+        let mut dots = Vec::with_capacity((total_edge_length * pixel_density) as usize * num_arms);
 
         let mut min_x = f32::INFINITY;
         let mut min_y = f32::INFINITY;
@@ -171,8 +171,12 @@ impl Shape {
         let mut max_z = f32::NEG_INFINITY;
 
         for (edge_id, edge) in edges.iter().enumerate() {
-            let edge_length = edge_lengths.get(edge_id).unwrap();
+            let edge_length = round_to( // fix float imprecisions leading to off-by-one error
+                *edge_lengths.get(edge_id).unwrap(),
+                10_000_f32
+            );
             let num_pixels_per_edge = (edge_length * pixel_density) as i32;
+            info!("edge length and num pixels: {} {}", edge_length, num_pixels_per_edge);
 
             let a_id = edge.source_id;
             let b_id = edge.target_id;
@@ -221,6 +225,8 @@ impl Shape {
             }
         }
 
+        info!("num dots: {:?}", dots.len());
+
         let bounds = Bounds {
             min: Point3::new(min_x, min_y, min_z),
             max: Point3::new(max_x, max_y, max_z)
@@ -239,3 +245,6 @@ impl Shape {
     }
 }
 
+fn round_to (value: f32, precision: f32) -> f32 {
+    (value * precision).round() / precision
+}

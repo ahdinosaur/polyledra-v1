@@ -36,8 +36,8 @@ fn main() {
     let abstract_shape = shape::Tetrahedron::new(1.0);
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
-        pixel_density: 120.0,
-        num_arms: 1
+        pixel_density: 30.0,
+        num_arms: 3
     });
 
     let (control_tx, control_rx) = control::create_control_channel();

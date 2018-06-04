@@ -104,14 +104,14 @@ impl AbstractShapeCreator for Tetrahedron {
     }
 }
 
-pub type EdgeIndex = usize;
+pub type DotIndex = usize;
 pub type ArmIndex = usize;
 
 #[derive(Clone, Debug)]
 pub struct Dot {
     pub position: Position,
     pub edge_id: EdgeId,
-    pub edge_index: EdgeIndex,
+    pub dot_index: DotIndex,
     pub arm_index: ArmIndex
 }
 
@@ -193,16 +193,16 @@ impl Shape {
 
             for arm_index in 0..num_arms {
                 let is_even_arm = arm_index % 2 == 0;
-                let edge_index_range = 0..(num_pixels_per_edge as usize);
-                let edge_index_iter: Box<Iterator<Item=usize>> = if is_even_arm {
-                    Box::new(edge_index_range)
+                let dot_index_range = 0..(num_pixels_per_edge as usize);
+                let dot_index_iter: Box<Iterator<Item=usize>> = if is_even_arm {
+                    Box::new(dot_index_range)
                 } else {
-                    Box::new(edge_index_range.rev())
+                    Box::new(dot_index_range.rev())
                 };
-                for edge_index in edge_index_iter {
-                    let x = half_interval_x + a.x + interval_x * (edge_index as f32);
-                    let y = half_interval_y + a.y + interval_y * (edge_index as f32);
-                    let z = half_interval_z + a.z + interval_z * (edge_index as f32);
+                for dot_index in dot_index_iter {
+                    let x = half_interval_x + a.x + interval_x * (dot_index as f32);
+                    let y = half_interval_y + a.y + interval_y * (dot_index as f32);
+                    let z = half_interval_z + a.z + interval_z * (dot_index as f32);
 
                     if x < min_x { min_x = x; } else if x > max_x { max_x = x; }
                     if y < min_y { min_y = y; } else if y > max_y { max_y = y; }
@@ -213,7 +213,7 @@ impl Shape {
                     let dot = Dot {
                         position,
                         edge_id,
-                        edge_index: edge_index as usize,
+                        dot_index: dot_index as usize,
                         arm_index
                     };
                     dots.push(dot);

@@ -23,6 +23,9 @@ mod walk;
 pub use self::spark::Spark;
 mod spark;
 
+pub use self::glow::Glow;
+mod glow;
+
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
     current_scene_index: usize
@@ -37,6 +40,7 @@ impl SceneManager {
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
             Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
+            Box::new(glow::Glow::new(scene_shape.clone())),
             // TODO twinkle
             // TODO ripple
             // TODO orbit (turn on closest shape point)

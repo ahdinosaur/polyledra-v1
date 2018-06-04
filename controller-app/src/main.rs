@@ -1,10 +1,12 @@
 extern crate clap_verbosity_flag;
+extern crate ezing;
 #[cfg(feature = "gl")] extern crate glfw;
 #[cfg(feature = "gl")] extern crate kiss3d;
 #[cfg(feature = "hal")] extern crate linux_embedded_hal as hal;
 #[macro_use] extern crate log;
 extern crate modulo;
 extern crate nalgebra as na;
+extern crate noise;
 #[macro_use] extern crate structopt;
 extern crate rand;
 
@@ -34,13 +36,13 @@ fn main() {
     let abstract_shape = shape::Tetrahedron::new(1.0);
     let shape = shape::Shape::new(shape::ShapeOptions {
         abstract_shape,
-        pixel_density: 30.0,
-        num_arms: 3
+        pixel_density: 120.0,
+        num_arms: 1
     });
 
     let (control_tx, control_rx) = control::create_control_channel();
 
-    control::connect_clock(120, control_tx.clone());
+    control::connect_clock(60, control_tx.clone());
 
     let display_tx = display::create_display_tx(control_tx.clone());
     let render_tx = render::create_render_tx(display_tx);

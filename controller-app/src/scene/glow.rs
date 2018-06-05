@@ -9,8 +9,11 @@ use control;
 use scene;
 use shape;
 
-static NS_PER_S: f32 = 1.0e9; // nanoseconds_per_second
-static S_PER_MINUTE: f32 = 60.;
+static NANOSEC_PER_SEC: f32 = 1.0e9; // nanoseconds_per_second
+static SEC_PER_MIN: f32 = 60.;
+
+static BEATS_PER_MINUTE: f32 = 60.;
+static BEATS_PER_BAR: f32 = 4.;
 
 #[derive(Debug)]
 pub struct Glow {
@@ -35,12 +38,11 @@ impl scene::Scene for Glow {
         let dots = &shape.dots;
         let bounds = &shape.bounds;
 
-        let beats_per_minute = 60.;
-        let frequency = beats_per_minute / S_PER_MINUTE / NS_PER_S;
-        let glow_time = (time * frequency * 2. * PI).sin();
-        let light_cycle = back_in((glow_time + 1.) / 2.);
+        let frequency = BEATS_PER_MINUTE / SEC_PER_MIN / NANOSEC_PER_SEC;
+        let glow_time = (time * frequency / BEATS_PER_BAR) + (time * frequency * 2. * PI).sin();
+        // let light_cycle = back_in((glow_time + 1.) / 2.);
 
-        debug!("glow: {} {}", glow_time, light_cycle);
+        // debug!("glow: {} {}", glow_time, light_cycle);
 
         let colors = dots.iter()
             .map(move |dot| {
@@ -51,6 +53,7 @@ impl scene::Scene for Glow {
                     position.z as f64,
                 ]);
 
+                /*
                 let edge_id = dot.edge_id;
                 let dot_index = dot.dot_index;
                 let arm_index = dot.arm_index;
@@ -60,11 +63,14 @@ impl scene::Scene for Glow {
                 ]) as f32;
                 let saturation = expo_out(motion_noise);
                 let lightness = expo_out(motion_noise) + light_cycle;
+                */
 
                 return color::Color::Hsl(color::Hsl {
                     hue: hue as f32,
-                    saturation: saturation,
-                    lightness: lightness
+                    saturation: 1.,
+                    lightness: 0.5,
+                    //saturation: saturation,
+                    // lightness: lightness
                 })
             });
 

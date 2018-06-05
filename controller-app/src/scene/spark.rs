@@ -1,13 +1,17 @@
-use na::{distance};
-
 use std::rc::Rc;
+use std::f32::consts::PI;
+use na::{distance};
+use ezing::{quad_out};
 
 use color;
 use control;
 use scene;
 use shape;
 
-static MS_PER_S: f32 = 1.0e9; // microseconds_per_second
+static NANOSEC_PER_SEC: f32 = 1.0e9; // nanoseconds_per_second
+static SEC_PER_MIN: f32 = 60.;
+
+static BEATS_PER_MINUTE: f32 = 120.;
 
 #[derive(Debug)]
 pub struct Spark {
@@ -26,10 +30,11 @@ impl scene::Scene for Spark {
         let dots = &shape.dots;
         let bounds = &shape.bounds;
 
-        let speed = (1.5_f32) / MS_PER_S;
-        let spark_time = time * speed;
+        let frequency = BEATS_PER_MINUTE / SEC_PER_MIN / NANOSEC_PER_SEC;
+        let spark_time = time * frequency;
+
         let hue_start = spark_time / 2_f32;
-        let spark_length = spark_time.sin().abs();
+        let spark_length = quad_out((spark_time * 2. * PI).sin() / 2. + 0.5);
         let half_spark_length = spark_length / 2_f32;
 
         debug!("spark: {} {}", spark_time, spark_length);

@@ -1,7 +1,8 @@
 use noise::{NoiseFn, OpenSimplex, Fbm};
-use ezing::{cubic_in};
+use ezing::{back_in, elastic_in, quad_out, expo_in, expo_out};
 
 use std::rc::Rc;
+use std::f32::consts::PI;
 
 use color;
 use control;
@@ -9,6 +10,7 @@ use scene;
 use shape;
 
 static NS_PER_S: f32 = 1.0e9; // nanoseconds_per_second
+static S_PER_MINUTE: f32 = 60.;
 
 #[derive(Debug)]
 pub struct Glow {
@@ -33,11 +35,12 @@ impl scene::Scene for Glow {
         let dots = &shape.dots;
         let bounds = &shape.bounds;
 
-        let speed = (1.5) / NS_PER_S;
-        let glow_time = time * speed / 2_f32;
-        let glow_cycle = (glow_time.sin() + 1_f32) / 2_f32;
+        let beats_per_minute = 60.;
+        let frequency = beats_per_minute / S_PER_MINUTE / NS_PER_S;
+        let glow_time = (time * frequency * 2. * PI).sin();
+        let light_cycle = back_in((glow_time + 1.) / 2.);
 
-        debug!("glow: {} {}", glow_time, glow_cycle);
+        debug!("glow: {} {}", glow_time, light_cycle);
 
         let colors = dots.iter()
             .map(move |dot| {
@@ -51,20 +54,17 @@ impl scene::Scene for Glow {
                 let edge_id = dot.edge_id;
                 let dot_index = dot.dot_index;
                 let arm_index = dot.arm_index;
-                let light_noise = (
-                    motion.get([
-                        edge_id as f64 + glow_time as f64,
-                        0.01 * dot_index as f64 + glow_time as f64,
-                    ]) as f32
-                ) + 1. / 2.;
-                // let lightness = (light_noise / 2.) + (glow_cycle / 4.) + 0.4;
-                let lightness = light_noise;
-                debug!("glow light noise: {} {}", light_noise, lightness);
+                let motion_noise = motion.get([
+                    edge_id as f64,
+                    0.01 * dot_index as f64 + glow_time as f64,
+                ]) as f32;
+                let saturation = expo_out(motion_noise);
+                let lightness = expo_out(motion_noise) + light_cycle;
 
                 return color::Color::Hsl(color::Hsl {
                     hue: hue as f32,
-                    saturation: 1_f32,
-                    lightness: cubic_in(lightness as f32)
+                    saturation: saturation,
+                    lightness: lightness
                 })
             });
 

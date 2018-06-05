@@ -23,7 +23,10 @@ mod walk;
 pub use self::spark::Spark;
 mod spark;
 
+use noise::{OpenSimplex, Fbm};
 pub use self::glow::Glow;
+type SimplexGlow = glow::Glow<OpenSimplex>;
+type FractalGlow = glow::Glow<Fbm>;
 mod glow;
 
 pub struct SceneManager {
@@ -40,7 +43,8 @@ impl SceneManager {
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
             Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
-            Box::new(glow::Glow::new(scene_shape.clone())),
+            Box::new(SimplexGlow::new(scene_shape.clone())),
+            Box::new(FractalGlow::new(scene_shape.clone())),
             // TODO twinkle
             // TODO ripple
             // TODO orbit (turn on closest shape point)

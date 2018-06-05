@@ -1,17 +1,57 @@
+# install
+
+## get PocketBeagle image
+
+[get stretch console image](https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Stretch_Snapshot_console)
+
+```shell
+# download
+wget https://rcn-ee.com/rootfs/bb.org/testing/2018-06-03/stretch-console/bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
+
+# verify hash
+sha256sum bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
+# 1a1675e105b0a1cf3295faacdd3f6c5ab02276627599b8e95f5c3f324deaf1b8  bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
+
+# write to sd card
+xzcat bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz | sudo dd of=/dev/sdX
 ```
-# get pocketbeagle image
-# - http://beagleboard.org/latest-images
-# - http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
-wget http://debian.beagleboard.org/images/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
-sha256sum bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
-  33fc557f32005c811bd449a59264da6b4a9b4ea9f87a1ee0aa43ae651c7f33d1  /home/dinosaur/Downloads/bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz
 
-# TODO https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Stretch_Snapshot_console
-# since iot image has some bloat that slows load
+## setup PocketBeagle
 
-# flash image to sd card
-unxz -c bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz | sudo dd bs=1M of=/dev/sdb
+```shell
+# send ssh key
+ssh-copy-id debian@192.168.6.2
+# default password is temppwd
+```
 
+connect
+
+```shell
+ssh debian@192.168.7.2
+```
+
+and run
+
+```shell
+# https://serverfault.com/a/841150
+sudo loginctl enable-linger debian
+```
+
+## install chandeledra
+
+```shell
+./bin/install-on-bone
+```
+
+(if `GLIBC` version error, run `cargo clean`: https://github.com/japaric/cross/issues/39)
+
+---
+
+## notes
+
+static network interface
+
+```
 # IGNORE
 # edit sd card /etc/network/interfaces
 # iface usb0 inet static
@@ -21,7 +61,11 @@ unxz -c bone-debian-9.3-iot-armhf-2018-03-05-4gb.img.xz | sudo dd bs=1M of=/dev/
 #  gateway 192.168.7.1
 # /IGNORE
 
-# flash sd card to bbb
+```
+
+masquerade internet
+
+```
 
 # setup host to masquerade for bbb
 # (enx985dad35b556 is bbb to host, wlp4s0 is host to internet)
@@ -31,10 +75,11 @@ sysctl net.ipv4.ip_forward=1
 iptables --table nat --append POSTROUTING --out-interface wlp4s0 -j MASQUERADE
 iptables --append FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables --append FORWARD --in-interface enx985dad35b556 --out-interface wlp4s0 -j ACCEPT
+```
 
-# connect to bbb
-ssh-copy-id debian@192.168.6.2 # default password is temppwd
+add upgrade all the things
 
+```
 ssh debian@192.168.6.2
 sudo -i
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
@@ -52,9 +97,6 @@ pkill ntpd
 ntpdate pool.ntp.org
 systemctl start ntp.service
 
-# https://serverfault.com/a/841150
-sudo loginctl enable-linger debian
-
 # rust
 # curl https://sh.rustup.rs -sSf | sh
 
@@ -68,10 +110,4 @@ sudo loginctl enable-linger debian
 # TODO reboot
 
 exit
-
-./bin/to-bone
 ```
-
-notes:
-
-- if cargo build fails, `cargo clean`: https://github.com/japaric/cross/issues/39

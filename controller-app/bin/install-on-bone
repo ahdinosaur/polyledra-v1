@@ -36,15 +36,19 @@ fi
 
 cross ${CROSS_ARGS}
 
+echo yay
+
 quiet_ssh ${BONE_SSH} <<EOF
 mkdir -p ${BONE_NAME}
 systemctl --user is-active --quiet ${BONE_SERVICE} && \
-  systemctl --user stop ${BONE_SERVICE}
+  systemctl --user stop ${BONE_SERVICE} ||
+    true
 EOF
 
 scp "target/${TARGET}/${MODE}/controller-app" "${BONE_SSH}:${BONE_DIR}/${BONE_BIN}"
 
-quiet_ssh ${BONE_SSH} tee ${BONE_DIR}/${BONE_SERVICE} > /dev/null <<EOF
+quiet_ssh ${BONE_SSH} <<EOF
+tee ${BONE_DIR}/${BONE_SERVICE} /dev/null <<EOOF
 [Unit]
 Description=${BONE_NAME}
 AssertPathExists=${BONE_DIR}
@@ -57,6 +61,7 @@ KillMode=control-group
 
 [Install]
 WantedBy=default.target
+EOOF
 EOF
 
 # https://serverfault.com/a/841150

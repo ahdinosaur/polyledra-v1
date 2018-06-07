@@ -92,12 +92,10 @@ fn pixels_to_apa102_buffer(pixels: &color::Pixels, brightness_option: Option<u8>
     let mut buffer: Vec<u8> = vec![0; buffer_length];
 
     // start frame
-    /*
     buffer[0] = 0;
     buffer[1] = 0;
     buffer[2] = 0;
     buffer[3] = 0;
-    */
 
     // led frames
     for (pixel_index, rgb) in pixels.iter().enumerate() {
@@ -111,12 +109,10 @@ fn pixels_to_apa102_buffer(pixels: &color::Pixels, brightness_option: Option<u8>
     }
 
     // end frames
-    /*
     for end_index in 0..num_end_frames {
         let buffer_index = start_frame_length + led_frames_length + end_index;
         buffer[buffer_index] = 0;
     }
-    */
 
     buffer
 }

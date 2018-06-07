@@ -2,6 +2,8 @@
 
 a [pocketbeagle](https://github.com/beagleboard/pocketbeagle)
 
+## design
+
 - 1x rotary encoder (eQEP)
   - with reset button
 - param selector buttons (+ and -)
@@ -14,3 +16,19 @@ nice to have:
 - microphone sensitivity potentiometer
 - microphone in
 - audio jack in
+
+## sofar
+
+```
+3.3V ------|
+           |
+        switch
+           |
+           |
+GPIO 27 ---|
+           |
+           |
+        10k ohm resistor
+           |
+GND -------|
+```

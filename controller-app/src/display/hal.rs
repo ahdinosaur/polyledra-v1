@@ -1,19 +1,27 @@
 extern crate linux_embedded_hal as hal;
 extern crate nalgebra as na;
 
-use hal::spidev::{self, Spidev, SpidevOptions};
+use std::u64;
 use std::io::Write;
 use std::sync::mpsc::{Sender};
 use std::thread;
+use std::time::{Instant};
+
+use hal::spidev::{self, Spidev, SpidevOptions};
+use hal::sysfs_gpio::{self, Pin, Direction};
 
 use color;
 use control;
 use shape;
 use display::{Display, DisplayMessage};
 
+static BUTTON_PIN: u64 = 27;
+
 pub struct HalDisplay {
     spidev: Spidev,
     spidev_options: SpidevOptions,
+    button_pin: Pin,
+    last_button_press: Option<Instant>,
     control_tx: Sender<control::Control>
 }
 
@@ -27,10 +35,15 @@ impl Display for HalDisplay {
             .build();
         spidev.configure(&spidev_options).unwrap();
 
+        let button_pin = Pin::new(BUTTON_PIN);
+        button_pin.set_direction(Direction::In);
+
         HalDisplay {
-            spidev: spidev,
-            spidev_options: spidev_options,
-            control_tx: control_tx
+            spidev,
+            spidev_options,
+            button_pin,
+            last_button_press: None,
+            control_tx
         }
     }
 
@@ -40,7 +53,7 @@ impl Display for HalDisplay {
 
         match display_message {
             &DisplayMessage::Pixels(ref pixels) => {
-                let brightness = 10;
+                let brightness = 5;
                 let mut buffer = pixels_to_apa102_buffer(pixels, Some(brightness));
                 spidev.write(&mut buffer).unwrap();
             }
@@ -53,7 +66,15 @@ impl Display for HalDisplay {
         }
         */
 
-        // TODO get sensor inputs
+        // if button is pushed, switch to next mode
+        let button_value = self.button_pin.get_value().unwrap_or(0);
+        let last_button_secs = self.last_button_press.map_or(u64::MAX, |instant| instant.elapsed().as_secs());
+        if button_value == 1 && last_button_secs > 1 {
+            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next)).unwrap();
+            self.last_button_press = Some(Instant::now());
+        }
+
+        // TODO get rotary encoder input as params
     }
 }
 

@@ -19,7 +19,7 @@ pub struct HalDisplay {
 
 impl Display for HalDisplay {
     fn new (control_tx: Sender<control::Control>) -> Self {
-        let mut spidev = Spidev::open("/dev/spidev1.0").unwrap();
+        let mut spidev = Spidev::open("/dev/spidev0.0").unwrap();
         let spidev_options = SpidevOptions::new()
             .bits_per_word(8)
             .max_speed_hz(8_000_000)

@@ -7,7 +7,6 @@ BONE_USER=debian
 BONE_HOST=192.168.7.2
 BONE_NAME=chandeledra
 BONE_DIR="/home/${BONE_USER}/${BONE_NAME}"
-BONE_BIN="bin"
 BONE_SERVICE="${BONE_NAME}.service"
 BONE_SSH="${BONE_USER}@${BONE_HOST}"
 
@@ -36,8 +35,6 @@ fi
 
 cross ${CROSS_ARGS}
 
-echo yay
-
 quiet_ssh ${BONE_SSH} <<EOF
 mkdir -p ${BONE_NAME}
 systemctl --user is-active --quiet ${BONE_SERVICE} && \
@@ -45,23 +42,37 @@ systemctl --user is-active --quiet ${BONE_SERVICE} && \
     true
 EOF
 
-scp "target/${TARGET}/${MODE}/controller-app" "${BONE_SSH}:${BONE_DIR}/${BONE_BIN}"
+scp "target/${TARGET}/${MODE}/controller-app" "${BONE_SSH}:${BONE_DIR}/${BONE_NAME}"
 
 quiet_ssh ${BONE_SSH} <<EOF
-tee ${BONE_DIR}/${BONE_SERVICE} /dev/null <<EOOF
+tee ${BONE_DIR}/${BONE_SERVICE} > /dev/null <<EOOF
 [Unit]
 Description=${BONE_NAME}
 AssertPathExists=${BONE_DIR}
 
 [Service]
 WorkingDirectory=${BONE_DIR}
-ExecStart=${BONE_DIR}/${BONE_BIN}
+ExecStart=${BONE_DIR}/${BONE_NAME}.sh
 Restart=always
 KillMode=control-group
 
 [Install]
 WantedBy=default.target
 EOOF
+
+tee ${BONE_DIR}/${BONE_NAME}.sh > /dev/null <<EOOF
+#!/bin/bash
+
+SPIDEV=/dev/spidev0.0
+while [ ! -e \\\${SPIDEV} ] || [ ! -w \\\${SPIDEV} ]
+do
+  sleep 0.1
+done
+
+exec ./${BONE_NAME}
+EOOF
+
+chmod +x ${BONE_DIR}/${BONE_NAME}.sh
 EOF
 
 # https://serverfault.com/a/841150

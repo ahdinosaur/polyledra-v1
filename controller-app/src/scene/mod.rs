@@ -5,6 +5,9 @@ use color;
 use control;
 use shape;
 
+// TODO separate
+// - changing state
+// - rendering state
 pub trait Scene {
     fn new (shape: Rc<shape::Shape>) -> Self where Self: Sized;
     fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a>;
@@ -48,7 +51,7 @@ impl SceneManager {
             // TODO twinkle
             // TODO ripple
             // TODO orbit (turn on closest shape point)
-            // TODO flame
+            // TODO flame: distance from "center", where center is a vertex
         ];
         drop(scene_shape);
         let scene_manager = SceneManager {

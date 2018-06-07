@@ -1,4 +1,4 @@
-use noise::{NoiseFn, Point3};
+use noise::{NoiseFn, Point4};
 
 use std::rc::Rc;
 use std::f32::consts::PI;
@@ -15,11 +15,11 @@ static BEATS_PER_MINUTE: f32 = 120.;
 static BEATS_PER_BAR: f32 = 4.;
 
 #[derive(Debug)]
-pub struct Glow<Noise: NoiseFn<Point3<f64>>> {
+pub struct Glow<Noise: NoiseFn<Point4<f64>>> {
     shape: Rc<shape::Shape>,
     noise: Noise,
 }
-impl<Noise: Default + NoiseFn<Point3<f64>>> scene::Scene for Glow<Noise> {
+impl<Noise: Default + NoiseFn<Point4<f64>>> scene::Scene for Glow<Noise> {
     fn new (shape: Rc<shape::Shape>) -> Self where Self:Sized {
         Glow {
             shape,
@@ -35,17 +35,21 @@ impl<Noise: Default + NoiseFn<Point3<f64>>> scene::Scene for Glow<Noise> {
         let bounds = &shape.bounds;
 
         let frequency = BEATS_PER_MINUTE / SEC_PER_MIN / NANOSEC_PER_SEC;
-        let glow_time = (time * frequency / BEATS_PER_BAR) + ((1./2.) * time * frequency * 2. * PI).sin();
+        let glow_time = 0.5 * (time * frequency / BEATS_PER_BAR) + ((1./2.) * time * frequency * 2. * PI).sin();
 
         debug!("glow: {}", glow_time);
 
+        // 4-dimensional noise, increase w
+
         let colors = dots.iter()
             .map(move |dot| {
+                let scalar = 0.5;
                 let position = dot.position;
                 let hue = noise.get([
-                    glow_time as f64 + position.x as f64,
-                    (1./2.) * glow_time as f64 + position.y as f64,
-                    (1./8.) * glow_time as f64 + position.z as f64,
+                    scalar * position.x as f64,
+                    scalar * position.y as f64,
+                    scalar * position.z as f64,
+                    glow_time as f64
                 ]);
 
                 return color::Color::Hsl(color::Hsl {

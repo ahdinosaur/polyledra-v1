@@ -11,7 +11,7 @@ use shape;
 static NANOSEC_PER_SEC: f32 = 1.0e9; // nanoseconds_per_second
 static SEC_PER_MIN: f32 = 60.;
 
-static BEATS_PER_MINUTE: f32 = 120.;
+static BEATS_PER_MINUTE: f32 = 60.;
 
 #[derive(Debug)]
 pub struct Spark {

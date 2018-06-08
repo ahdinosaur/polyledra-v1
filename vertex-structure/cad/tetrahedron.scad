@@ -11,8 +11,9 @@ ROD_RADIUS = 2;
 ARM_OFFSET = 10;
 ARM_HEIGHT= 40;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
-CAP_RADIUS= 30;
+CAP_OUTER_RADIUS= 30;
 CAP_OFFSET = 0;
+CAP_INNER_RADIUS = 20;
 BEYOND = 100;
 
 FILAMENT_WIDTH = 3;
@@ -59,7 +60,7 @@ module main () {
           ]
         )
         sphere(
-          r = CAP_RADIUS,
+          r = CAP_OUTER_RADIUS,
           $fa = MIN_ARC_FRAGMENT_ANGLE,
           $fs = MIN_ARC_FRAGMENT_SIZE
         );
@@ -109,6 +110,12 @@ module main () {
         )
         arm();
       }
+      
+      sphere(
+        r = CAP_INNER_RADIUS,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
     };
   };
 }

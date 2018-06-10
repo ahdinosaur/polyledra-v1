@@ -53,7 +53,7 @@ impl Display for HalDisplay {
 
         match display_message {
             &DisplayMessage::Pixels(ref pixels) => {
-                let brightness = 5;
+                let brightness = 10;
                 let mut buffer = pixels_to_apa102_buffer(pixels, Some(brightness));
                 spidev.write(&mut buffer).unwrap();
             }

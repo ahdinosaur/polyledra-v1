@@ -111,3 +111,31 @@ systemctl start ntp.service
 
 exit
 ```
+
+---
+
+notes
+
+- start @ 0
+- 0 -> 1
+  - 0A -> OB @ 1
+  - 0B -> OC @ 0
+  - 0C -> 1A @ 1
+- 1 -> 2
+  - 1A -> 1B @ 2
+  - 1B -> 1C @ 1: POWER
+  - 1C -> 2A @ 2
+- 2 -> 0
+  - 2A -> 2B @ 0
+  - 2B -> 2C @ 2
+  - 2C -> 3A @ 0
+- 0 -> 3
+  - 3A -> 3B @ 3: POWER
+  - 3B -> 3C @ 0
+  - 3C -> 4A @ 3
+- 3 -> 1
+  - 4A -> 4B @ 1
+  - 4B -> 4C @ 3: POWER
+  - 4C -> 5A @ 1
+- 2 -> 3
+

@@ -54,6 +54,10 @@ AssertPathExists=${BONE_DIR}
 WorkingDirectory=${BONE_DIR}
 ExecStart=${BONE_DIR}/${BONE_NAME}.sh
 Restart=always
+Environment="PIXEL_DENSITY=60"
+Environment="EDGE_LENGTH=0.5"
+Environment="NUM_ARMS=3"
+Environment="FPS=60"
 KillMode=control-group
 
 [Install]

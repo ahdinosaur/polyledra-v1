@@ -1,0 +1,6 @@
+export PIXEL_DENSITY=120
+export EDGE_LENGTH=1
+export NUM_ARMS=1
+export FPS=60
+
+exec cargo run --features gl

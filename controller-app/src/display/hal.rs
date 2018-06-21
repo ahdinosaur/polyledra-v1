@@ -5,7 +5,7 @@ use std::u64;
 use std::io::Write;
 use std::sync::mpsc::{Sender};
 use std::thread;
-use std::time::{Instant};
+use std::time::{Instant, Duration};
 
 use hal::spidev::{self, Spidev, SpidevOptions};
 use hal::sysfs_gpio::{self, Pin, Direction};
@@ -15,13 +15,16 @@ use control;
 use shape;
 use display::{Display, DisplayMessage};
 
-static BUTTON_PIN: u64 = 27;
+static NEXT_BUTTON_PIN: u64 = 27;
+static PREV_BUTTON_PIN: u64 = 65;
 
 pub struct HalDisplay {
     spidev: Spidev,
     spidev_options: SpidevOptions,
-    button_pin: Pin,
-    last_button_press: Option<Instant>,
+    next_button_pin: Pin,
+    prev_button_pin: Pin,
+    next_button_press_instant: Option<Instant>,
+    prev_button_press_instant: Option<Instant>,
     control_tx: Sender<control::Control>
 }
 
@@ -35,14 +38,19 @@ impl Display for HalDisplay {
             .build();
         spidev.configure(&spidev_options).unwrap();
 
-        let button_pin = Pin::new(BUTTON_PIN);
-        button_pin.set_direction(Direction::In);
+        let next_button_pin = Pin::new(NEXT_BUTTON_PIN);
+        next_button_pin.set_direction(Direction::In);
+
+        let prev_button_pin = Pin::new(PREV_BUTTON_PIN);
+        prev_button_pin.set_direction(Direction::In);
 
         HalDisplay {
             spidev,
             spidev_options,
-            button_pin,
-            last_button_press: None,
+            next_button_pin,
+            prev_button_pin,
+            next_button_press_instant: None,
+            prev_button_press_instant: None,
             control_tx
         }
     }
@@ -66,12 +74,22 @@ impl Display for HalDisplay {
         }
         */
 
-        // if button is pushed, switch to next mode
-        let button_value = self.button_pin.get_value().unwrap_or(0);
-        let last_button_secs = self.last_button_press.map_or(u64::MAX, |instant| instant.elapsed().as_secs());
-        if button_value == 1 && last_button_secs > 1 {
+        // TODO generalize
+        // if next button is pushed, switch to next mode
+        let next_button_value = self.next_button_pin.get_value().unwrap_or(0);
+        let next_button_press_ns = self.next_button_press_instant.map_or(u64::MAX, |instant| duration_to_nanos(instant.elapsed()));
+        if next_button_value == 1 && next_button_press_ns > 300_000_000 {
             control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next)).unwrap();
-            self.last_button_press = Some(Instant::now());
+            self.next_button_press_instant = Some(Instant::now());
+        }
+
+        // TODO generalize
+        // if prev button is pushed, switch to next mode
+        let prev_button_value = self.prev_button_pin.get_value().unwrap_or(0);
+        let prev_button_press_ns = self.prev_button_press_instant.map_or(u64::MAX, |instant| duration_to_nanos(instant.elapsed()));
+        if prev_button_value == 1 && prev_button_press_ns > 300_000_000 {
+            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev)).unwrap();
+            self.prev_button_press_instant = Some(Instant::now());
         }
 
         // TODO get rotary encoder input as params
@@ -115,6 +133,10 @@ fn pixels_to_apa102_buffer(pixels: &color::Pixels, brightness_option: Option<u8>
     }
 
     buffer
+}
+
+fn duration_to_nanos (duration: Duration) -> u64 {
+    duration.as_secs() as u64 * 1_000_000_000 + duration.subsec_nanos() as u64
 }
 
 #[cfg(test)]

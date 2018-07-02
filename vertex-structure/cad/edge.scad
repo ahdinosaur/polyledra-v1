@@ -2,15 +2,19 @@ echo(version=version());
 
 ROT=360;
 INFINITESIMAL = 0.01;
+BEYOND = 100;
 
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ROD_RADIUS = 2;
 ARM_OFFSET = 10;
-ARM_HEIGHT= 40;
+ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
-BEYOND = 100;
+PLUG_HEIGHT = 20;
+PLUG_RADIUS = 10;
+SCREW_RADIUS = 4;
+SCREW_OFFSET = 10;
 
 FILAMENT_WIDTH = 3;
 MIN_ARC_FRAGMENT_ANGLE = 6;
@@ -19,6 +23,53 @@ MIN_ARC_FRAGMENT_SIZE = FILAMENT_WIDTH / 2;
 main();
 
 module main () {
+  union () {
+    translate(
+      [
+        0,
+        0,
+        PLUG_HEIGHT
+      ]
+    )
+    edge_connector();
+    
+    plug();
+  }
+}
+
+module plug () {
+  difference () {
+    cylinder(
+        r = PLUG_RADIUS,
+        h = PLUG_HEIGHT,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+    
+      translate(
+        [
+          0,
+          (1/2) * BEYOND,
+          SCREW_OFFSET
+        ]
+      )
+      rotate(
+        a = [
+          (1/4) * ROT,
+          0,
+          0
+        ]
+      )
+      cylinder(
+        r = SCREW_RADIUS,
+        h = BEYOND,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+  }
+}
+
+module edge_connector () {
   difference () {
     cylinder(
         r = ARM_RADIUS + ROD_RADIUS,
@@ -27,7 +78,7 @@ module main () {
         $fs = MIN_ARC_FRAGMENT_SIZE
       );
     arm();
-  };
+  }
 }
 
 module arm () {
@@ -38,7 +89,7 @@ module arm () {
         a = [
           0,
           0,
-          (1/3) * ROT * i + (3/8) * ROT
+          (1/3) * ROT * i - (3/8) * ROT
         ]
       )
       channel();

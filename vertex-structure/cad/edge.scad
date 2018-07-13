@@ -1,8 +1,7 @@
-echo(version=version());
+include <constants.scad>
+include <nuts-and-bolts.scad>
 
-ROT=360;
-INFINITESIMAL = 0.01;
-BEYOND = 100;
+echo(version=version());
 
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
@@ -12,13 +11,10 @@ ARM_OFFSET = 10;
 ARM_HEIGHT= 30;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
 PLUG_HEIGHT = 20;
-PLUG_RADIUS = 10;
-SCREW_RADIUS = 4;
+PLUG_RADIUS = 6;
+SCREW_SIZE = 5;
+SCREW_LENGTH = INFINITY;
 SCREW_OFFSET = 10;
-
-FILAMENT_WIDTH = 3;
-MIN_ARC_FRAGMENT_ANGLE = 6;
-MIN_ARC_FRAGMENT_SIZE = FILAMENT_WIDTH / 2;
 
 main();
 
@@ -49,7 +45,7 @@ module plug () {
       translate(
         [
           0,
-          (1/2) * BEYOND,
+          (1/2) * SCREW_LENGTH,
           SCREW_OFFSET
         ]
       )
@@ -60,11 +56,9 @@ module plug () {
           0
         ]
       )
-      cylinder(
-        r = SCREW_RADIUS,
-        h = BEYOND,
-        $fa = MIN_ARC_FRAGMENT_ANGLE,
-        $fs = MIN_ARC_FRAGMENT_SIZE
+      bolt_hole(
+        size = SCREW_SIZE,
+        length = SCREW_LENGTH
       );
   }
 }
@@ -89,7 +83,7 @@ module arm () {
         a = [
           0,
           0,
-          (1/3) * ROT * i - (3/8) * ROT
+          (1/3) * ROT * i + (3/8) * ROT
         ]
       )
       channel();
@@ -107,7 +101,7 @@ module channel () {
       ]
     )
     linear_extrude(
-      height = CHANNEL_DEPTH + INFINITESIMAL + BEYOND
+      height = CHANNEL_DEPTH + INFINITESIMAL + INFINITY
     )
     channel_shape(
       length = CHANNEL_LENGTH
@@ -117,11 +111,11 @@ module channel () {
       [
         ROD_RADIUS,
         ROD_RADIUS,
-        -BEYOND
+        -INFINITY
       ]
     )
     linear_extrude(
-      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * BEYOND
+      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITY
     )
     channel_led_shape(
       length = CHANNEL_LENGTH
@@ -163,10 +157,10 @@ module channel_led_shape (length) {
 module positive_z () {
   translate(
     [
-      -BEYOND / 2,
-      -BEYOND / 2,,
+      -INFINITY / 2,
+      -INFINITY / 2,,
       0
     ]
   )
-  cube(BEYOND);
+  cube(INFINITY);
 }

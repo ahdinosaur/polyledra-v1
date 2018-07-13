@@ -1,19 +1,17 @@
 echo(version=version());
 
-ROT=360;
-INFINITESIMAL = 0.01;
+include <constants.scad>
+include <nuts-and-bolts.scad>
 
 EDGES_PER_VERTEX = 3;
-CHANNEL_DEPTH = 18;
-CHANNEL_TOLERANCE = 0.5;
-CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
-ROD_RADIUS = 2;
-ARM_OFFSET = 10;
-ARM_HEIGHT= 40;
-ARM_RADIUS = CHANNEL_LENGTH + 3;
-CAP_OUTER_RADIUS= 30;
+SOCKET_OFFSET = 1;
+SOCKET_HEIGHT = 30;
+SOCKET_RADIUS = 8;
+SCREW_SIZE = 5;
+SCREW_OFFSET = SOCKET_HEIGHT - 10;
+PLUG_RADIUS = 6;
+CAP_RADIUS= SOCKET_RADIUS;
 CAP_OFFSET = 0;
-CAP_INNER_RADIUS = 20;
 BEYOND = 100;
 
 FILAMENT_WIDTH = 3;
@@ -50,50 +48,23 @@ module main () {
   intersection () {
     positive_z();
   
-    difference () {
-      union () {
-        translate(
-          [
-            0,
-            0,
-            CAP_OFFSET
-          ]
-        )
-        sphere(
-          r = CAP_OUTER_RADIUS,
-          $fa = MIN_ARC_FRAGMENT_ANGLE,
-          $fs = MIN_ARC_FRAGMENT_SIZE
-        );
-        
-        for (arm_index = [0 : EDGES_PER_VERTEX]) {
-          arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
-        
-          rotate(
-            a = [
-              0,
-              arm_theta,
-              arm_phi
-            ]
-          )
-          translate(
-            [
-              0,
-              0,
-              ARM_OFFSET
-            ]
-          )
-          cylinder(
-            r = ARM_RADIUS + ROD_RADIUS,
-            h = ARM_HEIGHT,
-            $fa = MIN_ARC_FRAGMENT_ANGLE,
-            $fs = MIN_ARC_FRAGMENT_SIZE
-          );
-        }
-      };
-    
+    union () {
+      translate(
+        [
+          0,
+          0,
+          CAP_OFFSET
+        ]
+      )
+      sphere(
+        r = CAP_RADIUS,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+      
       for (arm_index = [0 : EDGES_PER_VERTEX]) {
         arm_phi = arm_index * (ROT / EDGES_PER_VERTEX);
-        
+      
         rotate(
           a = [
             0,
@@ -105,21 +76,53 @@ module main () {
           [
             0,
             0,
-            ARM_OFFSET
+            SOCKET_OFFSET
           ]
         )
-        arm();
+        socket();
       }
-      
-      sphere(
-        r = CAP_INNER_RADIUS,
-        $fa = MIN_ARC_FRAGMENT_ANGLE,
-        $fs = MIN_ARC_FRAGMENT_SIZE
-      );
     };
   };
 }
 
+module socket () {
+  difference () {
+    cylinder(
+      r = SOCKET_RADIUS,
+      h = SOCKET_HEIGHT,
+      $fa = MIN_ARC_FRAGMENT_ANGLE,
+      $fs = MIN_ARC_FRAGMENT_SIZE
+    );
+    
+    cylinder(
+      r = PLUG_RADIUS,
+      h = SOCKET_HEIGHT + INFINITESIMAL,
+      $fa = MIN_ARC_FRAGMENT_ANGLE,
+      $fs = MIN_ARC_FRAGMENT_SIZE
+    );
+    
+    translate(
+      [
+        0,
+        (1/2) * BEYOND,
+        SCREW_OFFSET
+      ]
+    )
+    rotate(
+      a = [
+        (1/4) * ROT,
+        0,
+        0
+      ]
+    )
+    bolt_hole(
+      size = SCREW_SIZE,
+      length = INFINITY
+    );
+    
+    // TODO hex cut-out
+  }
+}
 module arm () {
   difference () {
 

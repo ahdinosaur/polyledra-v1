@@ -6,13 +6,13 @@ include <nuts-and-bolts.scad>
 EDGES_PER_VERTEX = 3;
 SOCKET_OFFSET = 1;
 SOCKET_HEIGHT = 30;
-SOCKET_RADIUS = 8;
+SOCKET_RADIUS = 10;
 SCREW_SIZE = 5;
+SCREW_LENGTH = SOCKET_RADIUS * 2 + 1;
 SCREW_OFFSET = SOCKET_HEIGHT - 10;
 PLUG_RADIUS = 6;
 CAP_RADIUS= SOCKET_RADIUS;
 CAP_OFFSET = 0;
-BEYOND = 100;
 
 FILAMENT_WIDTH = 3;
 MIN_ARC_FRAGMENT_ANGLE = 6;
@@ -46,7 +46,7 @@ main();
 
 module main () {
   intersection () {
-    positive_z();
+    //positive_z();
   
     union () {
       translate(
@@ -86,13 +86,58 @@ module main () {
 }
 
 module socket () {
+  screw_cap_height = METRIC_NUT_THICKNESS[SCREW_SIZE];
+  
   difference () {
-    cylinder(
-      r = SOCKET_RADIUS,
-      h = SOCKET_HEIGHT,
-      $fa = MIN_ARC_FRAGMENT_ANGLE,
-      $fs = MIN_ARC_FRAGMENT_SIZE
-    );
+    union () {
+      cylinder(
+        r = SOCKET_RADIUS,
+        h = SOCKET_HEIGHT,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+      
+      translate(
+        [
+          0,
+          -SCREW_LENGTH + 3.5 * screw_cap_height,
+          SCREW_OFFSET
+        ]
+      )
+      rotate(
+        a = [
+          (1/4) * ROT,
+          0,
+          0
+        ]
+      )
+      cylinder(
+        r = SCREW_SIZE + 1,
+        h = screw_cap_height,
+        $fn = 6
+      );
+      
+      translate(
+        [
+          0,
+          (1/2) * SCREW_LENGTH,
+          SCREW_OFFSET
+        ]
+      )
+      rotate(
+        a = [
+          (1/4) * ROT,
+          0,
+          0
+        ]
+      )
+      cylinder(
+        r = SCREW_SIZE + 1,
+        h = screw_cap_height,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+    };
     
     cylinder(
       r = PLUG_RADIUS,
@@ -104,7 +149,7 @@ module socket () {
     translate(
       [
         0,
-        (1/2) * BEYOND,
+        (1/2) * (SCREW_LENGTH - screw_cap_height),
         SCREW_OFFSET
       ]
     )
@@ -117,10 +162,26 @@ module socket () {
     )
     bolt_hole(
       size = SCREW_SIZE,
-      length = INFINITY
+      length = SCREW_LENGTH
     );
     
-    // TODO hex cut-out
+    translate(
+      [
+        0,
+        -SCREW_LENGTH + 3 * screw_cap_height,
+        SCREW_OFFSET
+      ]
+    )
+    rotate(
+      a = [
+        (1/4) * ROT,
+        0,
+        0
+      ]
+    )
+    nut_hole(
+      size = SCREW_SIZE
+    );
   }
 }
 module arm () {
@@ -149,7 +210,7 @@ module channel () {
       ]
     )
     linear_extrude(
-      height = CHANNEL_DEPTH + INFINITESIMAL + BEYOND
+      height = CHANNEL_DEPTH + INFINITESIMAL + INFINITY
     )
     channel_shape(
       length = CHANNEL_LENGTH
@@ -159,11 +220,11 @@ module channel () {
       [
         ROD_RADIUS,
         ROD_RADIUS,
-        -BEYOND
+        -INFINITY
       ]
     )
     linear_extrude(
-      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * BEYOND
+      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITY
     )
     channel_led_shape(
       length = CHANNEL_LENGTH
@@ -205,10 +266,10 @@ module channel_led_shape (length) {
 module positive_z () {
   translate(
     [
-      -BEYOND / 2,
-      -BEYOND / 2,,
+      -INFINITY / 2,
+      -INFINITY / 2,,
       0
     ]
   )
-  cube(BEYOND);
+  cube(INFINITY);
 }

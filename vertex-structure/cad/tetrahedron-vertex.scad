@@ -46,7 +46,7 @@ main();
 
 module main () {
   intersection () {
-    //positive_z();
+    positive_z();
   
     union () {
       translate(

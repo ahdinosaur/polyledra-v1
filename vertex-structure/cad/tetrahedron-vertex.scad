@@ -5,7 +5,7 @@ include <nuts-and-bolts.scad>
 
 EDGES_PER_VERTEX = 3;
 SOCKET_OFFSET = 1;
-SOCKET_HEIGHT = 30;
+SOCKET_HEIGHT = 35;
 SOCKET_RADIUS = 10;
 SCREW_SIZE = 5;
 SCREW_LENGTH = SOCKET_RADIUS * 2 + 1;
@@ -14,7 +14,7 @@ PLUG_RADIUS = 6;
 CAP_RADIUS= SOCKET_RADIUS;
 CAP_OFFSET = 0;
 
-FILAMENT_WIDTH = 3;
+FILAMENT_WIDTH = 1.75;
 MIN_ARC_FRAGMENT_ANGLE = 6;
 MIN_ARC_FRAGMENT_SIZE = FILAMENT_WIDTH / 2;
 
@@ -99,15 +99,15 @@ module socket () {
       
       translate(
         [
+          SCREW_LENGTH - 3.2 * screw_cap_height,
           0,
-          -SCREW_LENGTH + 3.5 * screw_cap_height,
           SCREW_OFFSET
         ]
       )
       rotate(
         a = [
+          0, 
           (1/4) * ROT,
-          0,
           0
         ]
       )
@@ -119,15 +119,15 @@ module socket () {
       
       translate(
         [
+          -(1/2) * (SCREW_LENGTH + screw_cap_height),
           0,
-          (1/2) * SCREW_LENGTH,
           SCREW_OFFSET
         ]
       )
       rotate(
         a = [
+          0, 
           (1/4) * ROT,
-          0,
           0
         ]
       )
@@ -148,15 +148,15 @@ module socket () {
     
     translate(
       [
+        -(1/2) * (SCREW_LENGTH - screw_cap_height + INFINITESIMAL),
         0,
-        (1/2) * (SCREW_LENGTH - screw_cap_height),
         SCREW_OFFSET
       ]
     )
     rotate(
       a = [
-        (1/4) * ROT,
         0,
+        (1/4) * ROT,
         0
       ]
     )
@@ -167,15 +167,15 @@ module socket () {
     
     translate(
       [
+        SCREW_LENGTH - 3 * screw_cap_height - INFINITESIMAL,
         0,
-        -SCREW_LENGTH + 3 * screw_cap_height,
         SCREW_OFFSET
       ]
     )
     rotate(
       a = [
-        (1/4) * ROT,
         0,
+        (1/4) * ROT,
         0
       ]
     )

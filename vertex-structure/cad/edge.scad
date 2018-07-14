@@ -3,70 +3,33 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
-CHANNEL_DEPTH = 18;
+CHANNEL_DEPTH = 10;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
-ROD_RADIUS = 2;
 ARM_OFFSET = 10;
-ARM_HEIGHT= 30;
+ARM_HEIGHT= 20;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
-PLUG_HEIGHT = 20;
-PLUG_RADIUS = 6;
-SCREW_SIZE = 5;
-SCREW_LENGTH = INFINITY;
-SCREW_OFFSET = 10;
+BOLT_SIZE = 4;
+BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
 
 main();
 
 module main () {
-  union () {
-    translate(
-      [
-        0,
-        0,
-        PLUG_HEIGHT
-      ]
-    )
+  difference () {
     edge_connector();
     
-    plug();
-  }
-}
-
-module plug () {
-  difference () {
-    cylinder(
-        r = PLUG_RADIUS,
-        h = PLUG_HEIGHT,
-        $fa = MIN_ARC_FRAGMENT_ANGLE,
-        $fs = MIN_ARC_FRAGMENT_SIZE
-      );
-    
-      translate(
-        [
-          0,
-          (1/2) * SCREW_LENGTH,
-          SCREW_OFFSET
-        ]
-      )
-      rotate(
-        a = [
-          (1/4) * ROT,
-          0,
-          0
-        ]
-      )
-      bolt_hole(
-        size = SCREW_SIZE,
-        length = SCREW_LENGTH
-      );
+    translate([0, 0, -INFINITESIMAL])
+    bolt_hole(
+      size = BOLT_SIZE,
+      length = INFINITY
+    );
   }
 }
 
 module edge_connector () {
   difference () {
     cylinder(
-        r = ARM_RADIUS + ROD_RADIUS,
+        r = ARM_RADIUS + BOLT_CAP_RADIUS,
         h = ARM_HEIGHT,
         $fa = MIN_ARC_FRAGMENT_ANGLE,
         $fs = MIN_ARC_FRAGMENT_SIZE
@@ -95,8 +58,8 @@ module channel () {
   union () {
     translate(
       [
-        ROD_RADIUS,
-        ROD_RADIUS,
+        BOLT_CAP_RADIUS,
+        BOLT_CAP_RADIUS,
         ARM_HEIGHT - CHANNEL_DEPTH
       ]
     )
@@ -109,8 +72,8 @@ module channel () {
     
     translate(
       [
-        ROD_RADIUS,
-        ROD_RADIUS,
+        BOLT_CAP_RADIUS,
+        BOLT_CAP_RADIUS,
         -INFINITY
       ]
     )

@@ -3,11 +3,10 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
-CHANNEL_DEPTH = 10;
+CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
-ARM_OFFSET = 10;
-ARM_HEIGHT= 20;
+ARM_HEIGHT= CHANNEL_DEPTH + 2;
 ARM_RADIUS = CHANNEL_LENGTH + 3;
 BOLT_SIZE = 4;
 BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
@@ -15,11 +14,17 @@ BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 
 main();
 
+// Simple list comprehension for creating N-gon vertices
+function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
+
 module main () {
+  //polygon(ngon(3, 25));
+  
   difference () {
     edge_connector();
     
-    translate([0, 0, -INFINITESIMAL])
+    translate([0, 0, ARM_HEIGHT + INFINITESIMAL])
+    rotate([0, 1/2 * ROT, 0])
     bolt_hole(
       size = BOLT_SIZE,
       length = INFINITY

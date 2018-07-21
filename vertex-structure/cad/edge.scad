@@ -3,14 +3,14 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
+BOLT_SIZE = 4;
+BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
+BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 ARM_HEIGHT= CHANNEL_DEPTH + 2;
-ARM_RADIUS = CHANNEL_LENGTH + 3;
-BOLT_SIZE = 4;
-BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
-BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
+ARM_RADIUS = CHANNEL_LENGTH + 3 + BOLT_CAP_RADIUS;
 
 main();
 
@@ -18,6 +18,7 @@ main();
 function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
 module main () {
+  echo(arm_radius = ARM_RADIUS);
   //polygon(ngon(3, 25));
   
   difference () {
@@ -35,7 +36,7 @@ module main () {
 module edge_connector () {
   difference () {
     cylinder(
-        r = ARM_RADIUS + BOLT_CAP_RADIUS,
+        r = ARM_RADIUS,
         h = ARM_HEIGHT,
         $fa = MIN_ARC_FRAGMENT_ANGLE,
         $fs = MIN_ARC_FRAGMENT_SIZE

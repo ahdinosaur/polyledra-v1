@@ -6,17 +6,17 @@ include <nuts-and-bolts.scad>
 ARMS_PER_EDGE = 3;
 EDGES_PER_VERTEX = 3;
 EDGE_CONNECTOR_LENGTH = 25;
-EDGE_CONNECTOR_OFFSET = 20;
+EDGE_CONNECTOR_OFFSET = 26;
 EDGE_CONNECTOR_HEIGHT = 8.5;
 
-VERTEX_SURFACE_LENGTH = 14;
-VERTEX_SURFACE_HEIGHT = 8;
+VERTEX_SURFACE_LENGTH = 22;
+VERTEX_SURFACE_HEIGHT = 5;
 
 VERTEX_Z_OFFSET = 0;
 
 VERTEX_BEAM_X_LENGTH = 20;
 VERTEX_BEAM_Y_LENGTH = 8;
-VERTEX_BEAM_Z_LENGTH = 8;
+VERTEX_BEAM_Z_LENGTH = 10;
 
 VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_BEAM_Z_LENGTH;
 
@@ -56,6 +56,7 @@ edge_theta = 35.26439;
 // rotate around the pole = longitude
 
 
+     
 main();
 
 module main () {
@@ -70,28 +71,49 @@ module main () {
 }
 
 module vertex_connector () {
-  union () {
-    rotate((1 / EDGES_PER_VERTEX) * ROT)
-    translate([0, 0, VERTEX_Z_OFFSET])
-    linear_extrude(
-      height = VERTEX_SURFACE_HEIGHT
-    )
-    polygon(ngon(EDGES_PER_VERTEX, VERTEX_SURFACE_LENGTH));
-  
-    for (edge_index = [0 : EDGES_PER_VERTEX]) {
-      edge_phi = edge_index * (ROT / EDGES_PER_VERTEX);
-      
-      rotate(a = [0, 0, edge_phi])
-         translate([
-        -(1/4) * VERTEX_BEAM_X_LENGTH,
-        -(1/2) * VERTEX_BEAM_Y_LENGTH,
-        VERTEX_Z_OFFSET
-      ])
-      cube([
-        VERTEX_BEAM_X_LENGTH,
-        VERTEX_BEAM_Y_LENGTH,
-        VERTEX_BEAM_Z_LENGTH
-      ]);
+  difference () {
+    union () {
+      rotate((1 / EDGES_PER_VERTEX) * ROT)
+      translate([0, 0, VERTEX_Z_OFFSET])
+      linear_extrude(
+        height = VERTEX_SURFACE_HEIGHT
+      )
+      polygon(ngon(EDGES_PER_VERTEX, VERTEX_SURFACE_LENGTH));
+    
+      for (edge_index = [0 : EDGES_PER_VERTEX]) {
+        edge_phi = edge_index * (ROT / EDGES_PER_VERTEX);
+        
+        rotate(a = [0, 0, edge_phi])
+        translate([
+          0,
+          -(1/2) * VERTEX_BEAM_Y_LENGTH,
+          VERTEX_Z_OFFSET
+        ])
+        cube([
+          VERTEX_BEAM_X_LENGTH,
+          VERTEX_BEAM_Y_LENGTH,
+          VERTEX_BEAM_Z_LENGTH
+        ]);
+      }
+    }
+    
+    // subtract the space that would interfere with the edge connectors
+    union () {
+      for (edge_index = [0 : EDGES_PER_VERTEX]) {
+        edge_phi = edge_index * (ROT / EDGES_PER_VERTEX);
+        
+        translate(
+          [
+            EDGE_CONNECTOR_OFFSET*cos(edge_phi),
+            EDGE_CONNECTOR_OFFSET*sin(edge_phi),
+            0
+          ]
+        )
+        rotate(a = [0, edge_theta, edge_phi])
+        rotate([0, 0, (1 / 2 * EDGES_PER_VERTEX) * ROT])
+        translate([0, (-1/2) * INFINITY, (1/2) * EDGE_CONNECTOR_HEIGHT - INFINITESIMAL])
+        cube(INFINITY);
+      }
     }
   }
 }
@@ -108,6 +130,7 @@ module edge_connectors () {
       ]
     )
     rotate(a = [0, edge_theta, edge_phi])
+    //cylinder(r = 23.55, h = 20);
     edge_connector();
   }
 }

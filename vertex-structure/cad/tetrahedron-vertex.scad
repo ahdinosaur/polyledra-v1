@@ -5,7 +5,7 @@ include <nuts-and-bolts.scad>
 
 ARMS_PER_EDGE = 3;
 EDGES_PER_VERTEX = 3;
-EDGE_CONNECTOR_LENGTH = 25;
+EDGE_CONNECTOR_LENGTH = 19;
 EDGE_CONNECTOR_OFFSET = 30;
 EDGE_CONNECTOR_HEIGHT = 8.5;
 
@@ -22,7 +22,7 @@ VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_SURFACE_HEIGHT + VERTEX_Z_OFFSET;
 
 SCREW_SIZE = 4;
 SCREW_LENGTH = INFINITY;
-SCREW_OFFSET = 12;
+SCREW_OFFSET = 10.75;
 
 /*
 HEADER_NUM_PINS = 4;
@@ -131,8 +131,10 @@ module edge_connectors () {
       ]
     )
     rotate(a = [0, edge_theta, edge_phi])
-    //cylinder(r = 23.55, h = 20);
+    // union () {
+      // cylinder(r = 21.5, h = 20);
     edge_connector();
+    // }
   }
 }
 

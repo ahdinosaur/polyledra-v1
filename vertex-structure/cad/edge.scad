@@ -3,14 +3,20 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
-BOLT_SIZE = 4;
-BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
-BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
+CHANNELS_PER_ARM = 3;
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
+CHANNEL_OFFSET = 2;
+
 ARM_HEIGHT= CHANNEL_DEPTH + 2;
-ARM_RADIUS = CHANNEL_LENGTH + 3 + BOLT_CAP_RADIUS;
+ARM_RADIUS = CHANNEL_LENGTH + CHANNEL_OFFSET + 3;
+
+BOLT_SIZE = 4;
+BOLT_LENGTH = 35;
+BOLT_OFFSET = ARM_RADIUS / 2;
+BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
+BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 
 main();
 
@@ -18,36 +24,46 @@ main();
 function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
 module main () {
-  echo(arm_radius = ARM_RADIUS);
-  //polygon(ngon(3, 25));
+  echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
+  //polygon(ngon(3, 19));
   
-  difference () {
-    edge_connector();
-    
-    translate([0, 0, ARM_HEIGHT + INFINITESIMAL])
-    rotate([0, 1/2 * ROT, 0])
-    bolt_hole(
-      size = BOLT_SIZE,
-      length = INFINITY
-    );
-  }
+  arm();
 }
 
-module edge_connector () {
+module arm () {
   difference () {
     cylinder(
         r = ARM_RADIUS,
         h = ARM_HEIGHT,
         $fa = MIN_ARC_FRAGMENT_ANGLE,
         $fs = MIN_ARC_FRAGMENT_SIZE
-      );
-    arm();
+    );
+    
+    bolts();
+    channels();
   }
 }
 
-module arm () {
-  difference () {
+module bolts () {
+  for (screw_index = [1 : CHANNELS_PER_ARM - 1]) {
+    screw_phi = screw_index * (ROT / CHANNELS_PER_ARM);
 
+    translate([
+      BOLT_OFFSET*cos(screw_phi),
+      BOLT_OFFSET*sin(screw_phi),
+      0 //- (1/2) * BOLT_LENGTH
+    ])
+    translate([0, 0, ARM_HEIGHT + INFINITESIMAL])
+    rotate([0, 1/2 * ROT, 0])
+    bolt_hole(
+      size = BOLT_SIZE,
+      length = BOLT_LENGTH
+    );
+  }
+}
+
+module channels () {
+  union () {
     for (i = [0 : 2]) {
       rotate(
         a = [
@@ -63,10 +79,11 @@ module arm () {
 
 module channel () {
   union () {
+    // front entry
     translate(
       [
-        BOLT_CAP_RADIUS,
-        BOLT_CAP_RADIUS,
+        CHANNEL_OFFSET,
+        CHANNEL_OFFSET,
         ARM_HEIGHT - CHANNEL_DEPTH
       ]
     )
@@ -77,10 +94,11 @@ module channel () {
       length = CHANNEL_LENGTH
     );
     
+    // back stopper
     translate(
       [
-        BOLT_CAP_RADIUS,
-        BOLT_CAP_RADIUS,
+        CHANNEL_OFFSET,
+        CHANNEL_OFFSET,
         -INFINITY
       ]
     )

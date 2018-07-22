@@ -1,4 +1,4 @@
-recho(version=version());
+echo(version=version());
 
 include <constants.scad>
 include <nuts-and-bolts.scad>
@@ -22,6 +22,7 @@ VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_SURFACE_HEIGHT + VERTEX_Z_OFFSET;
 
 SCREW_SIZE = 4;
 SCREW_LENGTH = INFINITY;
+SCREW_OFFSET = 12;
 
 /*
 HEADER_NUM_PINS = 4;
@@ -144,14 +145,22 @@ module edge_connector () {
       height = EDGE_CONNECTOR_HEIGHT
     )
     polygon(ngon(ARMS_PER_EDGE, EDGE_CONNECTOR_LENGTH));
-    
-    // minus bolt
-    rotate([0, (1/2) * ROT, 0])
-    translate([0, 0, - (1/2) * SCREW_LENGTH])
-    bolt_hole(
-      size = SCREW_SIZE,
-      length = SCREW_LENGTH
-    );
+
+        
+    // minus bolts
+    for (screw_index = [1 : ARMS_PER_EDGE - 1]) {
+      screw_phi = screw_index * (ROT / ARMS_PER_EDGE);
+
+      translate([
+        SCREW_OFFSET*cos(screw_phi),
+        SCREW_OFFSET*sin(screw_phi),
+        - (1/2) * SCREW_LENGTH
+      ])
+      bolt_hole(
+        size = SCREW_SIZE,
+        length = SCREW_LENGTH
+      );
+    }
   }
 }
 

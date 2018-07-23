@@ -6,19 +6,19 @@ include <nuts-and-bolts.scad>
 ARMS_PER_EDGE = 3;
 EDGES_PER_VERTEX = 3;
 EDGE_CONNECTOR_LENGTH = 19;
-EDGE_CONNECTOR_OFFSET = 30;
+EDGE_CONNECTOR_OFFSET = 24;
 EDGE_CONNECTOR_HEIGHT = 8.5;
 
 VERTEX_SURFACE_LENGTH = 22;
-VERTEX_SURFACE_HEIGHT = 5;
+VERTEX_SURFACE_HEIGHT = 4;
 
-VERTEX_Z_OFFSET = 5;
+VERTEX_Z_OFFSET = 2;
 
 VERTEX_BEAM_X_LENGTH = 26;
 VERTEX_BEAM_Y_LENGTH = 8;
-VERTEX_BEAM_Z_LENGTH = 10;
+VERTEX_BEAM_Z_LENGTH = 4;
 
-VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_SURFACE_HEIGHT + VERTEX_Z_OFFSET;
+VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_SURFACE_HEIGHT + VERTEX_BEAM_Z_LENGTH;
 
 SCREW_SIZE = 4;
 SCREW_LENGTH = INFINITY;
@@ -88,7 +88,7 @@ module vertex_connector () {
         translate([
           0,
           -(1/2) * VERTEX_BEAM_Y_LENGTH,
-          VERTEX_Z_OFFSET
+          VERTEX_Z_OFFSET  + VERTEX_SURFACE_HEIGHT
         ])
         cube([
           VERTEX_BEAM_X_LENGTH,
@@ -132,7 +132,7 @@ module edge_connectors () {
     )
     rotate(a = [0, edge_theta, edge_phi])
     // union () {
-      // cylinder(r = 21.5, h = 20);
+    //  cylinder(r = 21.5, h = 20);
     edge_connector();
     // }
   }

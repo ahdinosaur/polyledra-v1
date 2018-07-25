@@ -9,8 +9,20 @@ CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
 CHANNEL_OFFSET = 2;
 
-ARM_HEIGHT= CHANNEL_DEPTH + 2;
+HEADER_DEPTH = 2.5;
+HEADER_PITCH = 2.54;
+HEADER_NUM_PINS = 4;
+HEADER_LENGTH = HEADER_PITCH * HEADER_NUM_PINS + 0.1;
+HEADER_WIDTH = 2.5;
+HEADER_OFFSET = 8;
+
+ARM_HEIGHT= CHANNEL_DEPTH + HEADER_DEPTH;
 ARM_RADIUS = CHANNEL_LENGTH + CHANNEL_OFFSET + 3;
+
+HOLE_WIDTH_START = 2;
+HOLE_WIDTH_END = 6.5;
+HOLE_OFFSET = CHANNEL_OFFSET;
+HOLE_WIDTH_LENGTH = 1/2 * ARM_RADIUS;
 
 BOLT_SIZE = 4;
 BOLT_LENGTH = 35;
@@ -25,7 +37,7 @@ function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
 module main () {
   echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
-  //polygon(ngon(3, 19));
+  //polygon(ngon(3, 25));
   
   arm();
 }
@@ -39,8 +51,21 @@ module arm () {
         $fs = MIN_ARC_FRAGMENT_SIZE
     );
     
+    hole();
     bolts();
     channels();
+  }
+}
+
+module hole () {
+  translate([HOLE_OFFSET, 0, -1/2 * INFINITY])
+  hull () {
+    translate([0, -1/2 * HOLE_WIDTH_START, 0])
+    cube([HOLE_WIDTH_LENGTH, HOLE_WIDTH_START, INFINITY]);
+    
+    translate([0, -1/2 * HOLE_WIDTH_END, 0])
+    translate([HOLE_WIDTH_LENGTH, 0, 0])
+    cube([INFINITESIMAL, HOLE_WIDTH_END, INFINITY]);
   }
 }
 
@@ -88,27 +113,39 @@ module channel () {
       ]
     )
     linear_extrude(
-      height = CHANNEL_DEPTH + INFINITESIMAL + INFINITY
+      height = CHANNEL_DEPTH + INFINITESIMAL
     )
     channel_shape(
       length = CHANNEL_LENGTH
     );
     
-    // back stopper
+    // back stopper (with header)
     translate(
       [
         CHANNEL_OFFSET,
         CHANNEL_OFFSET,
-        -INFINITY
+        -INFINITESIMAL
       ]
     )
     linear_extrude(
-      height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITY
+      height = HEADER_DEPTH + 2 * INFINITESIMAL
     )
-    channel_led_shape(
-      length = CHANNEL_LENGTH
-     );
+    header_shape();
   };
+}
+
+module header_shape () {
+  rotate(3/8 * ROT)
+  translate([
+    -1/2 * HEADER_LENGTH,
+     - HEADER_WIDTH - HEADER_OFFSET
+  ])
+  square(
+    size = [
+      HEADER_LENGTH,
+      HEADER_WIDTH
+    ]
+  );
 }
 
 module channel_shape (length) {
@@ -141,6 +178,7 @@ module channel_led_shape (length) {
     );
   };
 }
+
 
 module positive_z () {
   translate(

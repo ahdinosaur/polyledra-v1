@@ -7,7 +7,7 @@ CHANNELS_PER_ARM = 3;
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
-CHANNEL_OFFSET = 2;
+CHANNEL_OFFSET = 5;
 
 ARM_HEIGHT= CHANNEL_DEPTH + 2;
 ARM_RADIUS = CHANNEL_LENGTH + CHANNEL_OFFSET + 3;
@@ -18,6 +18,8 @@ BOLT_OFFSET = ARM_RADIUS / 2;
 BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
 BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 
+HOLE_RADIUS = 5;
+
 main();
 
 // Simple list comprehension for creating N-gon vertices
@@ -25,13 +27,13 @@ function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
 module main () {
   echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
-  //polygon(ngon(3, 19));
+  //polygon(ngon(3, 20));
   
   arm();
 }
 
 module arm () {
-  difference () {
+  union () {
     cylinder(
         r = ARM_RADIUS,
         h = ARM_HEIGHT,
@@ -39,9 +41,18 @@ module arm () {
         $fs = MIN_ARC_FRAGMENT_SIZE
     );
     
+    hole();
     bolts();
     channels();
   }
+}
+
+module hole () {
+  translate([0, 0, -(1/2) * INFINITY])
+  cylinder(
+    r = HOLE_RADIUS,
+    h = INFINITY
+  );
 }
 
 module bolts () {
@@ -87,6 +98,7 @@ module channel () {
         ARM_HEIGHT - CHANNEL_DEPTH
       ]
     )
+      rotate([0, 0, 1/4* ROT])
     linear_extrude(
       height = CHANNEL_DEPTH + INFINITESIMAL + INFINITY
     )
@@ -102,6 +114,8 @@ module channel () {
         -INFINITY
       ]
     )
+          rotate([0, 0, 1/4* ROT])
+
     linear_extrude(
       height = (ARM_HEIGHT - CHANNEL_DEPTH) + 2 * INFINITY
     )

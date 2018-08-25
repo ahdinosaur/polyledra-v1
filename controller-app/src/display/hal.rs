@@ -12,19 +12,28 @@ use hal::sysfs_gpio::{self, Pin, Direction};
 
 use color;
 use control;
-use shape;
 use display::{Display, DisplayMessage};
+use scene;
+use shape;
 
-static NEXT_BUTTON_PIN: u64 = 27;
-static PREV_BUTTON_PIN: u64 = 65;
+static BUTTON_PIN_1: u64 = 27;
+static BUTTON_PIN_2: u64 = 65;
+
+static DEFAULT_BRIGHTNESS: u8 = 2;
 
 pub struct HalDisplay {
     spidev: Spidev,
     spidev_options: SpidevOptions,
+    /*
     next_button_pin: Pin,
     prev_button_pin: Pin,
     next_button_press_instant: Option<Instant>,
     prev_button_press_instant: Option<Instant>,
+    */
+    button_pin_1: Pin,
+    button_pin_2: Pin,
+    brightness: u8,
+    current_scene_index: usize,
     control_tx: Sender<control::Control>
 }
 
@@ -38,19 +47,33 @@ impl Display for HalDisplay {
             .build();
         spidev.configure(&spidev_options).unwrap();
 
+        /*
         let next_button_pin = Pin::new(NEXT_BUTTON_PIN);
         next_button_pin.set_direction(Direction::In);
 
         let prev_button_pin = Pin::new(PREV_BUTTON_PIN);
         prev_button_pin.set_direction(Direction::In);
+        */
+
+        let button_pin_1 = Pin::new(BUTTON_PIN_1);
+        button_pin_1.set_direction(Direction::In).unwrap();
+
+        let button_pin_2 = Pin::new(BUTTON_PIN_2);
+        button_pin_2.set_direction(Direction::In).unwrap();
 
         HalDisplay {
             spidev,
             spidev_options,
+            /*
             next_button_pin,
             prev_button_pin,
             next_button_press_instant: None,
             prev_button_press_instant: None,
+            */
+            button_pin_1,
+            button_pin_2,
+            brightness: DEFAULT_BRIGHTNESS,
+            current_scene_index: scene::DEFAULT_SCENE_INDEX,
             control_tx
         }
     }
@@ -58,10 +81,10 @@ impl Display for HalDisplay {
     fn display (&mut self, display_message: &DisplayMessage) {
         let control_tx = &self.control_tx;
         let spidev = &mut self.spidev;
+        let brightness = self.brightness;
 
         match display_message {
             &DisplayMessage::Pixels(ref pixels) => {
-                let brightness = 10;
                 let mut buffer = pixels_to_apa102_buffer(pixels, Some(brightness));
                 spidev.write(&mut buffer).unwrap();
             }
@@ -74,8 +97,10 @@ impl Display for HalDisplay {
         }
         */
 
+
         // TODO generalize
         // if next button is pushed, switch to next mode
+        /*
         let next_button_value = self.next_button_pin.get_value().unwrap_or(0);
         let next_button_press_ns = self.next_button_press_instant.map_or(u64::MAX, |instant| duration_to_nanos(instant.elapsed()));
         if next_button_value == 1 && next_button_press_ns > 300_000_000 {
@@ -91,8 +116,35 @@ impl Display for HalDisplay {
             control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev)).unwrap();
             self.prev_button_press_instant = Some(Instant::now());
         }
+        */
+
+        let button_1_value = self.button_pin_1.get_value().unwrap_or(0);
+        let button_2_value = self.button_pin_2.get_value().unwrap_or(0);
+
+        let next_scene_index = (button_1_value + 2 * button_2_value) as usize;
+        let current_scene_index = self.current_scene_index;
+
+        if next_scene_index != current_scene_index {
+            if next_scene_index == 0 {
+                // rainbow
+                self.brightness = DEFAULT_BRIGHTNESS;
+            } else if next_scene_index == 1 {
+                // walk
+                self.brightness = 10;
+            } else if next_scene_index == 2 {
+                // noise
+                self.brightness = DEFAULT_BRIGHTNESS;
+            } else if next_scene_index == 3 {
+                // noise
+                self.brightness = DEFAULT_BRIGHTNESS;
+            }
+
+            self.current_scene_index = next_scene_index;
+            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Set(next_scene_index))).unwrap();
+        }
 
         // TODO get rotary encoder input as params
+        
     }
 }
 

@@ -67,6 +67,10 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
                     RenderMessage::ChangeMode(control::ChangeMode::Next) => {
                         scene_manager.next_mode();
                         should_render = true;
+                    },
+                    RenderMessage::ChangeMode(control::ChangeMode::Set(next_mode_index)) => {
+                        scene_manager.set_mode(next_mode_index);
+                        should_render = true;
                     }
                 }
             }

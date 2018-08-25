@@ -32,6 +32,8 @@ type SimplexGlow = glow::Glow<OpenSimplex>;
 type FractalGlow = glow::Glow<Fbm>;
 mod glow;
 
+pub static DEFAULT_SCENE_INDEX : usize = 0;
+
 pub struct SceneManager {
     scenes: Vec<Box<Scene>>,
     current_scene_index: usize
@@ -41,11 +43,11 @@ impl SceneManager {
     pub fn new(shape: shape::Shape) -> SceneManager {
         let scene_shape = Rc::new(shape);
         let scenes: Vec<Box<Scene>> = vec![
-            Box::new(test::Test::new(scene_shape.clone())),
-            Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
+            //Box::new(test::Test::new(scene_shape.clone())),
+            //Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
-            Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
+            //Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
             Box::new(SimplexGlow::new(scene_shape.clone())),
             Box::new(FractalGlow::new(scene_shape.clone())),
             // TODO twinkle
@@ -56,7 +58,7 @@ impl SceneManager {
         drop(scene_shape);
         let scene_manager = SceneManager {
             scenes,
-            current_scene_index: 4 // spark
+            current_scene_index: DEFAULT_SCENE_INDEX
         };
         return scene_manager;
     }
@@ -83,6 +85,11 @@ impl SceneManager {
 
     pub fn next_mode(&mut self) {
         self.current_scene_index = (self.current_scene_index as i8 + 1 as i8).modulo(self.scenes.len() as i8) as usize;
+        info!("current scene index: {}", self.current_scene_index);
+    }
+
+    pub fn set_mode(&mut self, next_scene_index: usize) {
+        self.current_scene_index = next_scene_index;
         info!("current scene index: {}", self.current_scene_index);
     }
 }

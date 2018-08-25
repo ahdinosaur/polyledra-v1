@@ -93,9 +93,15 @@ impl AbstractShapeCreator for Tetrahedron {
                 Vertex::new(-(2_f32/9_f32).sqrt() * a, -(2_f32/3_f32).sqrt() * a, -(1_f32/3_f32) * a)
             ],
             edges: vec![
+                /*
                 Edge::new(0, 1),
                 Edge::new(1, 2),
                 Edge::new(2, 0),
+                */
+                Edge::new(0, 2),
+                Edge::new(2, 1),
+                Edge::new(1, 0),
+
                 Edge::new(0, 3),
                 Edge::new(3, 1),
                 Edge::new(2, 3)

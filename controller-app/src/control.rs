@@ -7,7 +7,8 @@ pub type Time = f32;
 
 pub enum ChangeMode {
     Prev,
-    Next
+    Next,
+    Set(usize)
 }
 
 pub enum Control {

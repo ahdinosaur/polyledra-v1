@@ -34,8 +34,9 @@ impl<Noise: Default + NoiseFn<Point4<f64>>> scene::Scene for Glow<Noise> {
         let dots = &shape.dots;
         let bounds = &shape.bounds;
 
-        let frequency = BEATS_PER_MINUTE / SEC_PER_MIN / NANOSEC_PER_SEC;
-        let glow_time = 0.5 * (time * frequency / BEATS_PER_BAR) + ((1./2.) * time * frequency * 2. * PI).sin();
+        // let frequency = BEATS_PER_MINUTE / SEC_PER_MIN / NANOSEC_PER_SEC;
+        // let glow_time = 0.5 * (time * frequency / BEATS_PER_BAR) + ((1./2.) * time * frequency * 2. * PI).sin();
+        let glow_time = 0.75 * time / NANOSEC_PER_SEC;
 
         debug!("glow: {}", glow_time);
 

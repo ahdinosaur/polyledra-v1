@@ -57,7 +57,7 @@ edge_theta = 35.26439;
 // rotate around the pole = longitude
 
 
-     
+rotate([0, 180, 0])
 main();
 
 module main () {

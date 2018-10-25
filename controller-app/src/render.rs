@@ -20,7 +20,7 @@ pub struct RenderService {
     pub tx: Sender<RenderMessge>,
     rx: Receiver<RenderMessage>,
     display_tx: Sender<display::DisplayMessage>,
-    scene_manager: scene::SceneManager,
+ scene_manager: scene::SceneManager,
     time: f32,
     shape: shape::Shape
 }
@@ -42,7 +42,7 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
             let first_render_messages = vec![first_render_message];
             // unblocking read of next messages
             // (to stay up-to-date and batch renders)
-            let next_render_messages: iter::Chain<vec::IntoIter<RenderMessage>, mpsc::TryIter<RenderMessage>>  = first_render_messages
+            let next_render_messages: iter::Chain<vec::IntoIter<RenderMessage>, mpsc::TryIter<RenderMessage>> = first_render_messages
                 .into_iter()
                 .chain(
                     render_rx.try_iter()
@@ -76,16 +76,12 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
             }
 
             if should_render {
-                render(&display_tx, &mut scene_manager, time);
+                scene_manager.update(time);
+                let pixels = scene_manager.render(time);
+                let display_message = display::DisplayMessage::Pixels(pixels);
+                display_tx.send(display_message).unwrap();
             }
         }
     });
     return render_tx;
 }
-
-fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &mut scene::SceneManager, time: control::Time) {
-    let pixels = scene_manager.render(time);
-    let display_message = display::DisplayMessage::Pixels(pixels);
-    display_tx.send(display_message).unwrap();
-}
-

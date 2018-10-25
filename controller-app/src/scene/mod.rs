@@ -10,7 +10,8 @@ use shape;
 // - rendering state
 pub trait Scene {
     fn new (shape: Rc<shape::Shape>) -> Self where Self: Sized;
-    fn scene<'a> (&'a mut self, time: control::Time) -> color::Colors<'a>;
+    fn update<'a> (&'a mut self, time: control::Time);
+    fn render<'a> (&'a self, time: control::Time) -> color::Colors<'a>;
 }
 
 pub use self::test::Test;
@@ -63,11 +64,15 @@ impl SceneManager {
         return scene_manager;
     }
 
-    pub fn scene<'a>(&'a mut self, time: control::Time) -> color::Colors<'a> { 
-        self.get_current_scene().scene(time)
+    pub fn update(&mut self, time: control::Time) { 
+        self.get_current_scene().update(time)
     }
 
-    pub fn render(&mut self, time: control::Time) -> color::Pixels {
+    pub fn render<'a>(&'a self, time: control::Time) -> color::Colors<'a> { 
+        self.get_current_scene().render(time)
+    }
+
+    pub fn render_to_pixels(&mut self, time: control::Time) -> color::Pixels {
         (*self.scene(time))
             .into_iter()
             .map(|color| color.to_rgb())

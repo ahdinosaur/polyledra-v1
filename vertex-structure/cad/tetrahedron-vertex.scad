@@ -5,9 +5,17 @@ include <nuts-and-bolts.scad>
 
 ARMS_PER_EDGE = 3;
 EDGES_PER_VERTEX = 3;
+
+HEADER_DEPTH = 8.5;
+HEADER_PITCH = 2.54;
+HEADER_NUM_PINS = 4;
+HEADER_LENGTH = (0.1 + HEADER_PITCH) * HEADER_NUM_PINS + 0.1;
+HEADER_WIDTH = 2.5;
+HEADER_OFFSET = 6 + HEADER_WIDTH;
+
 EDGE_CONNECTOR_LENGTH = 19;
 EDGE_CONNECTOR_OFFSET = 24;
-EDGE_CONNECTOR_HEIGHT = 8.5;
+EDGE_CONNECTOR_HEIGHT = HEADER_DEPTH;
 
 VERTEX_SURFACE_LENGTH = 22;
 VERTEX_SURFACE_HEIGHT = 8;
@@ -23,15 +31,6 @@ VERTEX_MAX_Z = VERTEX_Z_OFFSET + VERTEX_SURFACE_HEIGHT + VERTEX_BEAM_Z_LENGTH;
 SCREW_SIZE = 4;
 SCREW_LENGTH = INFINITY;
 SCREW_OFFSET = 10.75;
-
-/*
-HEADER_NUM_PINS = 4;
-HEADER_PITCH = 2.54;
-HEADER_X_LENGTH = HEADER_PITCH * (HEADER_NUM_PINS * + 0.4) + 0.25;
-HEADER_Y_LENGTH = 2.4;
-HEADER_Z_LENGTH = 8.5;
-HEADER_Y_OFFSET = 2;
-*/
 
 // sin(phi) = x
 // sin^-1(x) = phi
@@ -148,14 +147,13 @@ module edge_connector () {
     )
     polygon(ngon(ARMS_PER_EDGE, EDGE_CONNECTOR_LENGTH));
 
-        
     // minus bolts
     for (screw_index = [1 : ARMS_PER_EDGE - 1]) {
       screw_phi = screw_index * (ROT / ARMS_PER_EDGE);
 
       translate([
-        SCREW_OFFSET*cos(screw_phi),
-        SCREW_OFFSET*sin(screw_phi),
+        SCREW_OFFSET * cos(screw_phi),
+        SCREW_OFFSET * sin(screw_phi),
         - (1/2) * SCREW_LENGTH
       ])
       bolt_hole(
@@ -163,7 +161,38 @@ module edge_connector () {
         length = SCREW_LENGTH
       );
     }
+    
+    // minus headers
+    for (arm_index = [0 : ARMS_PER_EDGE - 1]) {
+      arm_phi = (arm_index) * (ROT / ARMS_PER_EDGE);
+
+      translate([
+        -HEADER_OFFSET * cos(arm_phi),
+        -HEADER_OFFSET * sin(arm_phi),
+        - (1/2) * HEADER_DEPTH - INFINITESIMAL
+      ])
+      rotate(1/4 * ROT)
+      rotate(arm_phi)
+      linear_extrude(
+        height = HEADER_DEPTH + 2 * INFINITESIMAL
+      )
+      header_shape();
+    };
   }
+}
+
+
+module header_shape () {
+  translate([
+    - 1/2 * HEADER_LENGTH,
+    - 1/2 *  HEADER_WIDTH
+  ])
+  square(
+    size = [
+      HEADER_LENGTH,
+      HEADER_WIDTH
+    ]
+  );
 }
 
 // Simple list comprehension for creating N-gon vertices

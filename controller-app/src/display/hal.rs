@@ -19,7 +19,7 @@ use shape;
 static BUTTON_PIN_1: u64 = 27;
 static BUTTON_PIN_2: u64 = 65;
 
-static DEFAULT_BRIGHTNESS: u8 = 2;
+static DEFAULT_BRIGHTNESS: u8 = 6;
 
 pub struct HalDisplay {
     spidev: Spidev,
@@ -130,7 +130,7 @@ impl Display for HalDisplay {
                 self.brightness = DEFAULT_BRIGHTNESS;
             } else if next_scene_index == 1 {
                 // walk
-                self.brightness = 10;
+                self.brightness = 20;
             } else if next_scene_index == 2 {
                 // noise
                 self.brightness = DEFAULT_BRIGHTNESS;

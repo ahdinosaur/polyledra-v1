@@ -1,0 +1,12 @@
+{
+  "name": "edge",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "npm run pcb && kicad ./edge.pro",
+    "pcb": "jseda pcb ./edge.js ./edge.kicad_pcb"
+  },
+  "dependencies": {
+    "jseda": "^1.1.1"
+  }
+}

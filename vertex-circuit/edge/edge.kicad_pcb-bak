@@ -2,7 +2,7 @@
   (version 4)
   (host
     pcbnew
-    jseda-2.0.0
+    jseda-2.0.1
   )
   (general
     (links 0)
@@ -17,8 +17,8 @@
     (drawings 6)
     (tracks 9)
     (zones 1)
-    (modules 4)
-    (nets 7)
+    (modules 6)
+    (nets 8)
   )
   (page A4)
   (title_block
@@ -181,15 +181,16 @@
     (add_net IO_CLOCK_TO_ARM_1_CLOCK)
     (add_net ARM_2_DATA_TO_ARM_3_DATA)
     (add_net ARM_2_CLOCK_TO_ARM_3_CLOCK)
+    (add_net ARM_2_+5V_NO_CONNECT)
   )
   (net_class
     Power
     "net class for high-power"
-    (clearance 0.5)
-    (trace_width 1.7)
-    (via_dia 1.7)
+    (clearance 0.4)
+    (trace_width 1.5)
+    (via_dia 1.5)
     (via_drill 0.8)
-    (uvia_dia 1.7)
+    (uvia_dia 1.5)
     (uvia_drill 0.8)
     (add_net +5V)
     (add_net GND)
@@ -221,6 +222,10 @@
   (net
     6
     ARM_2_CLOCK_TO_ARM_3_CLOCK
+  )
+  (net
+    7
+    ARM_2_+5V_NO_CONNECT
   )
   (module
     H4-2.54mm
@@ -1041,8 +1046,8 @@
         *.Mask
       )
       (net
-        1
-        +5V
+        7
+        ARM_2_+5V_NO_CONNECT
       )
     )
     (fp_text
@@ -1666,16 +1671,176 @@
       )
     )
   )
+  (module
+    M4
+    (at
+      139.60769515458674
+      94
+    )
+    (descr "Mounting Hole 4.3mm, no annular, M4")
+    (tags "mounting hole 4.3mm no annular m4")
+    (pad
+      1
+      np_thru_hole
+      circle
+      (at
+        0
+        0
+      )
+      (size
+        4.3
+        4.3
+      )
+      (drill 4.3)
+      (layers
+        *.Cu
+        *.Mask
+      )
+      (net
+        2
+        GND
+      )
+    )
+    (fp_text
+      reference
+      H1
+      (at
+        0
+        -5.3
+      )
+      (layer F.SilkS)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_text
+      value
+      M4
+      (at
+        0
+        5.3
+      )
+      (layer F.Fab)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_circle
+      (center
+        0
+        0
+      )
+      (end
+        4.55
+        0
+      )
+      (layer F.CrtYd)
+      (width 0.05)
+
+    )
+  )
+  (module
+    M4
+    (at
+      160.39230484541326
+      94
+    )
+    (descr "Mounting Hole 4.3mm, no annular, M4")
+    (tags "mounting hole 4.3mm no annular m4")
+    (pad
+      1
+      np_thru_hole
+      circle
+      (at
+        0
+        0
+      )
+      (size
+        4.3
+        4.3
+      )
+      (drill 4.3)
+      (layers
+        *.Cu
+        *.Mask
+      )
+      (net
+        2
+        GND
+      )
+    )
+    (fp_text
+      reference
+      H2
+      (at
+        0
+        -5.3
+      )
+      (layer F.SilkS)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_text
+      value
+      M4
+      (at
+        0
+        5.3
+      )
+      (layer F.Fab)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_circle
+      (center
+        0
+        0
+      )
+      (end
+        4.55
+        0
+      )
+      (layer F.CrtYd)
+      (width 0.05)
+
+    )
+  )
   (segment
     (start
-      146.59387271168188
-      101.70716047745213
+      153.81
+      100
     )
     (end
-      146.59387271168188
-      86.70716047745213
+      153.81
+      85
     )
-    (width 1.7)
+    (width 1.5)
     (layer F.Cu)
     (net
       2
@@ -1683,12 +1848,12 @@
   )
   (segment
     (start
-      148.8646242372273
-      100.56905349248404
+      151.27
+      100
     )
     (end
-      148.8646242372273
-      85.56905349248404
+      151.27
+      85
     )
     (width 0.254)
     (layer F.Cu)
@@ -1698,12 +1863,12 @@
   )
   (segment
     (start
-      151.1353757627727
-      99.43094650751596
+      148.73
+      100
     )
     (end
-      151.1353757627727
-      84.43094650751596
+      148.73
+      85
     )
     (width 0.254)
     (layer F.Cu)
@@ -1713,14 +1878,14 @@
   )
   (segment
     (start
-      153.40612728831812
-      98.29283952254787
+      146.19
+      100
     )
     (end
-      153.40612728831812
-      83.29283952254787
+      146.19
+      85
     )
-    (width 1.7)
+    (width 1.5)
     (layer F.Cu)
     (net
       1
@@ -1728,14 +1893,14 @@
   )
   (segment
     (start
-      138.79162649811934
-      110.86757317282482
+      138.91461894323342
+      110.7995567884187
     )
     (end
-      160.26670185987948
-      104.83585442731739
+      161.08538105676658
+      110.79955678841871
     )
-    (width 1.7)
+    (width 1.5)
     (layer F.Cu)
     (net
       2
@@ -1743,12 +1908,12 @@
   )
   (segment
     (start
-      137.60362146152872
-      108.62252439094159
+      137.6446189432334
+      108.59985226280622
     )
     (end
-      162.08248799113755
-      106.61195147577246
+      162.3553810567666
+      108.59985226280624
     )
     (width 0.254)
     (layer F.Cu)
@@ -1758,12 +1923,12 @@
   )
   (segment
     (start
-      136.41561642493812
-      106.37747560905838
+      136.37461894323343
+      106.40014773719375
     )
     (end
-      163.8982741223956
-      108.38804852422754
+      163.62538105676657
+      106.40014773719376
     )
     (width 0.254)
     (layer F.Cu)
@@ -1773,14 +1938,14 @@
   )
   (segment
     (start
-      153.40612728831812
-      98.29283952254787
+      146.19
+      100
     )
     (end
-      153.40612728831812
-      110.16414557268261
+      146.19
+      104.20044321158129
     )
-    (width 1.7)
+    (width 1.5)
     (layer F.Cu)
     (net
       1
@@ -1788,14 +1953,14 @@
   )
   (segment
     (start
-      153.40612728831812
-      110.16414557268261
+      146.19
+      104.20044321158129
     )
     (end
-      165.71406025365368
-      110.16414557268261
+      164.89538105676658
+      104.20044321158129
     )
-    (width 1.7)
+    (width 1.5)
     (layer F.Cu)
     (net
       1

@@ -1,29 +1,39 @@
-(kicad_pcb
-  (version 4)
-  (host
-    pcbnew
-    jseda-2.0.1
-  )
+(kicad_pcb (version 4) (host pcbnew 4.0.7+dfsg1-1~bpo9+1)
+
   (general
-    (links 0)
+    (links 11)
     (no_connects 0)
-    (area
-      104.572999
-      74.854999
-      178.510001
-      123.265001
-    )
+    (area 129.277476 81.4755 170.722524 117.395509)
     (thickness 1.6)
     (drawings 6)
     (tracks 9)
-    (zones 1)
+    (zones 0)
     (modules 6)
     (nets 8)
   )
+
   (page A4)
   (title_block
     (title "Polyledra Edge")
   )
+
+  (layers
+    (0 F.Cu signal)
+    (31 B.Cu signal)
+    (34 B.Paste user)
+    (35 F.Paste user)
+    (36 B.SilkS user)
+    (37 F.SilkS user)
+    (38 B.Mask user)
+    (39 F.Mask user)
+    (40 Dwgs.User user)
+    (44 Edge.Cuts user)
+    (46 B.CrtYd user)
+    (47 F.CrtYd user)
+    (48 B.Fab user)
+    (49 F.Fab user)
+  )
+
   (setup
     (last_trace_width 0.254)
     (user_trace_width 0.1524)
@@ -42,52 +52,31 @@
     (via_drill 0.3302)
     (via_min_size 0.6858)
     (via_min_drill 0.3302)
-    (user_via
-      0.6858
-      0.3302
-    )
-    (user_via
-      0.762
-      0.4064
-    )
-    (user_via
-      0.8636
-      0.508
-    )
+    (user_via 0.6858 0.3302)
+    (user_via 0.762 0.4064)
+    (user_via 0.8636 0.508)
     (uvia_size 0.6858)
     (uvia_drill 0.3302)
     (uvias_allowed no)
     (uvia_min_size 0)
     (uvia_min_drill 0)
     (pcb_text_width 0.1524)
-    (pcb_text_size
-      1.016
-      1.016
-    )
+    (pcb_text_size 1.016 1.016)
     (mod_edge_width 0.1524)
-    (mod_text_size
-      1.016
-      1.016
-    )
+    (mod_text_size 1.016 1.016)
     (mod_text_width 0.1524)
-    (pad_size
-      1.524
-      1.524
-    )
+    (pad_size 1.524 1.524)
     (pad_drill 0.762)
     (pad_to_mask_clearance 0.0762)
     (solder_mask_min_width 0.1016)
     (pad_to_paste_clearance -0.0762)
-    (aux_axis_origin
-      0
-      0
-    )
+    (aux_axis_origin 0 0)
     (visible_elements FFFEDF7D)
     (pcbplotparams
       (layerselection 0x310fc_80000001)
       (usegerberextensions true)
       (excludeedgelayer true)
-      (linewidth 0.1)
+      (linewidth 0.100000)
       (plotframeref false)
       (viasonmask false)
       (mode 1)
@@ -107,85 +96,33 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory gerbers)
-    )
+      (outputdirectory gerbers))
   )
-  (layers
-    (0
-      F.Cu
-      signal
-    )
-    (31
-      B.Cu
-      signal
-    )
-    (34
-      B.Paste
-      user
-    )
-    (35
-      F.Paste
-      user
-    )
-    (36
-      B.SilkS
-      user
-    )
-    (37
-      F.SilkS
-      user
-    )
-    (38
-      B.Mask
-      user
-    )
-    (39
-      F.Mask
-      user
-    )
-    (40
-      Dwgs.User
-      user
-    )
-    (44
-      Edge.Cuts
-      user
-    )
-    (46
-      B.CrtYd
-      user
-    )
-    (47
-      F.CrtYd
-      user
-    )
-    (48
-      B.Fab
-      user
-    )
-    (49
-      F.Fab
-      user
-    )
-  )
-  (net_class
-    Default
-    "default net class"
+
+  (net 0 "")
+  (net 1 +5V)
+  (net 2 GND)
+  (net 3 IO_DATA_TO_ARM_1_DATA)
+  (net 4 IO_CLOCK_TO_ARM_1_CLOCK)
+  (net 5 ARM_2_DATA_TO_ARM_3_DATA)
+  (net 6 ARM_2_CLOCK_TO_ARM_3_CLOCK)
+  (net 7 ARM_2_+5V_NO_CONNECT)
+
+  (net_class Default "default net class"
     (clearance 0.254)
     (trace_width 0.254)
     (via_dia 0.6858)
     (via_drill 0.3302)
     (uvia_dia 0.6858)
     (uvia_drill 0.3302)
-    (add_net IO_DATA_TO_ARM_1_DATA)
-    (add_net IO_CLOCK_TO_ARM_1_CLOCK)
-    (add_net ARM_2_DATA_TO_ARM_3_DATA)
-    (add_net ARM_2_CLOCK_TO_ARM_3_CLOCK)
     (add_net ARM_2_+5V_NO_CONNECT)
+    (add_net ARM_2_CLOCK_TO_ARM_3_CLOCK)
+    (add_net ARM_2_DATA_TO_ARM_3_DATA)
+    (add_net IO_CLOCK_TO_ARM_1_CLOCK)
+    (add_net IO_DATA_TO_ARM_1_DATA)
   )
-  (net_class
-    Power
-    "net class for high-power"
+
+  (net_class Power "net class for high-power"
     (clearance 0.4)
     (trace_width 1.5)
     (via_dia 1.5)
@@ -195,1905 +132,329 @@
     (add_net +5V)
     (add_net GND)
   )
-  (net
-    0
-    ""
-  )
-  (net
-    1
-    +5V
-  )
-  (net
-    2
-    GND
-  )
-  (net
-    3
-    IO_DATA_TO_ARM_1_DATA
-  )
-  (net
-    4
-    IO_CLOCK_TO_ARM_1_CLOCK
-  )
-  (net
-    5
-    ARM_2_DATA_TO_ARM_3_DATA
-  )
-  (net
-    6
-    ARM_2_CLOCK_TO_ARM_3_CLOCK
-  )
-  (net
-    7
-    ARM_2_+5V_NO_CONNECT
-  )
-  (module
-    H4-2.54mm
-    (at
-      150
-      100
-      -90
-    )
+
+  (module H4-2.54mm (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 150 100 270)
     (descr "Through hole straight pin header, 1x04, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x04 2.54mm single row")
-    (pad
-      1
-      thru_hole
-      rect
-      (at
-        0
-        -3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference J1 (at -2.3495 -0.3175 360) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      2
-      thru_hole
-      circle
-      (at
-        0
-        -1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        3
-        IO_DATA_TO_ARM_1_DATA
-      )
+    (fp_text value IO (at 0 9.95 360) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      3
-      thru_hole
-      circle
-      (at
-        0
-        1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        4
-        IO_CLOCK_TO_ARM_1_CLOCK
-      )
+    (fp_text user %R (at 0 0 450) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      4
-      thru_hole
-      circle
-      (at
-        0
-        3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        1
-        +5V
-      )
-    )
-    (fp_text
-      reference
-      J1
-      (at
-        -2.3495
-        -0.3175
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      value
-      IO
-      (at
-        0
-        9.95
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      user
-      %R
-      (at
-        0
-        0
-        90
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_line
-      (start
-        -0.635
-        -5.08
-      )
-      (end
-        1.27
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        -5.08
-      )
-      (end
-        1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        5.08
-      )
-      (end
-        -1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        5.08
-      )
-      (end
-        -1.27
-        -4.445
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        -4.44
-      )
-      (end
-        -0.635
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.33
-        5.13
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        -1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        1.33
-        -2.54
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        1.33
-        -2.54
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -3.81
-      )
-      (end
-        -1.33
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -5.13
-      )
-      (end
-        0
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.8
-        -5.61
-      )
-      (end
-        -1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        -1.8
-        5.61
-      )
-      (end
-        1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        5.61
-      )
-      (end
-        1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        -5.61
-      )
-      (end
-        -1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (model
-      /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
-      (at
-        (xyz
-          0
-          -3.81
-          0
-        )
-      )
-      (scale
-        (xyz
-          1
-          1
-          1
-        )
-      )
-      (rotate
-        (xyz
-          0
-          0
-          0
-        )
-      )
+    (fp_line (start -0.635 -5.08) (end 1.27 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 -5.08) (end 1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 5.08) (end -1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 5.08) (end -1.27 -4.445) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 -4.44) (end -0.635 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.33 5.13) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end -1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start 1.33 -2.54) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end 1.33 -2.54) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -3.81) (end -1.33 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -5.13) (end 0 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.8 -5.61) (end -1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start -1.8 5.61) (end 1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 5.61) (end 1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 -5.61) (end -1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole rect (at 0 -3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 2 GND))
+    (pad 2 thru_hole circle (at 0 -1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 3 IO_DATA_TO_ARM_1_DATA))
+    (pad 3 thru_hole circle (at 0 1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 4 IO_CLOCK_TO_ARM_1_CLOCK))
+    (pad 4 thru_hole circle (at 0 3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 1 +5V))
+    (model /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+      (at (xyz 0 -3.81 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
-  (module
-    H4-2.54mm
-    (at
-      150
-      85
-      -90
-    )
+
+  (module H4-2.54mm (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 150 85 270)
     (descr "Through hole straight pin header, 1x04, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x04 2.54mm single row")
-    (pad
-      1
-      thru_hole
-      rect
-      (at
-        0
-        -3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference J2 (at -2.3495 -0.3175 360) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      2
-      thru_hole
-      circle
-      (at
-        0
-        -1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        3
-        IO_DATA_TO_ARM_1_DATA
-      )
+    (fp_text value ARM_1 (at 0 9.95 360) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      3
-      thru_hole
-      circle
-      (at
-        0
-        1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        4
-        IO_CLOCK_TO_ARM_1_CLOCK
-      )
+    (fp_text user %R (at 0 0 450) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      4
-      thru_hole
-      circle
-      (at
-        0
-        3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        1
-        +5V
-      )
-    )
-    (fp_text
-      reference
-      J2
-      (at
-        -2.3495
-        -0.3175
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      value
-      ARM_1
-      (at
-        0
-        9.95
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      user
-      %R
-      (at
-        0
-        0
-        90
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_line
-      (start
-        -0.635
-        -5.08
-      )
-      (end
-        1.27
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        -5.08
-      )
-      (end
-        1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        5.08
-      )
-      (end
-        -1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        5.08
-      )
-      (end
-        -1.27
-        -4.445
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        -4.44
-      )
-      (end
-        -0.635
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.33
-        5.13
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        -1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        1.33
-        -2.54
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        1.33
-        -2.54
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -3.81
-      )
-      (end
-        -1.33
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -5.13
-      )
-      (end
-        0
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.8
-        -5.61
-      )
-      (end
-        -1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        -1.8
-        5.61
-      )
-      (end
-        1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        5.61
-      )
-      (end
-        1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        -5.61
-      )
-      (end
-        -1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (model
-      /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
-      (at
-        (xyz
-          0
-          -3.81
-          0
-        )
-      )
-      (scale
-        (xyz
-          1
-          1
-          1
-        )
-      )
-      (rotate
-        (xyz
-          0
-          0
-          0
-        )
-      )
+    (fp_line (start -0.635 -5.08) (end 1.27 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 -5.08) (end 1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 5.08) (end -1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 5.08) (end -1.27 -4.445) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 -4.44) (end -0.635 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.33 5.13) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end -1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start 1.33 -2.54) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end 1.33 -2.54) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -3.81) (end -1.33 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -5.13) (end 0 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.8 -5.61) (end -1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start -1.8 5.61) (end 1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 5.61) (end 1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 -5.61) (end -1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole rect (at 0 -3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 2 GND))
+    (pad 2 thru_hole circle (at 0 -1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 3 IO_DATA_TO_ARM_1_DATA))
+    (pad 3 thru_hole circle (at 0 1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 4 IO_CLOCK_TO_ARM_1_CLOCK))
+    (pad 4 thru_hole circle (at 0 3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 1 +5V))
+    (model /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+      (at (xyz 0 -3.81 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
-  (module
-    H4-2.54mm
-    (at
-      137.00961894323342
-      107.49999999999999
-      210
-    )
+
+  (module H4-2.54mm (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 137.009619 107.5 210)
     (descr "Through hole straight pin header, 1x04, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x04 2.54mm single row")
-    (pad
-      1
-      thru_hole
-      rect
-      (at
-        0
-        -3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference J3 (at -2.3495 -0.3175 360) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      2
-      thru_hole
-      circle
-      (at
-        0
-        -1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        5
-        ARM_2_DATA_TO_ARM_3_DATA
-      )
+    (fp_text value ARM_2 (at 0 9.95 360) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      3
-      thru_hole
-      circle
-      (at
-        0
-        1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        6
-        ARM_2_CLOCK_TO_ARM_3_CLOCK
-      )
+    (fp_text user %R (at 0 0 450) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      4
-      thru_hole
-      circle
-      (at
-        0
-        3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        7
-        ARM_2_+5V_NO_CONNECT
-      )
-    )
-    (fp_text
-      reference
-      J3
-      (at
-        -2.3495
-        -0.3175
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      value
-      ARM_2
-      (at
-        0
-        9.95
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      user
-      %R
-      (at
-        0
-        0
-        90
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_line
-      (start
-        -0.635
-        -5.08
-      )
-      (end
-        1.27
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        -5.08
-      )
-      (end
-        1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        5.08
-      )
-      (end
-        -1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        5.08
-      )
-      (end
-        -1.27
-        -4.445
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        -4.44
-      )
-      (end
-        -0.635
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.33
-        5.13
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        -1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        1.33
-        -2.54
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        1.33
-        -2.54
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -3.81
-      )
-      (end
-        -1.33
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -5.13
-      )
-      (end
-        0
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.8
-        -5.61
-      )
-      (end
-        -1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        -1.8
-        5.61
-      )
-      (end
-        1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        5.61
-      )
-      (end
-        1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        -5.61
-      )
-      (end
-        -1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (model
-      /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
-      (at
-        (xyz
-          0
-          -3.81
-          0
-        )
-      )
-      (scale
-        (xyz
-          1
-          1
-          1
-        )
-      )
-      (rotate
-        (xyz
-          0
-          0
-          0
-        )
-      )
+    (fp_line (start -0.635 -5.08) (end 1.27 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 -5.08) (end 1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 5.08) (end -1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 5.08) (end -1.27 -4.445) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 -4.44) (end -0.635 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.33 5.13) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end -1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start 1.33 -2.54) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end 1.33 -2.54) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -3.81) (end -1.33 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -5.13) (end 0 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.8 -5.61) (end -1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start -1.8 5.61) (end 1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 5.61) (end 1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 -5.61) (end -1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole rect (at 0 -3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 2 GND))
+    (pad 2 thru_hole circle (at 0 -1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 5 ARM_2_DATA_TO_ARM_3_DATA))
+    (pad 3 thru_hole circle (at 0 1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 6 ARM_2_CLOCK_TO_ARM_3_CLOCK))
+    (pad 4 thru_hole circle (at 0 3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 7 ARM_2_+5V_NO_CONNECT))
+    (model /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+      (at (xyz 0 -3.81 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
-  (module
-    H4-2.54mm
-    (at
-      162.99038105676658
-      107.5
-      150
-    )
+
+  (module H4-2.54mm (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 162.990381 107.5 150)
     (descr "Through hole straight pin header, 1x04, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x04 2.54mm single row")
-    (pad
-      1
-      thru_hole
-      rect
-      (at
-        0
-        -3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference J4 (at -2.3495 -0.3175 360) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      2
-      thru_hole
-      circle
-      (at
-        0
-        -1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        5
-        ARM_2_DATA_TO_ARM_3_DATA
-      )
+    (fp_text value ARM_3 (at 0 9.95 360) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      3
-      thru_hole
-      circle
-      (at
-        0
-        1.27
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        6
-        ARM_2_CLOCK_TO_ARM_3_CLOCK
-      )
+    (fp_text user %R (at 0 0 450) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad
-      4
-      thru_hole
-      circle
-      (at
-        0
-        3.81
-      )
-      (size
-        1.7
-        1.7
-      )
-      (drill 1)
-      (layers
-        *.Cu
-        *.Paste
-        *.Mask
-      )
-      (net
-        1
-        +5V
-      )
-    )
-    (fp_text
-      reference
-      J4
-      (at
-        -2.3495
-        -0.3175
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      value
-      ARM_3
-      (at
-        0
-        9.95
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_text
-      user
-      %R
-      (at
-        0
-        0
-        90
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_line
-      (start
-        -0.635
-        -5.08
-      )
-      (end
-        1.27
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        -5.08
-      )
-      (end
-        1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        1.27
-        5.08
-      )
-      (end
-        -1.27
-        5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        5.08
-      )
-      (end
-        -1.27
-        -4.445
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.27
-        -4.44
-      )
-      (end
-        -0.635
-        -5.08
-      )
-      (layer F.Fab)
-      (width 0.1)
-    )
-    (fp_line
-      (start
-        -1.33
-        5.13
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        -1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        1.33
-        -2.54
-      )
-      (end
-        1.33
-        5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -2.54
-      )
-      (end
-        1.33
-        -2.54
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -3.81
-      )
-      (end
-        -1.33
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.33
-        -5.13
-      )
-      (end
-        0
-        -5.13
-      )
-      (layer F.SilkS)
-      (width 0.12)
-    )
-    (fp_line
-      (start
-        -1.8
-        -5.61
-      )
-      (end
-        -1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        -1.8
-        5.61
-      )
-      (end
-        1.8
-        5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        5.61
-      )
-      (end
-        1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (fp_line
-      (start
-        1.8
-        -5.61
-      )
-      (end
-        -1.8
-        -5.61
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-    )
-    (model
-      /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
-      (at
-        (xyz
-          0
-          -3.81
-          0
-        )
-      )
-      (scale
-        (xyz
-          1
-          1
-          1
-        )
-      )
-      (rotate
-        (xyz
-          0
-          0
-          0
-        )
-      )
+    (fp_line (start -0.635 -5.08) (end 1.27 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 -5.08) (end 1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start 1.27 5.08) (end -1.27 5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 5.08) (end -1.27 -4.445) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.27 -4.44) (end -0.635 -5.08) (layer F.Fab) (width 0.1))
+    (fp_line (start -1.33 5.13) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end -1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start 1.33 -2.54) (end 1.33 5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -2.54) (end 1.33 -2.54) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -3.81) (end -1.33 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.33 -5.13) (end 0 -5.13) (layer F.SilkS) (width 0.12))
+    (fp_line (start -1.8 -5.61) (end -1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start -1.8 5.61) (end 1.8 5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 5.61) (end 1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (fp_line (start 1.8 -5.61) (end -1.8 -5.61) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole rect (at 0 -3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 2 GND))
+    (pad 2 thru_hole circle (at 0 -1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 5 ARM_2_DATA_TO_ARM_3_DATA))
+    (pad 3 thru_hole circle (at 0 1.27) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 6 ARM_2_CLOCK_TO_ARM_3_CLOCK))
+    (pad 4 thru_hole circle (at 0 3.81) (size 1.7 1.7) (drill 1) (layers *.Cu *.Paste *.Mask)
+      (net 1 +5V))
+    (model /usr/share/kicad/modules/packages3d/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+      (at (xyz 0 -3.81 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
-  (module
-    M4
-    (at
-      139.60769515458674
-      94
-    )
+
+  (module M4 (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 139.607695 94)
     (descr "Mounting Hole 4.3mm, no annular, M4")
     (tags "mounting hole 4.3mm no annular m4")
-    (pad
-      1
-      np_thru_hole
-      circle
-      (at
-        0
-        0
-      )
-      (size
-        4.3
-        4.3
-      )
-      (drill 4.3)
-      (layers
-        *.Cu
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference H1 (at 0 -5.3) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text
-      reference
-      H1
-      (at
-        0
-        -5.3
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
+    (fp_text value M4 (at 0 5.3) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text
-      value
-      M4
-      (at
-        0
-        5.3
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_circle
-      (center
-        0
-        0
-      )
-      (end
-        4.55
-        0
-      )
-      (layer F.CrtYd)
-      (width 0.05)
-
-    )
+    (fp_circle (center 0 0) (end 4.55 0) (layer F.CrtYd) (width 0.05))
+    (pad 1 np_thru_hole circle (at 0 0) (size 4.3 4.3) (drill 4.3) (layers *.Cu *.Mask)
+      (net 2 GND))
   )
-  (module
-    M4
-    (at
-      160.39230484541326
-      94
-    )
+
+  (module M4 (layer F.Cu) (tedit 0) (tstamp 0)
+    (at 160.392305 94)
     (descr "Mounting Hole 4.3mm, no annular, M4")
     (tags "mounting hole 4.3mm no annular m4")
-    (pad
-      1
-      np_thru_hole
-      circle
-      (at
-        0
-        0
-      )
-      (size
-        4.3
-        4.3
-      )
-      (drill 4.3)
-      (layers
-        *.Cu
-        *.Mask
-      )
-      (net
-        2
-        GND
-      )
+    (fp_text reference H2 (at 0 -5.3) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text
-      reference
-      H2
-      (at
-        0
-        -5.3
-      )
-      (layer F.SilkS)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
+    (fp_text value M4 (at 0 5.3) (layer F.Fab)
+      (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text
-      value
-      M4
-      (at
-        0
-        5.3
-      )
-      (layer F.Fab)
-      (effects
-        (font
-          (size
-            1
-            1
-          )
-          (thickness 0.15)
-        )
-      )
-    )
-    (fp_circle
-      (center
-        0
-        0
-      )
-      (end
-        4.55
-        0
-      )
-      (layer F.CrtYd)
-      (width 0.05)
+    (fp_circle (center 0 0) (end 4.55 0) (layer F.CrtYd) (width 0.05))
+    (pad 1 np_thru_hole circle (at 0 0) (size 4.3 4.3) (drill 4.3) (layers *.Cu *.Mask)
+      (net 2 GND))
+  )
 
-    )
-  )
-  (segment
-    (start
-      153.81
-      100
-    )
-    (end
-      153.81
-      85
-    )
-    (width 1.5)
-    (layer F.Cu)
-    (net
-      2
-    )
-  )
-  (segment
-    (start
-      151.27
-      100
-    )
-    (end
-      151.27
-      85
-    )
-    (width 0.254)
-    (layer F.Cu)
-    (net
-      3
-    )
-  )
-  (segment
-    (start
-      148.73
-      100
-    )
-    (end
-      148.73
-      85
-    )
-    (width 0.254)
-    (layer F.Cu)
-    (net
-      4
-    )
-  )
-  (segment
-    (start
-      146.19
-      100
-    )
-    (end
-      146.19
-      85
-    )
-    (width 1.5)
-    (layer F.Cu)
-    (net
-      1
-    )
-  )
-  (segment
-    (start
-      138.91461894323342
-      110.7995567884187
-    )
-    (end
-      161.08538105676658
-      110.79955678841871
-    )
-    (width 1.5)
-    (layer F.Cu)
-    (net
-      2
-    )
-  )
-  (segment
-    (start
-      137.6446189432334
-      108.59985226280622
-    )
-    (end
-      162.3553810567666
-      108.59985226280624
-    )
-    (width 0.254)
-    (layer F.Cu)
-    (net
-      5
-    )
-  )
-  (segment
-    (start
-      136.37461894323343
-      106.40014773719375
-    )
-    (end
-      163.62538105676657
-      106.40014773719376
-    )
-    (width 0.254)
-    (layer F.Cu)
-    (net
-      6
-    )
-  )
-  (segment
-    (start
-      146.19
-      100
-    )
-    (end
-      146.19
-      104.20044321158129
-    )
-    (width 1.5)
-    (layer F.Cu)
-    (net
-      1
-    )
-  )
-  (segment
-    (start
-      146.19
-      104.20044321158129
-    )
-    (end
-      164.89538105676658
-      104.20044321158129
-    )
-    (width 1.5)
-    (layer F.Cu)
-    (net
-      1
-    )
-  )
-  (zone
-    (net
-      2
-    )
-    (layer F.Cu)
-    (hatch
-      edge
-      0.508
-    )
-    (connect_pads
-      (clearance 0.2)
-    )
+  (gr_line (start 170 100) (end 160 117.320508) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 160 117.320508) (end 140 117.320508) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 140 117.320508) (end 130 100) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 130 100) (end 140 82.679492) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 140 82.679492) (end 160 82.679492) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 160 82.679492) (end 170 100) (angle 90) (layer Edge.Cuts) (width 0.15))
+
+  (segment (start 146.19 100) (end 146.19 85) (width 1.5) (layer F.Cu) (net 1))
+  (segment (start 146.19 100) (end 146.19 104.200443) (width 1.5) (layer F.Cu) (net 1))
+  (segment (start 146.19 104.200443) (end 164.895381 104.200443) (width 1.5) (layer F.Cu) (net 1))
+  (segment (start 153.81 100) (end 153.81 85) (width 1.5) (layer F.Cu) (net 2))
+  (segment (start 138.914619 110.799557) (end 161.085381 110.799557) (width 1.5) (layer F.Cu) (net 2))
+  (segment (start 151.27 100) (end 151.27 85) (width 0.254) (layer F.Cu) (net 3))
+  (segment (start 148.73 100) (end 148.73 85) (width 0.254) (layer F.Cu) (net 4))
+  (segment (start 137.644619 108.599852) (end 162.355381 108.599852) (width 0.254) (layer F.Cu) (net 5))
+  (segment (start 136.374619 106.400148) (end 163.625381 106.400148) (width 0.254) (layer F.Cu) (net 6))
+
+  (zone (net 2) (net_name GND) (layer F.Cu) (tstamp 0) (hatch edge 0.508)
+    (connect_pads (clearance 0.2))
     (min_thickness 0.1778)
-    (fill
-      (arc_segments 16)
-      (thermal_gap 0.254)
-      (thermal_bridge_width 0.4064)
-    )
+    (fill yes (arc_segments 16) (thermal_gap 0.254) (thermal_bridge_width 0.4064))
     (polygon
       (pts
-        (xy
-          170
-          100
-        )
-        (xy
-          160
-          117.32050807568876
-        )
-        (xy
-          140
-          117.32050807568878
-        )
-        (xy
-          130
-          100
-        )
-        (xy
-          140
-          82.67949192431124
-        )
-        (xy
-          160
-          82.67949192431124
-        )
-        (xy
-          170
-          100
-        )
+        (xy 170 100) (xy 160 117.320508) (xy 140 117.320508) (xy 130 100) (xy 140 82.679492)
+        (xy 160 82.679492)
       )
     )
-    (net_name GND)
-  )
-  (gr_line
-    (start
-      170
-      100
+    (filled_polygon
+      (pts
+        (xy 169.579804 100) (xy 159.789902 116.956608) (xy 140.210098 116.956608) (xy 136.770809 110.999582) (xy 137.721719 110.999582)
+        (xy 137.721719 111.717764) (xy 137.773922 111.843794) (xy 137.870382 111.940254) (xy 137.996412 111.992457) (xy 138.714594 111.992457)
+        (xy 138.800319 111.906732) (xy 138.800319 110.913857) (xy 139.028919 110.913857) (xy 139.028919 111.906732) (xy 139.114644 111.992457)
+        (xy 139.832826 111.992457) (xy 139.958856 111.940254) (xy 140.055316 111.843794) (xy 140.107519 111.717764) (xy 140.107519 110.999582)
+        (xy 159.892481 110.999582) (xy 159.892481 111.717764) (xy 159.944684 111.843794) (xy 160.041144 111.940254) (xy 160.167174 111.992457)
+        (xy 160.885356 111.992457) (xy 160.971081 111.906732) (xy 160.971081 110.913857) (xy 161.199681 110.913857) (xy 161.199681 111.906732)
+        (xy 161.285406 111.992457) (xy 162.003588 111.992457) (xy 162.129618 111.940254) (xy 162.226078 111.843794) (xy 162.278281 111.717764)
+        (xy 162.278281 110.999582) (xy 162.192556 110.913857) (xy 161.199681 110.913857) (xy 160.971081 110.913857) (xy 159.978206 110.913857)
+        (xy 159.892481 110.999582) (xy 140.107519 110.999582) (xy 140.021794 110.913857) (xy 139.028919 110.913857) (xy 138.800319 110.913857)
+        (xy 137.807444 110.913857) (xy 137.721719 110.999582) (xy 136.770809 110.999582) (xy 135.521718 108.836093) (xy 136.451513 108.836093)
+        (xy 136.632738 109.274693) (xy 136.968013 109.610553) (xy 137.406296 109.792544) (xy 137.758376 109.792851) (xy 137.721719 109.88135)
+        (xy 137.721719 110.599532) (xy 137.807444 110.685257) (xy 138.800319 110.685257) (xy 138.800319 109.692382) (xy 139.028919 109.692382)
+        (xy 139.028919 110.685257) (xy 140.021794 110.685257) (xy 140.107519 110.599532) (xy 140.107519 109.88135) (xy 159.892481 109.88135)
+        (xy 159.892481 110.599532) (xy 159.978206 110.685257) (xy 160.971081 110.685257) (xy 160.971081 109.692382) (xy 160.885356 109.606657)
+        (xy 160.167174 109.606657) (xy 160.041144 109.65886) (xy 159.944684 109.75532) (xy 159.892481 109.88135) (xy 140.107519 109.88135)
+        (xy 140.055316 109.75532) (xy 139.958856 109.65886) (xy 139.832826 109.606657) (xy 139.114644 109.606657) (xy 139.028919 109.692382)
+        (xy 138.800319 109.692382) (xy 138.714594 109.606657) (xy 138.324545 109.606657) (xy 138.65532 109.276458) (xy 138.741152 109.069752)
+        (xy 161.25882 109.069752) (xy 161.3435 109.274693) (xy 161.674886 109.606657) (xy 161.285406 109.606657) (xy 161.199681 109.692382)
+        (xy 161.199681 110.685257) (xy 162.192556 110.685257) (xy 162.278281 110.599532) (xy 162.278281 109.88135) (xy 162.241542 109.792653)
+        (xy 162.591622 109.792958) (xy 163.030222 109.611733) (xy 163.366082 109.276458) (xy 163.548073 108.838175) (xy 163.548487 108.363611)
+        (xy 163.367262 107.925011) (xy 163.031987 107.589151) (xy 162.593704 107.40716) (xy 162.11914 107.406746) (xy 161.68054 107.587971)
+        (xy 161.34468 107.923246) (xy 161.258848 108.129952) (xy 138.74118 108.129952) (xy 138.6565 107.925011) (xy 138.321225 107.589151)
+        (xy 137.882942 107.40716) (xy 137.408378 107.406746) (xy 136.969778 107.587971) (xy 136.633918 107.923246) (xy 136.451927 108.361529)
+        (xy 136.451513 108.836093) (xy 135.521718 108.836093) (xy 134.251718 106.636389) (xy 135.181513 106.636389) (xy 135.362738 107.074989)
+        (xy 135.698013 107.410849) (xy 136.136296 107.59284) (xy 136.61086 107.593254) (xy 137.04946 107.412029) (xy 137.38532 107.076754)
+        (xy 137.471152 106.870048) (xy 162.52882 106.870048) (xy 162.6135 107.074989) (xy 162.948775 107.410849) (xy 163.387058 107.59284)
+        (xy 163.861622 107.593254) (xy 164.300222 107.412029) (xy 164.636082 107.076754) (xy 164.818073 106.638471) (xy 164.818487 106.163907)
+        (xy 164.637262 105.725307) (xy 164.351796 105.439343) (xy 164.387623 105.439343) (xy 164.627889 105.53911) (xy 165.160536 105.539575)
+        (xy 165.652816 105.336169) (xy 166.029784 104.959859) (xy 166.234048 104.467935) (xy 166.234513 103.935288) (xy 166.031107 103.443008)
+        (xy 165.654797 103.06604) (xy 165.162873 102.861776) (xy 164.630226 102.861311) (xy 164.387646 102.961543) (xy 147.4289 102.961543)
+        (xy 147.4289 100.507758) (xy 147.528667 100.267492) (xy 147.529132 99.734845) (xy 147.4289 99.492265) (xy 147.4289 85.507758)
+        (xy 147.528667 85.267492) (xy 147.528694 85.236241) (xy 147.536894 85.236241) (xy 147.718119 85.674841) (xy 148.053394 86.010701)
+        (xy 148.2601 86.096533) (xy 148.2601 98.903439) (xy 148.055159 98.988119) (xy 147.719299 99.323394) (xy 147.537308 99.761677)
+        (xy 147.536894 100.236241) (xy 147.718119 100.674841) (xy 148.053394 101.010701) (xy 148.491677 101.192692) (xy 148.966241 101.193106)
+        (xy 149.404841 101.011881) (xy 149.740701 100.676606) (xy 149.922692 100.238323) (xy 149.923106 99.763759) (xy 149.741881 99.325159)
+        (xy 149.406606 98.989299) (xy 149.1999 98.903467) (xy 149.1999 86.096561) (xy 149.404841 86.011881) (xy 149.740701 85.676606)
+        (xy 149.922692 85.238323) (xy 149.922693 85.236241) (xy 150.076894 85.236241) (xy 150.258119 85.674841) (xy 150.593394 86.010701)
+        (xy 150.8001 86.096533) (xy 150.8001 98.903439) (xy 150.595159 98.988119) (xy 150.259299 99.323394) (xy 150.077308 99.761677)
+        (xy 150.076894 100.236241) (xy 150.258119 100.674841) (xy 150.593394 101.010701) (xy 151.031677 101.192692) (xy 151.506241 101.193106)
+        (xy 151.944841 101.011881) (xy 152.280701 100.676606) (xy 152.462692 100.238323) (xy 152.462725 100.200025) (xy 152.6171 100.200025)
+        (xy 152.6171 100.918207) (xy 152.669303 101.044237) (xy 152.765763 101.140697) (xy 152.891793 101.1929) (xy 153.609975 101.1929)
+        (xy 153.6957 101.107175) (xy 153.6957 100.1143) (xy 153.9243 100.1143) (xy 153.9243 101.107175) (xy 154.010025 101.1929)
+        (xy 154.728207 101.1929) (xy 154.854237 101.140697) (xy 154.950697 101.044237) (xy 155.0029 100.918207) (xy 155.0029 100.200025)
+        (xy 154.917175 100.1143) (xy 153.9243 100.1143) (xy 153.6957 100.1143) (xy 152.702825 100.1143) (xy 152.6171 100.200025)
+        (xy 152.462725 100.200025) (xy 152.463106 99.763759) (xy 152.281881 99.325159) (xy 152.038939 99.081793) (xy 152.6171 99.081793)
+        (xy 152.6171 99.799975) (xy 152.702825 99.8857) (xy 153.6957 99.8857) (xy 153.6957 98.892825) (xy 153.9243 98.892825)
+        (xy 153.9243 99.8857) (xy 154.917175 99.8857) (xy 155.0029 99.799975) (xy 155.0029 99.081793) (xy 154.950697 98.955763)
+        (xy 154.854237 98.859303) (xy 154.728207 98.8071) (xy 154.010025 98.8071) (xy 153.9243 98.892825) (xy 153.6957 98.892825)
+        (xy 153.609975 98.8071) (xy 152.891793 98.8071) (xy 152.765763 98.859303) (xy 152.669303 98.955763) (xy 152.6171 99.081793)
+        (xy 152.038939 99.081793) (xy 151.946606 98.989299) (xy 151.7399 98.903467) (xy 151.7399 95.815605) (xy 158.738345 95.815605)
+        (xy 158.99229 96.121414) (xy 159.91069 96.495693) (xy 160.902411 96.490026) (xy 161.79232 96.121414) (xy 162.046265 95.815605)
+        (xy 160.392305 94.161645) (xy 158.738345 95.815605) (xy 151.7399 95.815605) (xy 151.7399 93.518385) (xy 157.896612 93.518385)
+        (xy 157.902279 94.510106) (xy 158.270891 95.400015) (xy 158.5767 95.65396) (xy 160.23066 94) (xy 160.55395 94)
+        (xy 162.20791 95.65396) (xy 162.513719 95.400015) (xy 162.887998 94.481615) (xy 162.882331 93.489894) (xy 162.513719 92.599985)
+        (xy 162.20791 92.34604) (xy 160.55395 94) (xy 160.23066 94) (xy 158.5767 92.34604) (xy 158.270891 92.599985)
+        (xy 157.896612 93.518385) (xy 151.7399 93.518385) (xy 151.7399 92.184395) (xy 158.738345 92.184395) (xy 160.392305 93.838355)
+        (xy 162.046265 92.184395) (xy 161.79232 91.878586) (xy 160.87392 91.504307) (xy 159.882199 91.509974) (xy 158.99229 91.878586)
+        (xy 158.738345 92.184395) (xy 151.7399 92.184395) (xy 151.7399 86.096561) (xy 151.944841 86.011881) (xy 152.280701 85.676606)
+        (xy 152.462692 85.238323) (xy 152.462725 85.200025) (xy 152.6171 85.200025) (xy 152.6171 85.918207) (xy 152.669303 86.044237)
+        (xy 152.765763 86.140697) (xy 152.891793 86.1929) (xy 153.609975 86.1929) (xy 153.6957 86.107175) (xy 153.6957 85.1143)
+        (xy 153.9243 85.1143) (xy 153.9243 86.107175) (xy 154.010025 86.1929) (xy 154.728207 86.1929) (xy 154.854237 86.140697)
+        (xy 154.950697 86.044237) (xy 155.0029 85.918207) (xy 155.0029 85.200025) (xy 154.917175 85.1143) (xy 153.9243 85.1143)
+        (xy 153.6957 85.1143) (xy 152.702825 85.1143) (xy 152.6171 85.200025) (xy 152.462725 85.200025) (xy 152.463106 84.763759)
+        (xy 152.281881 84.325159) (xy 152.038939 84.081793) (xy 152.6171 84.081793) (xy 152.6171 84.799975) (xy 152.702825 84.8857)
+        (xy 153.6957 84.8857) (xy 153.6957 83.892825) (xy 153.9243 83.892825) (xy 153.9243 84.8857) (xy 154.917175 84.8857)
+        (xy 155.0029 84.799975) (xy 155.0029 84.081793) (xy 154.950697 83.955763) (xy 154.854237 83.859303) (xy 154.728207 83.8071)
+        (xy 154.010025 83.8071) (xy 153.9243 83.892825) (xy 153.6957 83.892825) (xy 153.609975 83.8071) (xy 152.891793 83.8071)
+        (xy 152.765763 83.859303) (xy 152.669303 83.955763) (xy 152.6171 84.081793) (xy 152.038939 84.081793) (xy 151.946606 83.989299)
+        (xy 151.508323 83.807308) (xy 151.033759 83.806894) (xy 150.595159 83.988119) (xy 150.259299 84.323394) (xy 150.077308 84.761677)
+        (xy 150.076894 85.236241) (xy 149.922693 85.236241) (xy 149.923106 84.763759) (xy 149.741881 84.325159) (xy 149.406606 83.989299)
+        (xy 148.968323 83.807308) (xy 148.493759 83.806894) (xy 148.055159 83.988119) (xy 147.719299 84.323394) (xy 147.537308 84.761677)
+        (xy 147.536894 85.236241) (xy 147.528694 85.236241) (xy 147.529132 84.734845) (xy 147.325726 84.242565) (xy 146.949416 83.865597)
+        (xy 146.457492 83.661333) (xy 145.924845 83.660868) (xy 145.432565 83.864274) (xy 145.055597 84.240584) (xy 144.851333 84.732508)
+        (xy 144.850868 85.265155) (xy 144.9511 85.507735) (xy 144.9511 99.492242) (xy 144.851333 99.732508) (xy 144.850868 100.265155)
+        (xy 144.9511 100.507735) (xy 144.9511 104.200443) (xy 145.045406 104.67455) (xy 145.313965 105.076478) (xy 145.715893 105.345037)
+        (xy 146.19 105.439343) (xy 162.899375 105.439343) (xy 162.61468 105.723542) (xy 162.528848 105.930248) (xy 137.47118 105.930248)
+        (xy 137.3865 105.725307) (xy 137.051225 105.389447) (xy 136.612942 105.207456) (xy 136.138378 105.207042) (xy 135.699778 105.388267)
+        (xy 135.363918 105.723542) (xy 135.181927 106.161825) (xy 135.181513 106.636389) (xy 134.251718 106.636389) (xy 132.981717 104.436684)
+        (xy 133.911513 104.436684) (xy 134.092738 104.875284) (xy 134.428013 105.211144) (xy 134.866296 105.393135) (xy 135.34086 105.393549)
+        (xy 135.77946 105.212324) (xy 136.11532 104.877049) (xy 136.297311 104.438766) (xy 136.297725 103.964202) (xy 136.1165 103.525602)
+        (xy 135.781225 103.189742) (xy 135.342942 103.007751) (xy 134.868378 103.007337) (xy 134.429778 103.188562) (xy 134.093918 103.523837)
+        (xy 133.911927 103.96212) (xy 133.911513 104.436684) (xy 132.981717 104.436684) (xy 130.420196 100) (xy 132.836057 95.815605)
+        (xy 137.953735 95.815605) (xy 138.20768 96.121414) (xy 139.12608 96.495693) (xy 140.117801 96.490026) (xy 141.00771 96.121414)
+        (xy 141.261655 95.815605) (xy 139.607695 94.161645) (xy 137.953735 95.815605) (xy 132.836057 95.815605) (xy 134.162358 93.518385)
+        (xy 137.112002 93.518385) (xy 137.117669 94.510106) (xy 137.486281 95.400015) (xy 137.79209 95.65396) (xy 139.44605 94)
+        (xy 139.76934 94) (xy 141.4233 95.65396) (xy 141.729109 95.400015) (xy 142.103388 94.481615) (xy 142.097721 93.489894)
+        (xy 141.729109 92.599985) (xy 141.4233 92.34604) (xy 139.76934 94) (xy 139.44605 94) (xy 137.79209 92.34604)
+        (xy 137.486281 92.599985) (xy 137.112002 93.518385) (xy 134.162358 93.518385) (xy 134.932537 92.184395) (xy 137.953735 92.184395)
+        (xy 139.607695 93.838355) (xy 141.261655 92.184395) (xy 141.00771 91.878586) (xy 140.08931 91.504307) (xy 139.097589 91.509974)
+        (xy 138.20768 91.878586) (xy 137.953735 92.184395) (xy 134.932537 92.184395) (xy 140.210098 83.043392) (xy 159.789902 83.043392)
+      )
     )
-    (end
-      160
-      117.32050807568876
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
-  )
-  (gr_line
-    (start
-      160
-      117.32050807568876
-    )
-    (end
-      140
-      117.32050807568878
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
-  )
-  (gr_line
-    (start
-      140
-      117.32050807568878
-    )
-    (end
-      130
-      100
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
-  )
-  (gr_line
-    (start
-      130
-      100
-    )
-    (end
-      140
-      82.67949192431124
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
-  )
-  (gr_line
-    (start
-      140
-      82.67949192431124
-    )
-    (end
-      160
-      82.67949192431124
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
-  )
-  (gr_line
-    (start
-      160
-      82.67949192431124
-    )
-    (end
-      170
-      100
-    )
-    (angle 90)
-    (layer Edge.Cuts)
-    (width 0.15)
   )
 )

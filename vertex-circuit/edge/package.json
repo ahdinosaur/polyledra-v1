@@ -7,6 +7,6 @@
     "pcb": "jseda pcb ./ ./edge.kicad_pcb"
   },
   "dependencies": {
-    "jseda": "^2.0.0"
+    "jseda": "^2.0.1"
   }
 }

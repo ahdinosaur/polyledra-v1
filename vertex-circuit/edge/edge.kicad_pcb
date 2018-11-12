@@ -2,7 +2,7 @@
   (version 4)
   (host
     pcbnew
-    jseda-2.0.0
+    jseda-2.0.1
   )
   (general
     (links 0)
@@ -17,7 +17,7 @@
     (drawings 6)
     (tracks 9)
     (zones 1)
-    (modules 4)
+    (modules 6)
     (nets 8)
   )
   (page A4)
@@ -186,11 +186,11 @@
   (net_class
     Power
     "net class for high-power"
-    (clearance 0.5)
-    (trace_width 1.6)
-    (via_dia 1.6)
+    (clearance 0.4)
+    (trace_width 1.5)
+    (via_dia 1.5)
     (via_drill 0.8)
-    (uvia_dia 1.6)
+    (uvia_dia 1.5)
     (uvia_drill 0.8)
     (add_net +5V)
     (add_net GND)
@@ -1671,6 +1671,166 @@
       )
     )
   )
+  (module
+    M4
+    (at
+      139.60769515458674
+      94
+    )
+    (descr "Mounting Hole 4.3mm, no annular, M4")
+    (tags "mounting hole 4.3mm no annular m4")
+    (pad
+      1
+      np_thru_hole
+      circle
+      (at
+        0
+        0
+      )
+      (size
+        4.3
+        4.3
+      )
+      (drill 4.3)
+      (layers
+        *.Cu
+        *.Mask
+      )
+      (net
+        2
+        GND
+      )
+    )
+    (fp_text
+      reference
+      H1
+      (at
+        0
+        -5.3
+      )
+      (layer F.SilkS)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_text
+      value
+      M4
+      (at
+        0
+        5.3
+      )
+      (layer F.Fab)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_circle
+      (center
+        0
+        0
+      )
+      (end
+        4.55
+        0
+      )
+      (layer F.CrtYd)
+      (width 0.05)
+
+    )
+  )
+  (module
+    M4
+    (at
+      160.39230484541326
+      94
+    )
+    (descr "Mounting Hole 4.3mm, no annular, M4")
+    (tags "mounting hole 4.3mm no annular m4")
+    (pad
+      1
+      np_thru_hole
+      circle
+      (at
+        0
+        0
+      )
+      (size
+        4.3
+        4.3
+      )
+      (drill 4.3)
+      (layers
+        *.Cu
+        *.Mask
+      )
+      (net
+        2
+        GND
+      )
+    )
+    (fp_text
+      reference
+      H2
+      (at
+        0
+        -5.3
+      )
+      (layer F.SilkS)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_text
+      value
+      M4
+      (at
+        0
+        5.3
+      )
+      (layer F.Fab)
+      (effects
+        (font
+          (size
+            1
+            1
+          )
+          (thickness 0.15)
+        )
+      )
+    )
+    (fp_circle
+      (center
+        0
+        0
+      )
+      (end
+        4.55
+        0
+      )
+      (layer F.CrtYd)
+      (width 0.05)
+
+    )
+  )
   (segment
     (start
       153.81
@@ -1680,7 +1840,7 @@
       153.81
       85
     )
-    (width 1.6)
+    (width 1.5)
     (layer F.Cu)
     (net
       2
@@ -1725,7 +1885,7 @@
       146.19
       85
     )
-    (width 1.6)
+    (width 1.5)
     (layer F.Cu)
     (net
       1
@@ -1740,7 +1900,7 @@
       161.08538105676658
       110.79955678841871
     )
-    (width 1.6)
+    (width 1.5)
     (layer F.Cu)
     (net
       2
@@ -1785,7 +1945,7 @@
       146.19
       104.20044321158129
     )
-    (width 1.6)
+    (width 1.5)
     (layer F.Cu)
     (net
       1
@@ -1800,7 +1960,7 @@
       164.89538105676658
       104.20044321158129
     )
-    (width 1.6)
+    (width 1.5)
     (layer F.Cu)
     (net
       1

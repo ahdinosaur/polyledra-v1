@@ -1,9 +1,11 @@
 const CENTER = { x: 150, y: 100 }
 const HEADER_RADIUS = 15
+const SCREW_RADIUS = 12
 const CUT_RADIUS = 20
 const CUT_SIDES = 6
 
 const HeaderComponent = require('./header')
+const M4Component = require('./m4')
 
 var pcb = module.exports = {
   general: {
@@ -167,11 +169,11 @@ var pcb = module.exports = {
     {
       name: 'Power',
       description: 'net class for high-power',
-      clearance: 0.5,
-      trace_width: 1.6,
-      via_dia: 1.6,
+      clearance: 0.4,
+      trace_width: 1.5,
+      via_dia: 1.5,
       via_drill: 0.8,
-      uvia_dia: 1.6,
+      uvia_dia: 1.5,
       uvia_drill: 0.8,
       add_net: [
         '+5V',
@@ -267,6 +269,42 @@ var pcb = module.exports = {
         { net: { name: 'ARM_2_DATA_TO_ARM_3_DATA' } },
         { net: { name: 'ARM_2_CLOCK_TO_ARM_3_CLOCK' } },
         { net: { name: '+5V' } }
+      ]
+    },
+    {
+      component: M4Component,
+      at: {
+        x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 1/3) * 2 * Math.PI),
+        y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 1/3) * 2 * Math.PI)
+      },
+      graphics: {
+        reference: {
+          content: 'H1'
+        },
+        value: {
+          content: 'M4'
+        },
+      },
+      pads: [
+        { net: { name: 'GND' } }
+      ]
+    },
+    {
+      component: M4Component,
+      at: {
+        x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 2/3) * 2 * Math.PI),
+        y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 2/3) * 2 * Math.PI)
+      },
+      graphics: {
+        reference: {
+          content: 'H2'
+        },
+        value: {
+          content: 'M4'
+        },
+      },
+      pads: [
+        { net: { name: 'GND' } }
       ]
     }
   ],
@@ -405,10 +443,8 @@ function pad_at (module, index) {
 
   const rotated_component_at = rotate(component_at, center, angle)
 
-  console.log('component_at', component_at, rotated_component_at)
 
   const value = add(rotated_component_at, module_at)
-  console.log('value', module_at, value)
   return value
 }
 
@@ -418,21 +454,6 @@ function add (a, b) {
     y: a.y + b.y
   }
 }
-
-
-console.log('tracks', pcb.tracks.map(track => track.start))
-console.log('modules', pcb.modules.map(module => module.at))
-console.log('pads', HeaderComponent.pads)
-
-console.log(`
-  (segment (start 146.19 85) (end 146.19 100) (width 1.7) (layer F.Cu) (net 1) (status C00000))
-  (segment (start 153.81 85) (end 153.81 100) (width 1.7) (layer F.Cu) (net 2) (status C00000))
-  (segment (start 138.914619 110.799557) (end 161.085381 110.799557) (width 1.7) (layer F.Cu) (net 2) (status C00000))
-  (segment (start 151.27 85) (end 151.27 100) (width 0.254) (layer F.Cu) (net 3) (status C00000))
-  (segment (start 148.73 85) (end 148.73 100) (width 0.254) (layer F.Cu) (net 4) (status C00000))
-  (segment (start 137.644619 108.599852) (end 162.355381 108.599852) (width 0.254) (layer F.Cu) (net 5) (status C00000))
-  (segment (start 136.374619 106.400148) (end 163.625381 106.400148) (width 0.254) (layer F.Cu) (net 6) (status C00000))
-`)
 
 function range (n) {
   return [...Array(n).keys()]

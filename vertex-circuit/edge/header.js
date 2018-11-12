@@ -1,5 +1,3 @@
-const KISYS3DMOD = process.env.KISYS3DMOD || '/usr/share/kicad/modules/packages3d/'
-
 /*
   -1.27 = -5.08 (left edge)
   8.89 = 5.08 (right edge)
@@ -23,7 +21,11 @@ module.exports = {
   name: 'H4-2.54mm',
   description: 'Through hole straight pin header, 1x04, 2.54mm pitch, single row',
   tags: 'Through hole pin header THT 1x04 2.54mm single row',
-  graphics: (graphics) => {
+  graphics: (module) => {
+    const {
+      graphics = {}
+    } = module
+
     const {
       reference = {},
       value = {},
@@ -87,7 +89,7 @@ module.exports = {
       {
         type: 'line',
         start: { x: -1.27, y: -4.44 },
-        end: { x: end -0.635, y: -5.08 },
+        end: { x: -0.635, y: -5.08 },
         layer: 'F.Fab',
         width: 0.1
       },
@@ -183,7 +185,7 @@ module.exports = {
       at: { x: 0, y: -3.81 },
       size: { x: 1.7, y: 1.7 },
       drill: 1.0,
-      layers: '*.Cu *.Paste *.Mask'
+      layers: ['*.Cu', '*.Paste', '*.Mask']
     },
     {
       type: 'thru_hole',
@@ -191,7 +193,7 @@ module.exports = {
       at: { x: 0, y: -1.27 },
       size: { x: 1.7, y: 1.7 },
       drill: 1.0,
-      layers: '*.Cu *.Paste *.Mask'
+      layers: ['*.Cu', '*.Paste', '*.Mask']
     },
     {
       type: 'thru_hole',
@@ -199,7 +201,7 @@ module.exports = {
       at: { x: 0, y: 1.27 },
       size: { x: 1.7, y: 1.7 },
       drill: 1.0,
-      layers: '*.Cu *.Paste *.Mask'
+      layers: ['*.Cu', '*.Paste', '*.Mask']
     },
     {
       type: 'thru_hole',
@@ -207,7 +209,7 @@ module.exports = {
       at: { x: 0, y: 3.81 },
       size: { x: 1.7, y: 1.7 },
       drill: 1.0,
-      layers: '*.Cu *.Paste *.Mask'
+      layers: ['*.Cu', '*.Paste', '*.Mask']
     }
   ],
   model: {
@@ -218,6 +220,7 @@ module.exports = {
   }
 }
 
+  /*
 module.exports = (module) => `
 (module
   H4-2.54mm
@@ -244,6 +247,7 @@ module.exports = (module) => `
   )
 )
 `
+*/
 
   /*
     (module

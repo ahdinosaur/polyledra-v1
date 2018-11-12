@@ -1,15 +1,15 @@
 (kicad_pcb (version 4) (host pcbnew 4.0.7+dfsg1-1~bpo9+1)
 
   (general
-    (links 14)
-    (no_connects 14)
-    (area 110.396647 65.1034 148.137253 99.5775)
+    (links 13)
+    (no_connects 13)
+    (area 0 0 0 0)
     (thickness 1.6)
     (drawings 0)
     (tracks 0)
     (zones 0)
     (modules 6)
-    (nets 8)
+    (nets 9)
   )
 
   (page A4)
@@ -98,6 +98,7 @@
   (net 5 "Net-(J2-Pad3)")
   (net 6 "Net-(J3-Pad2)")
   (net 7 "Net-(J3-Pad3)")
+  (net 8 "Net-(J3-Pad1)")
 
   (net_class Default "This is the default net class."
     (clearance 0.2)
@@ -111,6 +112,7 @@
     (add_net "Net-(J1-Pad-2)")
     (add_net "Net-(J2-Pad2)")
     (add_net "Net-(J2-Pad3)")
+    (add_net "Net-(J3-Pad1)")
     (add_net "Net-(J3-Pad2)")
     (add_net "Net-(J3-Pad3)")
   )
@@ -327,7 +329,7 @@
     (fp_line (start 1.27 5.08) (end -1.27 5.08) (layer F.SilkS) (width 0))
     (fp_line (start -1.27 5.08) (end -1.27 -5.08) (layer F.SilkS) (width 0))
     (pad 1 thru_hole rect (at 0 -3.81 270) (size 1.651 1.651) (drill 0.889) (layers *.Cu *.Paste *.Mask)
-      (net 1 +5V))
+      (net 8 "Net-(J3-Pad1)"))
     (pad 2 thru_hole circle (at 0 -1.27 270) (size 1.651 1.651) (drill 0.889) (layers *.Cu *.Paste *.Mask)
       (net 6 "Net-(J3-Pad2)"))
     (pad 3 thru_hole circle (at 0 1.27 270) (size 1.651 1.651) (drill 0.889) (layers *.Cu *.Paste *.Mask)

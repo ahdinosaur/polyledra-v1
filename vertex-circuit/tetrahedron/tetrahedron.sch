@@ -268,7 +268,6 @@ $EndComp
 Connection ~ 2200 2850
 Wire Wire Line
 	2350 2850 2100 2850
-Connection ~ 2250 3150
 Wire Wire Line
 	2250 3150 2250 3200
 Connection ~ 2200 2000
@@ -310,5 +309,6 @@ Wire Wire Line
 Wire Wire Line
 	2100 3050 2350 3050
 Wire Wire Line
-	2100 3150 2350 3150
+	2250 3150 2350 3150
+NoConn ~ 2100 3150
 $EndSCHEMATC

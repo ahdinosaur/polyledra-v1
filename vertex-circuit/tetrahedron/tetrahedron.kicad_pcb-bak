@@ -1,11 +1,11 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.5+dfsg1-4)
+(kicad_pcb (version 4) (host pcbnew 4.0.7+dfsg1-1~bpo9+1)
 
   (general
     (links 14)
     (no_connects 14)
-    (area 111.0774 61.8649 147.5454 99.5775)
+    (area 110.396647 65.1034 148.137253 99.5775)
     (thickness 1.6)
-    (drawings 1)
+    (drawings 0)
     (tracks 0)
     (zones 0)
     (modules 6)
@@ -423,7 +423,5 @@
       (rotate (xyz 0 0 0))
     )
   )
-
-  (gr_circle (center 109.22 91.44) (end 110.236 91.948) (layer Edge.Cuts) (width 0.1))
 
 )

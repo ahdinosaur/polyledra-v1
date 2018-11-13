@@ -40,10 +40,10 @@ module main () {
   // echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
   // polygon(ngon(3, 25));
   
-  arm();
+  edge();
 }
 
-module arm () {
+module edge () {
   difference () {
     linear_extrude(
       height = EDGE_CONNECTOR_HEIGHT
@@ -53,18 +53,29 @@ module arm () {
 
     bolts();
     channels();
+    //headers();
+  }
+}
+
+module for_each_radial (start_step = 0, num_steps, radius, rotation_offset = 0) {
+  for (index = [start_step : num_steps - 1]) {
+    phi = rotation_offset + index * (ROT / num_steps);
+
+    translate([
+      radius * cos(phi),
+      radius * sin(phi),
+      0
+    ])
+    children();
   }
 }
 
 module bolts () {
-  for (screw_index = [1 : CHANNELS_PER_EDGE - 1]) {
-    screw_phi = screw_index * (ROT / CHANNELS_PER_EDGE);
-
-    translate([
-      BOLT_OFFSET*cos(screw_phi),
-      BOLT_OFFSET*sin(screw_phi),
-      0 //- (1/2) * BOLT_LENGTH
-    ])
+  for_each_radial(
+    start_step = 1,
+    num_steps = CHANNELS_PER_EDGE,
+    radius = BOLT_OFFSET
+  ) {
     translate([0, 0, EDGE_CONNECTOR_HEIGHT + INFINITESIMAL])
     rotate([0, 1/2 * ROT, 0])
     bolt_hole(

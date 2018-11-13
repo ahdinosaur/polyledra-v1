@@ -59,10 +59,10 @@ module.exports = {
       },
       {
         type: 'circle',
-        center: [
-          0,
-          0
-        ],
+        center: {
+          x: 0,
+          y: 0
+        },
         end: {
           x: 4.55,
           y: 0

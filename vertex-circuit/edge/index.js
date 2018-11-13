@@ -213,7 +213,8 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J2'
+          content: 'J2',
+          at: { x: 2.3495, y: -0.3175 }
         },
         value: {
           content: 'ARM_1'
@@ -258,7 +259,8 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J4'
+          content: 'J4',
+          at: { x: 2.3495, y: -0.3175 }
         },
         value: {
           content: 'ARM_3'
@@ -329,10 +331,10 @@ var pcb = module.exports = {
       net: { name: 'GND' },
       layer: 'F.Cu',
       hatch: [ 'edge', 0.508 ],
+      min_thickness: 0.1778,
       connect_pads: {
         clearance: 0.2
       },
-      min_thickness: 0.1778,
       fill: {
         arc_segments: 16,
         thermal_gap: 0.254,

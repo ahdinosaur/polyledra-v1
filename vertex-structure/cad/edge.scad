@@ -3,7 +3,7 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
-CHANNELS_PER_ARM = 3;
+CHANNELS_PER_EDGE = 3;
 CHANNEL_DEPTH = 18;
 CHANNEL_TOLERANCE = 0.5;
 CHANNEL_LENGTH = 16 + CHANNEL_TOLERANCE;
@@ -16,17 +16,18 @@ HEADER_LENGTH = HEADER_PITCH * HEADER_NUM_PINS + 0.1;
 HEADER_WIDTH = 2.5;
 HEADER_OFFSET = 8;
 
-ARM_HEIGHT= CHANNEL_DEPTH + HEADER_DEPTH;
-ARM_RADIUS = CHANNEL_LENGTH + CHANNEL_OFFSET + 3;
+EDGE_CONNECTOR_SIDES = CHANNELS_PER_EDGE * 2;
+EDGE_CONNECTOR_RADIUS = CHANNEL_LENGTH + CHANNEL_OFFSET + 3;
+EDGE_CONNECTOR_HEIGHT = CHANNEL_DEPTH + HEADER_DEPTH;
 
 HOLE_WIDTH_START = 2;
 HOLE_WIDTH_END = 6.5;
 HOLE_OFFSET = CHANNEL_OFFSET;
-HOLE_WIDTH_LENGTH = 1/2 * ARM_RADIUS;
+HOLE_WIDTH_LENGTH = 1/2 * EDGE_CONNECTOR_RADIUS;
 
 BOLT_SIZE = 4;
 BOLT_LENGTH = 35;
-BOLT_OFFSET = ARM_RADIUS / 2;
+BOLT_OFFSET = EDGE_CONNECTOR_RADIUS / 2;
 BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
 BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 
@@ -36,49 +37,35 @@ main();
 function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
 module main () {
-  echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
-  //polygon(ngon(3, 25));
+  // echo(arm_radius = ARM_RADIUS, bolt_offset = BOLT_OFFSET);
+  // polygon(ngon(3, 25));
   
   arm();
 }
 
 module arm () {
   difference () {
-    cylinder(
-        r = ARM_RADIUS,
-        h = ARM_HEIGHT,
-        $fa = MIN_ARC_FRAGMENT_ANGLE,
-        $fs = MIN_ARC_FRAGMENT_SIZE
-    );
-    
-    hole();
+    linear_extrude(
+      height = EDGE_CONNECTOR_HEIGHT
+    )
+    rotate(ROT / (EDGE_CONNECTOR_SIDES * 2))
+    polygon(ngon(EDGE_CONNECTOR_SIDES, EDGE_CONNECTOR_RADIUS));
+
     bolts();
     channels();
   }
 }
 
-module hole () {
-  translate([HOLE_OFFSET, 0, -1/2 * INFINITY])
-  hull () {
-    translate([0, -1/2 * HOLE_WIDTH_START, 0])
-    cube([HOLE_WIDTH_LENGTH, HOLE_WIDTH_START, INFINITY]);
-    
-    translate([0, -1/2 * HOLE_WIDTH_END, 0])
-    translate([HOLE_WIDTH_LENGTH, 0, 0])
-    cube([INFINITESIMAL, HOLE_WIDTH_END, INFINITY]);
-  }
-}
-
 module bolts () {
-  for (screw_index = [1 : CHANNELS_PER_ARM - 1]) {
-    screw_phi = screw_index * (ROT / CHANNELS_PER_ARM);
+  for (screw_index = [1 : CHANNELS_PER_EDGE - 1]) {
+    screw_phi = screw_index * (ROT / CHANNELS_PER_EDGE);
 
     translate([
       BOLT_OFFSET*cos(screw_phi),
       BOLT_OFFSET*sin(screw_phi),
       0 //- (1/2) * BOLT_LENGTH
     ])
-    translate([0, 0, ARM_HEIGHT + INFINITESIMAL])
+    translate([0, 0, EDGE_CONNECTOR_HEIGHT + INFINITESIMAL])
     rotate([0, 1/2 * ROT, 0])
     bolt_hole(
       size = BOLT_SIZE,
@@ -109,7 +96,7 @@ module channel () {
       [
         CHANNEL_OFFSET,
         CHANNEL_OFFSET,
-        ARM_HEIGHT - CHANNEL_DEPTH
+        EDGE_CONNECTOR_HEIGHT - CHANNEL_DEPTH
       ]
     )
     linear_extrude(

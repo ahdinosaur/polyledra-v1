@@ -1,3 +1,5 @@
+include <constants.scad>
+
 // Simple list comprehension for creating N-gon vertices
 function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
@@ -21,4 +23,26 @@ module for_each_radial (
     rotate(rotation)
     children();
   }
+}
+
+module below (z) {
+  translate(
+    [
+      -INFINITY / 2,
+      -INFINITY / 2,
+      z - (INFINITY)
+    ]
+  )
+  cube(INFINITY);
+}
+
+module above (z) {
+  translate(
+    [
+      -INFINITY / 2,
+      -INFINITY / 2,,
+      z
+    ]
+  )
+  cube(INFINITY);
 }

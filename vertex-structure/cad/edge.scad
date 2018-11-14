@@ -29,6 +29,9 @@ BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 main();
 
 module main () {
+  echo(
+    edge_connector_radius=EDGE_CONNECTOR_RADIUS
+  );
   edge();
 }
 

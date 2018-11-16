@@ -3,14 +3,50 @@ include <constants.scad>
 // Simple list comprehension for creating N-gon vertices
 function ngon(num, r) = [for (i=[0:num-1], a=i*360/num) [ r*cos(a), r*sin(a) ]];
 
+function triangle_height (a, b, c) =
+  let (
+    perimeter = (a + b + c),
+    s = perimeter / 2,
+    area = sqrt(s * (s - a) * (s - b) * (s - c)),
+    base = a,
+    height = area / ((1 / 2) * base)
+  ) height;
+
+function sec (theta) = 1 / cos(theta);
+function csc (theta) = 1 / sin(theta);
+function cot (theta) = 1 / tan(theta);
+
+function polygon_side_length (circumradius, sides) =
+  2 * circumradius * sin(180 / sides);
+
+function polygon_inradius (circumradius, sides) =
+  circumradius / sec(180 / sides);
+
+function defined(a) = str(a) != "undef"; 
+
+module ellipses (rx, ry) {
+  scale([
+    1,
+    ry / rx
+  ])
+  circle(
+    r = rx,
+    $fa = MIN_ARC_FRAGMENT_ANGLE,
+    $fs = MIN_ARC_FRAGMENT_SIZE
+  );
+}
+
 module for_each_radial (
   start_step = 0,
+  end_step,
   num_steps,
   radius,
   radial_offset = 0,
   rotation_offset = 0
 ) {
-  for (index = [start_step : num_steps - 1]) {
+  end_step_value = defined(end_step) ? end_step - 1 : num_steps - 1;
+  
+  for (index = [start_step : end_step_value]) {
     angle = index * (ROT / num_steps);
     radial = angle + radial_offset;
     rotation = angle + rotation_offset;

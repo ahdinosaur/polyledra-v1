@@ -67,7 +67,34 @@ module for_each_radial (
   }
 }
 
-module below (z) {
+// https://www.youtube.com/watch?v=c1LKQaFIPNA
+module right_triangle (a, b, corner_radius, height) {
+  translate([(-1/2) * a, (-1/2) * b, (-1/2) * height])
+  linear_extrude(height = height)
+  translate([corner_radius, 0])
+  hull () {
+    circle(r = corner_radius);
+
+    translate([a - corner_radius * 2, 0])
+    circle(r = corner_radius);
+
+    translate([0, b - corner_radius * 2])
+    circle(r = corner_radius);
+  }
+}
+
+module below_x (x) {
+  translate(
+    [
+      x - (INFINITY),
+      -INFINITY / 2,
+      -INFINITY / 2
+    ]
+  )
+  cube(INFINITY);
+}
+
+module below_z (z) {
   translate(
     [
       -INFINITY / 2,
@@ -78,7 +105,7 @@ module below (z) {
   cube(INFINITY);
 }
 
-module above (z) {
+module above_z (z) {
   translate(
     [
       -INFINITY / 2,

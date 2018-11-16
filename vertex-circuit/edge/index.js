@@ -442,10 +442,7 @@ function pad_at (module, index) {
   const module_at = module.at
   const center = { x: 0, y: 0 }
   const angle = module.at.angle || 0
-
   const rotated_component_at = rotate(component_at, center, angle)
-
-
   const value = add(rotated_component_at, module_at)
   return value
 }

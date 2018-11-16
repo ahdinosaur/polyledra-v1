@@ -8,21 +8,20 @@ EDGES_PER_VERTEX = 3;
 EDGE_CONNECTOR_ANGLE = 35.26439;
 
 EDGE_CONNECTOR_SIDES = EDGES_PER_VERTEX;
-EDGE_CONNECTOR_RADIUS = 22.4;
-EDGE_CONNECTOR_LENGTH_XY = 19;
+EDGE_CONNECTOR_RADIUS = 28;
 EDGE_CONNECTOR_LENGTH_Z = 8.5;
 EDGE_CONNECTORS_RADIUS = 24;
 
-VERTEX_CONNECTOR_RADIUS = 22;
+VERTEX_CONNECTOR_RADIUS = 18;
 VERTEX_CONNECTOR_LENGTH_Z = 8;
-VERTEX_CONNECTOR_SIDES = EDGES_PER_VERTEX;
-VERTEX_CONNECTOR_OFFSET_Z = 2;
+VERTEX_CONNECTOR_SIDES = EDGES_PER_VERTEX * 2;
+VERTEX_CONNECTOR_OFFSET_Z = -2;
 
 MAX_Z = VERTEX_CONNECTOR_OFFSET_Z + VERTEX_CONNECTOR_LENGTH_Z;
 
-SCREW_SIZE = 4;
-SCREW_LENGTH = INFINITY;
-SCREW_OFFSET = 10.75;
+BOLT_SIZE = 4;
+BOLT_LENGTH = INFINITY;
+BOLTS_RADIUS = 17.4937;
 
 /*
 HEADER_NUM_PINS = 4;
@@ -110,19 +109,21 @@ module edge_connector () {
     )
     polygon(ngon(EDGE_CONNECTOR_SIDES, EDGE_CONNECTOR_RADIUS));
 
-        
     // minus bolts
-    for (screw_index = [1 : EDGES_PER_VERTEX - 1]) {
-      screw_phi = screw_index * (ROT / EDGES_PER_VERTEX);
-
+    for_each_radial(
+      start_step = 1,
+      num_steps = EDGES_PER_VERTEX,
+      radius = BOLTS_RADIUS
+    ) {
       translate([
-        SCREW_OFFSET*cos(screw_phi),
-        SCREW_OFFSET*sin(screw_phi),
-        - (1/2) * SCREW_LENGTH
+        0,
+        0,
+        - (1/2) * BOLT_LENGTH
       ])
       bolt_hole(
-        size = SCREW_SIZE,
-        length = SCREW_LENGTH
+        size = BOLT_SIZE,
+        length = BOLT_LENGTH,
+        tolerance = XY_TOLERANCE
       );
     }
   }

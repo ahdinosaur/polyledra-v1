@@ -46,13 +46,15 @@ module for_each_radial (
   start_step = 0,
   end_step,
   num_steps,
+  step_length = 1,
   radius,
   radial_offset = 0,
   rotation_offset = 0
 ) {
   end_step_value = defined(end_step) ? end_step - 1 : num_steps - 1;
   
-  for (index = [start_step : end_step_value]) {
+  for (step_index = [start_step : end_step_value]) {
+    index = step_index * step_length;
     angle = index * (ROT / num_steps);
     radial = angle + radial_offset;
     rotation = angle + rotation_offset;

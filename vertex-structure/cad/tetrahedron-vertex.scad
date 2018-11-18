@@ -5,126 +5,85 @@ include <helpers.scad>
 include <nuts-and-bolts.scad>
 
 EDGES_PER_VERTEX = 3;
-EDGE_CONNECTOR_ANGLE = 35.26439;
 
-EDGE_CONNECTOR_SIDES = EDGES_PER_VERTEX;
-EDGE_CONNECTOR_RADIUS = 28;
-EDGE_CONNECTOR_LENGTH_Z = 8.5;
-EDGE_CONNECTORS_RADIUS = 24;
+BOTTOM_BOLT_SIZE = 4;
+BOTTOM_BOLT_LENGTH = INFINITY;
+BOTTOM_BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOTTOM_BOLT_SIZE];
+BOTTOM_BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOTTOM_BOLT_SIZE] / 2;
+BOTTOM_BOLTS_RADIUS = 18;
+BOTTOM_BED_RADIUS = BOTTOM_BOLTS_RADIUS + 7;
+BOTTOM_BED_SIDES = EDGES_PER_VERTEX * 2;
+BOTTOM_BED_LENGTH_Z = 6;
 
-VERTEX_CONNECTOR_RADIUS = 18;
-VERTEX_CONNECTOR_LENGTH_Z = 8;
-VERTEX_CONNECTOR_SIDES = EDGES_PER_VERTEX * 2;
-VERTEX_CONNECTOR_OFFSET_Z = -2;
+TOP_BOLT_SIZE = 3;
+TOP_BOLT_LENGTH = 10;
+TOP_BOLTS_RADIUS = 6;
+TOP_BED_RADIUS = TOP_BOLTS_RADIUS + 7;
+TOP_BED_SIDES = EDGES_PER_VERTEX * 2;
+TOP_BED_LENGTH_Z = 6;
 
-MAX_Z = VERTEX_CONNECTOR_OFFSET_Z + VERTEX_CONNECTOR_LENGTH_Z;
-
-BOLT_SIZE = 4;
-BOLT_LENGTH = INFINITY;
-BOLTS_RADIUS = 17.4937;
-
-/*
-HEADER_NUM_PINS = 4;
-HEADER_PITCH = 2.54;
-HEADER_X_LENGTH = HEADER_PITCH * (HEADER_NUM_PINS * + 0.4) + 0.25;
-HEADER_Y_LENGTH = 2.4;
-HEADER_Z_LENGTH = 8.5;
-HEADER_Y_OFFSET = 2;
-*/
-
-// rotate([0, 180, 0])
 main();
 
 module main () {
-  intersection () {
-    below(z = MAX_Z);
-    
-    union () {
-      vertex_connector();
-      edge_connectors();
-    };
-  }
+  vertex_bed();
 }
 
-module vertex_connector () {
+module vertex_bed () {
   difference () {
     union () {
-      rotate((1 / EDGES_PER_VERTEX) * ROT)
-      translate([0, 0, VERTEX_CONNECTOR_OFFSET_Z])
-      linear_extrude(
-        height = VERTEX_CONNECTOR_LENGTH_Z
-      )
-      polygon(ngon(VERTEX_CONNECTOR_SIDES, VERTEX_CONNECTOR_RADIUS));
+      bottom_bed();
+      top_bed();
     }
     
-    // subtract the space that would interfere with the edge connectors
-    union () {
-      for (edge_index = [0 : EDGES_PER_VERTEX]) {
-        edge_theta = EDGE_CONNECTOR_ANGLE;
-        edge_phi = edge_index * (ROT / EDGES_PER_VERTEX);
-        
-        translate(
-          [
-            EDGE_CONNECTORS_RADIUS*cos(edge_phi),
-            EDGE_CONNECTORS_RADIUS*sin(edge_phi),
-            0
-          ]
-        )
-        rotate(a = [0, edge_theta, edge_phi])
-        rotate([0, 0, (1 / 2 * EDGES_PER_VERTEX) * ROT])
-        translate([0, (-1/2) * INFINITY, (1/2) * EDGE_CONNECTOR_LENGTH_Z - INFINITESIMAL])
-        cube(INFINITY);
-      }
-    }
+    bottom_bolts();
+    top_bolts();
   }
 }
 
-module edge_connectors () {
-  for (edge_index = [0 : EDGES_PER_VERTEX]) {
-    edge_theta = EDGE_CONNECTOR_ANGLE;
-    edge_phi = edge_index * (ROT / EDGES_PER_VERTEX);
+module bottom_bed () {
+  linear_extrude(
+    height = BOTTOM_BED_LENGTH_Z
+  )
+  polygon(ngon(BOTTOM_BED_SIDES, BOTTOM_BED_RADIUS));
+}
 
-    translate(
-      [
-        EDGE_CONNECTORS_RADIUS*cos(edge_phi),
-        EDGE_CONNECTORS_RADIUS*sin(edge_phi),
-        0
-      ]
-    )
-    rotate(a = [0, edge_theta, edge_phi])
-    // union () {
-    //  cylinder(r = 21.5, h = 20);
-    edge_connector();
-    // }
+module bottom_bolts () {
+  translate([0, 0, BOTTOM_BED_LENGTH_Z + INFINITESIMAL])
+  rotate([0, (1/2) * ROT])
+  for_each_radial(
+    start_step = 0,
+    num_steps = BOTTOM_BED_SIDES,
+    radius = BOTTOM_BOLTS_RADIUS
+  ) {
+    bolt_hole(
+      size = BOTTOM_BOLT_SIZE,
+      length = BOTTOM_BOLT_LENGTH,
+      tolerance = XY_TOLERANCE
+    );
   }
 }
 
-module edge_connector () {
-  rotate(a = [0, 0, (1 / 2 * EDGES_PER_VERTEX) * ROT])
-  difference () {
-    // triangle
-    translate([0, 0, (-1/2) * EDGE_CONNECTOR_LENGTH_Z])
-    linear_extrude(
-      height = EDGE_CONNECTOR_LENGTH_Z
-    )
-    polygon(ngon(EDGE_CONNECTOR_SIDES, EDGE_CONNECTOR_RADIUS));
+module top_bed () {
+  translate([0, 0, BOTTOM_BED_LENGTH_Z])
+  linear_extrude(
+    height = TOP_BED_LENGTH_Z
+  )
+  polygon(ngon(TOP_BED_SIDES, TOP_BED_RADIUS));
+}
 
-    // minus bolts
-    for_each_radial(
-      start_step = 1,
-      num_steps = EDGES_PER_VERTEX,
-      radius = BOLTS_RADIUS
-    ) {
-      translate([
-        0,
-        0,
-        - (1/2) * BOLT_LENGTH
-      ])
-      bolt_hole(
-        size = BOLT_SIZE,
-        length = BOLT_LENGTH,
-        tolerance = XY_TOLERANCE
-      );
-    }
+module top_bolts () {
+  translate([0, 0, BOTTOM_BED_LENGTH_Z + TOP_BED_LENGTH_Z + INFINITESIMAL])
+  rotate([0, (1/2) * ROT])
+  for_each_radial(
+    start_step = 0,
+    num_steps = 2,
+    step_length = 3,
+    radius = TOP_BOLTS_RADIUS
+  ) {
+    bolt_hole(
+      size = TOP_BOLT_SIZE,
+      length = TOP_BOLT_LENGTH,
+      tolerance = XY_TOLERANCE
+    );
   }
 }

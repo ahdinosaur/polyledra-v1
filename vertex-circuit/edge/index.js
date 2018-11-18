@@ -1,11 +1,11 @@
 const CENTER = { x: 150, y: 100 }
 const HEADER_RADIUS = 15
-const SCREW_RADIUS = 12
+const SCREW_RADIUS = 15
 const CUT_RADIUS = 20
 const CUT_SIDES = 6
 
 const HeaderComponent = require('./header')
-const M4Component = require('./m4')
+const M3Component = require('./m3')
 
 var pcb = module.exports = {
   general: {
@@ -274,7 +274,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M4Component,
+      component: M3Component,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 1/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 1/3) * 2 * Math.PI)
@@ -284,7 +284,7 @@ var pcb = module.exports = {
           content: 'H1'
         },
         value: {
-          content: 'M4'
+          content: 'M3'
         },
       },
       pads: [
@@ -292,7 +292,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M4Component,
+      component: M3Component,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 2/3) * 2 * Math.PI)
@@ -302,7 +302,7 @@ var pcb = module.exports = {
           content: 'H2'
         },
         value: {
-          content: 'M4'
+          content: 'M3'
         },
       },
       pads: [
@@ -342,36 +342,10 @@ var pcb = module.exports = {
       },
       polygon: {
         pts: {
-          xy: [
-            {
-              x: 170,
-              y: 100
-            },
-            {
-              x: 160,
-              y: 117.32050807568876
-            },
-            {
-              x: 140,
-              y: 117.32050807568878
-            },
-            {
-              x: 130,
-              y: 100
-            },
-            {
-              x: 140,
-              y: 82.67949192431124
-            },
-            {
-              x: 160,
-              y: 82.67949192431124
-            },
-            {
-              x: 170,
-              y: 100
-            }
-          ]
+          xy: range(CUT_SIDES + 1).map(i => ({
+            x: CENTER.x + CUT_RADIUS * Math.cos(((i / CUT_SIDES)) * 2 * Math.PI),
+            y: CENTER.y + CUT_RADIUS * Math.sin(((i / CUT_SIDES)) * 2 * Math.PI)
+          }))
         }
       }
     }

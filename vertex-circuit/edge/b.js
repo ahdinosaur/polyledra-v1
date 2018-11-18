@@ -1,6 +1,6 @@
 const CENTER = { x: 150, y: 100 }
 const HEADER_RADIUS = 15
-const SCREW_RADIUS = 15
+const SCREW_RADIUS = 12
 const CUT_RADIUS = 20
 const CUT_SIDES = 6
 
@@ -133,19 +133,25 @@ var pcb = module.exports = {
       name: 'GND'
     },
     {
-      name: 'IO_DATA_TO_ARM_1_DATA'
+      name: 'ARM_1_DATA_TO_ARM_2_DATA'
     },
     {
-      name: 'IO_CLOCK_TO_ARM_1_CLOCK'
+      name: 'ARM_1_CLOCK_TO_ARM_2_CLOCK'
     },
     {
-      name: 'ARM_2_DATA_TO_ARM_3_DATA'
+      name: 'ARM_3_DATA_TO_OUTPUT_DATA'
     },
     {
-      name: 'ARM_2_CLOCK_TO_ARM_3_CLOCK'
+      name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK'
     },
     {
-      name: 'ARM_2_+5V_NO_CONNECT'
+      name: 'ARM_1_+5V_NO_CONNECT'
+    },
+    {
+      name: 'ARM_3_+5V_NO_CONNECT'
+    },
+    {
+      name: 'OUTPUT_+5V_NO_CONNECT'
     }
   ],
   net_classes: [
@@ -159,11 +165,13 @@ var pcb = module.exports = {
       uvia_dia: 0.6858,
       uvia_drill: 0.3302,
       add_net: [
-        'IO_DATA_TO_ARM_1_DATA',
-        'IO_CLOCK_TO_ARM_1_CLOCK',
-        'ARM_2_DATA_TO_ARM_3_DATA',
-        'ARM_2_CLOCK_TO_ARM_3_CLOCK',
-        'ARM_2_+5V_NO_CONNECT'
+        'ARM_1_DATA_TO_ARM_2_DATA',
+        'ARM_1_CLOCK_TO_ARM_2_CLOCK',
+        'ARM_3_DATA_TO_OUTPUT_DATA',
+        'ARM_3_CLOCK_TO_OUTPUT_CLOCK',
+        'ARM_1_+5V_NO_CONNECT',
+        'ARM_3_+5V_NO_CONNECT',
+        'OUTPUT_+5V_NO_CONNECT'
       ]
     },
     {
@@ -187,21 +195,21 @@ var pcb = module.exports = {
       at: {
         x: CENTER.x,
         y: CENTER.y,
-        angle: -(1/4) * 360
+        angle: (1/4) * 360
       },
       graphics: {
         reference: {
           content: 'J1'
         },
         value: {
-          content: 'IO'
+          content: 'OUTPUT'
         },
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'IO_DATA_TO_ARM_1_DATA' } },
-        { net: { name: 'IO_CLOCK_TO_ARM_1_CLOCK' } },
-        { net: { name: '+5V' } }
+        { net: { name: 'ARM_3_DATA_TO_OUTPUT_DATA' } },
+        { net: { name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK' } },
+        { net: { name: 'OUTPUT_+5V_NO_CONNECT' } }
       ]
     },
     {
@@ -217,14 +225,14 @@ var pcb = module.exports = {
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
-          content: 'ARM_1'
+          content: 'ARM_1_IN'
         },
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'IO_DATA_TO_ARM_1_DATA' } },
-        { net: { name: 'IO_CLOCK_TO_ARM_1_CLOCK' } },
-        { net: { name: '+5V' } }
+        { net: { name: 'ARM_1_DATA_TO_ARM_2_DATA' } },
+        { net: { name: 'ARM_1_CLOCK_TO_ARM_2_CLOCK' } },
+        { net: { name: 'ARM_1_+5V_NO_CONNECT' } }
       ]
     },
     {
@@ -240,14 +248,14 @@ var pcb = module.exports = {
           content: 'J3'
         },
         value: {
-          content: 'ARM_2'
+          content: 'ARM_2_OUT'
         },
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'ARM_2_DATA_TO_ARM_3_DATA' } },
-        { net: { name: 'ARM_2_CLOCK_TO_ARM_3_CLOCK' } },
-        { net: { name: 'ARM_2_+5V_NO_CONNECT' } }
+        { net: { name: 'ARM_1_DATA_TO_ARM_2_DATA' } },
+        { net: { name: 'ARM_1_CLOCK_TO_ARM_2_CLOCK' } },
+        { net: { name: '+5V' } }
       ]
     },
     {
@@ -263,14 +271,14 @@ var pcb = module.exports = {
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
-          content: 'ARM_3'
+          content: 'ARM_3_IN'
         },
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'ARM_2_DATA_TO_ARM_3_DATA' } },
-        { net: { name: 'ARM_2_CLOCK_TO_ARM_3_CLOCK' } },
-        { net: { name: '+5V' } }
+        { net: { name: 'ARM_3_DATA_TO_OUTPUT_DATA' } },
+        { net: { name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK' } },
+        { net: { name: 'ARM_3_+5V_NO_CONNECT' } }
       ]
     },
     {
@@ -348,6 +356,28 @@ var pcb = module.exports = {
           }))
         }
       }
+    },
+    {
+      net: { name: '+5V' },
+      layer: 'B.Cu',
+      hatch: [ 'edge', 0.508 ],
+      min_thickness: 0.1778,
+      connect_pads: {
+        clearance: 0.2
+      },
+      fill: {
+        arc_segments: 16,
+        thermal_gap: 0.254,
+        thermal_bridge_width: 0.4064
+      },
+      polygon: {
+        pts: {
+          xy: range(CUT_SIDES + 1).map(i => ({
+            x: CENTER.x + CUT_RADIUS * Math.cos(((i / CUT_SIDES)) * 2 * Math.PI),
+            y: CENTER.y + CUT_RADIUS * Math.sin(((i / CUT_SIDES)) * 2 * Math.PI)
+          }))
+        }
+      }
     }
   ]
 }
@@ -355,59 +385,57 @@ var pcb = module.exports = {
 const DEFAULT_NET_CLASS = pcb.net_classes[0]
 const POWER_NET_CLASS = pcb.net_classes[1]
 
-const IO = pcb.modules[0]
+const OUTPUT = pcb.modules[0]
 const ARM_1 = pcb.modules[1]
 const ARM_2 = pcb.modules[2]
 const ARM_3 = pcb.modules[3]
 
 
 pcb.tracks = [
-  // IO TO ARM 1
-  ...range(HeaderComponent.pads.length).map(index => {
-    const net = IO.pads[index].net
+  // ARM_1 TO ARM_2
+  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+    const net = OUTPUT.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
     return {
-      start: pad_at(IO, index),
-      end: pad_at(ARM_1, index),
+      start: pad_at(ARM_1, index),
+      end: pad_at(ARM_2, index),
       width: net_class.trace_width,
       layer: 'F.Cu',
       net
     }
   }),
-  // ARM 1 TO ARM 2 (except 5v, last pad)
-  ...range(HeaderComponent.pads.length - 1).map(index => {
+  // ARM 3 TO OUTPUT
+  ...range(1, HeaderComponent.pads.length - 1).map(index => {
     const net = ARM_2.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
+
     return {
-      start: pad_at(ARM_2, index),
-      end: pad_at(ARM_3, index),
+      start: pad_at(ARM_3, index),
+      end: {
+        x: pad_at(OUTPUT, index).x,
+        y: pad_at(ARM_3, index).y
+      },
       width: net_class.trace_width,
       layer: 'F.Cu',
       net
     }
   }),
-  // SPECIAL CONNECTION FROM IO 5V to ARM 3
-  {
-    start: pad_at(IO, 3),
-    end: {
-      x: pad_at(IO, 3).x,
-      y: pad_at(ARM_3, 3).y
-    },
-    width: POWER_NET_CLASS.trace_width,
-    layer: 'F.Cu',
-    net: { name: '+5V' }
-  },
-  {
-    start: {
-      x: pad_at(IO, 3).x,
-      y: pad_at(ARM_3, 3).y
-    },
-    end: pad_at(ARM_3, 3),
-    width: POWER_NET_CLASS.trace_width,
-    layer: 'F.Cu',
-    net: { name: '+5V' }
-  }
+  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+    const net = ARM_2.pads[index].net
+    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
+
+    return {
+      start: {
+        x: pad_at(OUTPUT, index).x,
+        y: pad_at(ARM_3, index).y
+      },
+      end: pad_at(OUTPUT, index),
+      width: net_class.trace_width,
+      layer: 'F.Cu',
+      net
+    }
+  })
 ]
 
 function pad_at (module, index) {
@@ -428,8 +456,16 @@ function add (a, b) {
   }
 }
 
-function range (n) {
-  return [...Array(n).keys()]
+function range (...args) {
+  var start = 0
+  var end = 1
+  if (args.length === 2) {
+    [start, end] = args
+  } else {
+    [end] = args
+  }
+  var keys = [...Array(end - start).keys()]
+  return keys.map(index => index + start)
 }
 
 // https://stackoverflow.com/a/2259502

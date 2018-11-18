@@ -4,9 +4,14 @@
   "version": "0.0.0",
   "scripts": {
     "start": "npm run pcb && kicad ./edge.pro",
-    "pcb": "jseda pcb ./ ./edge.kicad_pcb"
+    "pcb:a": "jseda pcb ./a ./a.kicad_pcb",
+    "pcb:b": "jseda pcb ./b ./b.kicad_pcb",
+    "pcb": "npm-run-all -p pcb:*"
   },
   "dependencies": {
     "jseda": "^2.0.2"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
   }
 }

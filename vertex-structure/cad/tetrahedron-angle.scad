@@ -11,64 +11,32 @@ HEADER_LENGTH_Y = 2.54 + XY_TOLERANCE;
 HEADER_LENGTH_Z = 2.54 + Z_TOLERANCE;
 EDGE_HEADER_OFFSET = 0;
 
-BOLT_SIZE = 4;
-BOLT_LENGTH = INFINITY;
+BOLT_SIZE = 5;
+BOLT_LENGTH = 10;
 BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
 BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
 BOLT_TOLERANCE = XY_TOLERANCE / 2;
-BOLTS_RADIUS = 17.4937;
 
-// x is width
-// y is depth
+// x is length
+// y is thickness
 // z is height
 
-
-/*
-EDGE_NUM_BOLTS = 2;
-EDGE_PART_DEPTH = 15;
-EDGE_PART_HEIGHT = 8;
-VERTEX_BOLTS_DISTANCE = EDGE_BOLTS_DISTANCE;
-VERTEX_PART_WIDTH = VERTEX_BOLTS_DISTANCE + 2;
-VERTEX_PART_DEPTH = 15;
-VERTEX_PART_HEIGHT = cos(EDGE_PART_ANGLE) * EDGE_PART_HEIGHT;
-*/
-
-
-
-// 
-// z is width
 
 EDGE_CONNECTOR_ANGLE = 35.26439;
 
 EDGE_BOLTS_DISTANCE = 14.775;
 EDGE_CONNECTOR_THICKNESS = 6;
-EDGE_CONNECTOR_LENGTH = 20;
-EDGE_CONNECTOR_MARGIN = 2;
-EDGE_CONNECTOR_OFFSET = 4;
-EDGE_CONNECTOR_HEIGHT = EDGE_BOLTS_DISTANCE + 2 * EDGE_CONNECTOR_MARGIN;
-EDGE_CONNECTOR_CORNER_RADIUS = 0.01;
+EDGE_CONNECTOR_LENGTH = 30;
+EDGE_CONNECTOR_MARGIN = 1;
+EDGE_CONNECTOR_OFFSET = 8;
+EDGE_CONNECTOR_BOLT_SIZE = BOLT_SIZE;
 
 VERTEX_BOLTS_DISTANCE = EDGE_BOLTS_DISTANCE;
 VERTEX_CONNECTOR_THICKNESS = EDGE_CONNECTOR_THICKNESS;
 VERTEX_CONNECTOR_LENGTH = EDGE_CONNECTOR_LENGTH;
 VERTEX_CONNECTOR_MARGIN = EDGE_CONNECTOR_MARGIN;
 VERTEX_CONNECTOR_OFFSET = EDGE_CONNECTOR_OFFSET;
-VERTEX_CONNECTOR_HEIGHT = VERTEX_BOLTS_DISTANCE + 2 * VERTEX_CONNECTOR_MARGIN;
-VERTEX_CONNECTOR_CORNER_RADIUS = 0.01;
-
-
-/*
-EDGE_CONNECTOR_SIDES = EDGES_PER_VERTEX;
-EDGE_PART_OFFSET = sin(EDGE_PART_ANGLE) * EDGE_CONNECTORS_RADIUS;
-
-EDGE_CONNECTOR_SIDES = EDGES_PER_VERTEX;
-EDGE_CONNECTOR_RADIUS = 30;
-EDGE_CONNECTOR_LENGTH_Z = 8.5;
-EDGE_CONNECTORS_RADIUS = 24;
-*/
-
-// VERTEX_PART_HEIGHT = cos(EDGE_PART_ANGLE) * EDGE_PART_HEIGHT;
-// EDGE_PART_OFFSET = sin(EDGE_PART_ANGLE) * EDGE_CONNECTORS_RADIUS;
+VERTEX_CONNECTOR_BOLT_SIZE = EDGE_CONNECTOR_BOLT_SIZE;
 
 main();
 
@@ -77,90 +45,127 @@ module main () {
 }
 
 module tetrahedron_angle () {
-  rotate(EDGE_CONNECTOR_ANGLE)
-  rotate((1/2) * ROT)
-  edge_connector();
+  difference () {
+    union () {
+      rotate(EDGE_CONNECTOR_ANGLE)
+      rotate((1/2) * ROT)
+      edge_connector();
 
-  vertex_connector();
+      vertex_connector();
+    }
+    
+
+    union () {
+      rotate(EDGE_CONNECTOR_ANGLE)
+      edge_connector_negative();
+      
+      vertex_connector_negative();
+    }
+  }
 }
 
 module edge_connector () {
   connector(
     length = EDGE_CONNECTOR_LENGTH,
-    height = EDGE_CONNECTOR_HEIGHT,
-    corner_radius = EDGE_CONNECTOR_CORNER_RADIUS,
+    distance = EDGE_BOLTS_DISTANCE,
+    bolt_size = EDGE_CONNECTOR_BOLT_SIZE,
     thickness = EDGE_CONNECTOR_THICKNESS,
+    margin = EDGE_CONNECTOR_MARGIN,
     offset = EDGE_CONNECTOR_OFFSET
   );
 }
 
+module edge_connector_negative () {
+  connector_negative(
+    thickness = EDGE_CONNECTOR_THICKNESS
+  );
+}
 
 module vertex_connector () {
   connector(
     length = VERTEX_CONNECTOR_LENGTH,
-    height = VERTEX_CONNECTOR_HEIGHT,
-    corner_radius = VERTEX_CONNECTOR_CORNER_RADIUS,
+    distance = VERTEX_BOLTS_DISTANCE,
+    bolt_size = VERTEX_CONNECTOR_BOLT_SIZE,
     thickness = VERTEX_CONNECTOR_THICKNESS,
+    margin = VERTEX_CONNECTOR_MARGIN,
     offset = VERTEX_CONNECTOR_OFFSET
+  );
+}
+
+module vertex_connector_negative () {
+  connector_negative(
+    thickness = VERTEX_CONNECTOR_THICKNESS
   );
 }
 
 module connector (
   length,
-  height,
-  corner_radius = 0.01,
+  distance,
+  bolt_size = 4,
   thickness = NOZZLE_WIDTH * 4,
+  length_margin = 0,
   offset = 0
 ) {
-  translate([-length / 2 + offset, 0])
-  union () {
-    // triangle
-    rotate(a = [(1/4) * ROT, (0/8) * ROT, (0/8) * ROT])
-    //translate([(-1/2) * EDGE_CONNECTOR_LENGTH, -(1/2) * EDGE_CONNECTOR_HEIGHT, (-1/2) * EDGE_CONNECTOR_THICKNESS])
+  width = length + bolt_size + 2 * margin + offset;
+  height = distance + 2 * bolt_size + 2 * margin;
+  
+  // translate([(-1/2) * length + offset, 0, 0])
+  translate([(-1/2) * length + offset, 0, 0])
+  // triangle
+  rotate(a = [(1/4) * ROT, (0/8) * ROT, (0/8) * ROT])
+  difference () {
     right_triangle(
-      a = length,
+      a = width,
       b = height,
-      corner_radius = corner_radius,
+      corner_radius = bolt_size,
       height = thickness
-    )
-      
-    for (bolt_index = [0: 1]) {
-      translate([
-        0,
-        0,
-        - (1/2) * BOLT_LENGTH
-      ])
+    );
+    
+    translate([
+      BOLT_SIZE,
+      0
+    ])
+    translate([
+      margin,
+      margin
+    ])
+    translate([
+      - width / 2,
+      - height / 2,
+      - (1/2) * BOLT_LENGTH
+    ])
+    union () {
+      translate([0, distance, 0])
+      bolt_hole(
+        size = BOLT_SIZE,
+        length = BOLT_LENGTH,
+        tolerance = XY_TOLERANCE
+      );
+
       bolt_hole(
         size = BOLT_SIZE,
         length = BOLT_LENGTH,
         tolerance = XY_TOLERANCE
       );
     }
-
-/*
-    // minus bolts
-    //translate([0, -EDGE_CONNECTOR_RADIUS / 4, 0])
-    //rotate(a = [0, (0/4) * ROT, (1/12) * ROT])
-    union () {
-      for_each_radial(
-        start_step = 0,
-        end_step = 2,
-        num_steps = NUM_BOLTS,
-        radius = BOLTS_RADIUS
-      ) {
-        translate([
-          0,
-          0,
-          - (1/2) * BOLT_LENGTH
-        ])
-
-        bolt_hole(
-          size = BOLT_SIZE,
-          length = BOLT_LENGTH,
-          tolerance = XY_TOLERANCE
-        );
-      }
-    }
-    */
   }
+}
+
+module connector_negative (
+  thickness
+) {
+  translate(
+    [
+      0,
+      - thickness - (INFINITY / 2) - INFINITESIMAL
+    ]
+  )
+  cube(
+    [
+      INFINITY,
+      thickness + INFINITY,
+      INFINITY
+    ],
+    center = true
+  );
 }

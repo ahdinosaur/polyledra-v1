@@ -11,11 +11,11 @@ HEADER_LENGTH_Y = 2.54 + XY_TOLERANCE;
 HEADER_LENGTH_Z = 2.54 + Z_TOLERANCE;
 EDGE_HEADER_OFFSET = 0;
 
-BOLT_SIZE = 5;
+BOLT_SIZE = 4;
 BOLT_LENGTH = 10;
 BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOLT_SIZE] / 2;
 BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOLT_SIZE];
-BOLT_TOLERANCE = XY_TOLERANCE / 2;
+BOLT_TOLERANCE = (XY_TOLERANCE / 4) + (Z_TOLERANCE / 4);
 
 // x is length
 // y is thickness
@@ -28,7 +28,7 @@ EDGE_BOLTS_DISTANCE = 14.775;
 EDGE_CONNECTOR_THICKNESS = 6;
 EDGE_CONNECTOR_LENGTH = 30;
 EDGE_CONNECTOR_MARGIN = 1;
-EDGE_CONNECTOR_OFFSET = 8;
+EDGE_CONNECTOR_OFFSET = 10;
 EDGE_CONNECTOR_BOLT_SIZE = BOLT_SIZE;
 
 VERTEX_BOLTS_DISTANCE = EDGE_BOLTS_DISTANCE;
@@ -54,6 +54,7 @@ module tetrahedron_angle () {
       vertex_connector();
     }
     
+
 
     union () {
       rotate(EDGE_CONNECTOR_ANGLE)
@@ -110,9 +111,9 @@ module connector (
   height = distance + 2 * bolt_size + 2 * margin;
   
   // translate([(-1/2) * length + offset, 0, 0])
-  translate([(-1/2) * length + offset, 0, 0])
+  translate([(1/2) * (length - offset), 0, 0])
   // triangle
-  rotate(a = [(1/4) * ROT, (0/8) * ROT, (0/8) * ROT])
+  rotate(a = [(1/4) * ROT, (0/8) * ROT, (4/8) * ROT])
   difference () {
     right_triangle(
       a = width,
@@ -157,7 +158,7 @@ module connector_negative (
   translate(
     [
       0,
-      - thickness - (INFINITY / 2) - INFINITESIMAL
+      thickness + (INFINITY / 2) + INFINITESIMAL
     ]
   )
   cube(

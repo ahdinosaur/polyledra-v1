@@ -1,8 +1,10 @@
-const CENTER = { x: 150, y: 100 }
-const HEADER_RADIUS = 15
-const SCREW_RADIUS = 12
-const CUT_RADIUS = 20
-const CUT_SIDES = 6
+const {
+  CENTER,
+  HEADER_RADIUS,
+  SCREW_RADIUS,
+  CUT_SIDES,
+  CUT_RADIUS
+} = require('./constants')
 
 const HeaderComponent = require('./header')
 const M3Component = require('./m3')

@@ -1,8 +1,11 @@
-const CENTER = { x: 150, y: 100 }
-const HEADER_RADIUS = 15
-const SCREW_RADIUS = 12
-const CUT_RADIUS = 20
-const CUT_SIDES = 6
+const {
+  CENTER,
+  HEADER_RADIUS,
+  HEADER_PITCH,
+  SCREW_RADIUS,
+  CUT_SIDES,
+  CUT_RADIUS
+} = require('./constants')
 
 const HeaderComponent = require('./header')
 const M3Component = require('./m3')
@@ -399,6 +402,48 @@ pcb.tracks = [
 
     return {
       start: pad_at(ARM_1, index),
+      end: add(
+        pad_at(ARM_1, index),
+        { x: 0, y: HEADER_RADIUS / 4 }
+      ),
+      width: net_class.trace_width,
+      layer: 'F.Cu',
+      net
+    }
+  }),
+  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+    const net = OUTPUT.pads[index].net
+    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
+
+    return {
+      start: add(
+        pad_at(ARM_1, index),
+        { x: 0, y: HEADER_RADIUS / 4 }
+      ),
+      end: add(
+        pad_at(OUTPUT, 0),
+        {
+          x: - (1/2) * HEADER_PITCH - (1/2) * HEADER_PITCH * (index - 1),
+          y: - HEADER_PITCH
+        }
+      ),
+      width: net_class.trace_width,
+      layer: 'F.Cu',
+      net
+    }
+  }),
+  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+    const net = OUTPUT.pads[index].net
+    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
+
+    return {
+      start: add(
+        pad_at(OUTPUT, 0),
+        {
+          x: - (1/2) * HEADER_PITCH - (1/2) * HEADER_PITCH * (index - 1),
+          y: - HEADER_PITCH
+        }
+      ),
       end: pad_at(ARM_2, index),
       width: net_class.trace_width,
       layer: 'F.Cu',

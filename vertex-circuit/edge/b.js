@@ -7,8 +7,10 @@ const {
   CUT_RADIUS
 } = require('./constants')
 
-const HeaderComponent = require('./header')
-const M3Component = require('./m3')
+const H4 = require('./h4')
+const H3 = require('./h3')
+const H2 = require('./h2')
+const M3 = require('./m3')
 
 var pcb = module.exports = {
   general: {
@@ -194,9 +196,9 @@ var pcb = module.exports = {
   ],
   modules: [
     {
-      component: HeaderComponent,
+      component: H3,
       at: {
-        x: CENTER.x,
+        x: CENTER.x - (1/2) * HEADER_PITCH,
         y: CENTER.y,
         angle: (1/4) * 360
       },
@@ -211,12 +213,31 @@ var pcb = module.exports = {
       pads: [
         { net: { name: 'GND' } },
         { net: { name: 'ARM_3_DATA_TO_OUTPUT_DATA' } },
-        { net: { name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK' } },
-        { net: { name: 'OUTPUT_+5V_NO_CONNECT' } }
+        { net: { name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK' } }
       ]
     },
     {
-      component: HeaderComponent,
+      component: H2,
+      at: {
+        x: CENTER.x + 2 * HEADER_PITCH,
+        y: CENTER.y,
+        angle: -(1/4) * 360 + 90
+      },
+      graphics: {
+        reference: {
+          content: 'J2'
+        },
+        value: {
+          content: 'POWER'
+        },
+      },
+      pads: [
+        { net: { name: 'GND' } },
+        { net: { name: '+5V' } },
+      ]
+    },
+    {
+      component: H4,
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4) * 2 * Math.PI),
@@ -224,7 +245,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J2',
+          content: 'J3',
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
@@ -239,7 +260,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: HeaderComponent,
+      component: H4,
       name: 'ARM_2',
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 1/3) * 2 * Math.PI),
@@ -248,7 +269,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J3'
+          content: 'J4'
         },
         value: {
           content: 'ARM_2_OUT'
@@ -262,7 +283,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: HeaderComponent,
+      component: H4,
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4 + 2/3) * 2 * Math.PI),
@@ -270,7 +291,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J4',
+          content: 'J5',
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
@@ -285,7 +306,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M3Component,
+      component: M3,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 1/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 1/3) * 2 * Math.PI)
@@ -303,7 +324,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M3Component,
+      component: M3,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 2/3) * 2 * Math.PI)
@@ -389,14 +410,15 @@ const DEFAULT_NET_CLASS = pcb.net_classes[0]
 const POWER_NET_CLASS = pcb.net_classes[1]
 
 const OUTPUT = pcb.modules[0]
-const ARM_1 = pcb.modules[1]
-const ARM_2 = pcb.modules[2]
-const ARM_3 = pcb.modules[3]
+const POWER = pcb.modules[1]
+const ARM_1 = pcb.modules[2]
+const ARM_2 = pcb.modules[3]
+const ARM_3 = pcb.modules[4]
 
 
 pcb.tracks = [
   // ARM_1 TO ARM_2
-  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = OUTPUT.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
@@ -411,7 +433,7 @@ pcb.tracks = [
       net
     }
   }),
-  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = OUTPUT.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
@@ -432,7 +454,7 @@ pcb.tracks = [
       net
     }
   }),
-  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = OUTPUT.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
@@ -451,7 +473,7 @@ pcb.tracks = [
     }
   }),
   // ARM 3 TO OUTPUT
-  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = ARM_2.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
@@ -466,7 +488,7 @@ pcb.tracks = [
       net
     }
   }),
-  ...range(1, HeaderComponent.pads.length - 1).map(index => {
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = ARM_2.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
@@ -484,7 +506,7 @@ pcb.tracks = [
 ]
 
 function pad_at (module, index) {
-  const component_pad = HeaderComponent.pads[index]
+  const component_pad = module.component.pads[index]
   const component_at = component_pad.at
   const module_at = module.at
   const center = { x: 0, y: 0 }

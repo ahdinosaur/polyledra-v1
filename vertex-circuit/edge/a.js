@@ -1,13 +1,16 @@
 const {
   CENTER,
   HEADER_RADIUS,
+  HEADER_PITCH,
   SCREW_RADIUS,
   CUT_SIDES,
   CUT_RADIUS
 } = require('./constants')
 
-const HeaderComponent = require('./header')
-const M3Component = require('./m3')
+const H4 = require('./h4')
+const H3 = require('./h3')
+const H2 = require('./h2')
+const M3 = require('./m3')
 
 var pcb = module.exports = {
   general: {
@@ -135,10 +138,10 @@ var pcb = module.exports = {
       name: 'GND'
     },
     {
-      name: 'IO_DATA_TO_ARM_1_DATA'
+      name: 'INPUT_DATA_TO_ARM_1_DATA'
     },
     {
-      name: 'IO_CLOCK_TO_ARM_1_CLOCK'
+      name: 'INPUT_CLOCK_TO_ARM_1_CLOCK'
     },
     {
       name: 'ARM_2_DATA_TO_ARM_3_DATA'
@@ -161,8 +164,8 @@ var pcb = module.exports = {
       uvia_dia: 0.6858,
       uvia_drill: 0.3302,
       add_net: [
-        'IO_DATA_TO_ARM_1_DATA',
-        'IO_CLOCK_TO_ARM_1_CLOCK',
+        'INPUT_DATA_TO_ARM_1_DATA',
+        'INPUT_CLOCK_TO_ARM_1_CLOCK',
         'ARM_2_DATA_TO_ARM_3_DATA',
         'ARM_2_CLOCK_TO_ARM_3_CLOCK',
         'ARM_2_+5V_NO_CONNECT'
@@ -185,9 +188,9 @@ var pcb = module.exports = {
   ],
   modules: [
     {
-      component: HeaderComponent,
+      component: H3,
       at: {
-        x: CENTER.x,
+        x: CENTER.x + (1/2) * HEADER_PITCH,
         y: CENTER.y,
         angle: -(1/4) * 360
       },
@@ -196,18 +199,37 @@ var pcb = module.exports = {
           content: 'J1'
         },
         value: {
-          content: 'IO'
+          content: 'INPUT'
         },
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'IO_DATA_TO_ARM_1_DATA' } },
-        { net: { name: 'IO_CLOCK_TO_ARM_1_CLOCK' } },
-        { net: { name: '+5V' } }
+        { net: { name: 'INPUT_DATA_TO_ARM_1_DATA' } },
+        { net: { name: 'INPUT_CLOCK_TO_ARM_1_CLOCK' } }
       ]
     },
     {
-      component: HeaderComponent,
+      component: H2,
+      at: {
+        x: CENTER.x - 2 * HEADER_PITCH,
+        y: CENTER.y,
+        angle: -(1/4) * 360 + 90
+      },
+      graphics: {
+        reference: {
+          content: 'J2'
+        },
+        value: {
+          content: 'POWER'
+        },
+      },
+      pads: [
+        { net: { name: 'GND' } },
+        { net: { name: '+5V' } },
+      ]
+    },
+    {
+      component: H4,
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4) * 2 * Math.PI),
@@ -215,7 +237,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J2',
+          content: 'J3',
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
@@ -224,13 +246,13 @@ var pcb = module.exports = {
       },
       pads: [
         { net: { name: 'GND' } },
-        { net: { name: 'IO_DATA_TO_ARM_1_DATA' } },
-        { net: { name: 'IO_CLOCK_TO_ARM_1_CLOCK' } },
+        { net: { name: 'INPUT_DATA_TO_ARM_1_DATA' } },
+        { net: { name: 'INPUT_CLOCK_TO_ARM_1_CLOCK' } },
         { net: { name: '+5V' } }
       ]
     },
     {
-      component: HeaderComponent,
+      component: H4,
       name: 'ARM_2',
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 1/3) * 2 * Math.PI),
@@ -239,7 +261,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J3'
+          content: 'J4'
         },
         value: {
           content: 'ARM_2'
@@ -253,7 +275,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: HeaderComponent,
+      component: H4,
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4 + 2/3) * 2 * Math.PI),
@@ -261,7 +283,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J4',
+          content: 'J5',
           at: { x: 2.3495, y: -0.3175 }
         },
         value: {
@@ -276,7 +298,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M3Component,
+      component: M3,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 1/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 1/3) * 2 * Math.PI)
@@ -294,7 +316,7 @@ var pcb = module.exports = {
       ]
     },
     {
-      component: M3Component,
+      component: M3,
       at: {
         x: CENTER.x + SCREW_RADIUS * Math.cos((1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + SCREW_RADIUS * Math.sin((1/4 + 2/3) * 2 * Math.PI)
@@ -350,6 +372,28 @@ var pcb = module.exports = {
           }))
         }
       }
+    },
+    {
+      net: { name: '+5V' },
+      layer: 'B.Cu',
+      hatch: [ 'edge', 0.508 ],
+      min_thickness: 0.1778,
+      connect_pads: {
+        clearance: 0.2
+      },
+      fill: {
+        arc_segments: 16,
+        thermal_gap: 0.254,
+        thermal_bridge_width: 0.4064
+      },
+      polygon: {
+        pts: {
+          xy: range(CUT_SIDES + 1).map(i => ({
+            x: CENTER.x + CUT_RADIUS * Math.cos(((i / CUT_SIDES)) * 2 * Math.PI),
+            y: CENTER.y + CUT_RADIUS * Math.sin(((i / CUT_SIDES)) * 2 * Math.PI)
+          }))
+        }
+      }
     }
   ]
 }
@@ -357,28 +401,29 @@ var pcb = module.exports = {
 const DEFAULT_NET_CLASS = pcb.net_classes[0]
 const POWER_NET_CLASS = pcb.net_classes[1]
 
-const IO = pcb.modules[0]
-const ARM_1 = pcb.modules[1]
-const ARM_2 = pcb.modules[2]
-const ARM_3 = pcb.modules[3]
+const INPUT = pcb.modules[0]
+const POWER = pcb.modules[1]
+const ARM_1 = pcb.modules[2]
+const ARM_2 = pcb.modules[3]
+const ARM_3 = pcb.modules[4]
 
 
 pcb.tracks = [
-  // IO TO ARM 1
-  ...range(HeaderComponent.pads.length).map(index => {
-    const net = IO.pads[index].net
+  // INPUT TO ARM 1 (except GND and 5V)
+  ...range(1, H4.pads.length - 1).map(index => {
+    const net = INPUT.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
 
     return {
-      start: pad_at(IO, index),
+      start: pad_at(INPUT, index),
       end: pad_at(ARM_1, index),
       width: net_class.trace_width,
       layer: 'F.Cu',
       net
     }
   }),
-  // ARM 1 TO ARM 2 (except 5v, last pad)
-  ...range(HeaderComponent.pads.length - 1).map(index => {
+  // ARM 1 TO ARM 2 (except GND and 5v)
+  ...range(1, H4.pads.length - 1).map(index => {
     const net = ARM_2.pads[index].net
     const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
     return {
@@ -388,32 +433,11 @@ pcb.tracks = [
       layer: 'F.Cu',
       net
     }
-  }),
-  // SPECIAL CONNECTION FROM IO 5V to ARM 3
-  {
-    start: pad_at(IO, 3),
-    end: {
-      x: pad_at(IO, 3).x,
-      y: pad_at(ARM_3, 3).y
-    },
-    width: POWER_NET_CLASS.trace_width,
-    layer: 'F.Cu',
-    net: { name: '+5V' }
-  },
-  {
-    start: {
-      x: pad_at(IO, 3).x,
-      y: pad_at(ARM_3, 3).y
-    },
-    end: pad_at(ARM_3, 3),
-    width: POWER_NET_CLASS.trace_width,
-    layer: 'F.Cu',
-    net: { name: '+5V' }
-  }
+  })
 ]
 
 function pad_at (module, index) {
-  const component_pad = HeaderComponent.pads[index]
+  const component_pad = module.component.pads[index]
   const component_at = component_pad.at
   const module_at = module.at
   const center = { x: 0, y: 0 }
@@ -430,8 +454,16 @@ function add (a, b) {
   }
 }
 
-function range (n) {
-  return [...Array(n).keys()]
+function range (...args) {
+  var start = 0
+  var end = 1
+  if (args.length === 2) {
+    [start, end] = args
+  } else {
+    [end] = args
+  }
+  var keys = [...Array(end - start).keys()]
+  return keys.map(index => index + start)
 }
 
 // https://stackoverflow.com/a/2259502

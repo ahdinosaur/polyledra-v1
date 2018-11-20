@@ -19,5 +19,9 @@ LAYER_HEIGHT = 0.2;
 NOZZLE_WIDTH = 0.6;
 
 // https://www.reddit.com/r/3Dprinting/comments/42mwhw/fdm_and_tolerances/czbj3b6/
-XY_TOLERANCE = NOZZLE_WIDTH;
-Z_TOLERANCE = LAYER_HEIGHT;
+// XY_TOLERANCE = NOZZLE_WIDTH;
+// Z_TOLERANCE = LAYER_HEIGHT;
+
+XY_TOLERANCE = 0.2;
+Z_TOLERANCE = 0.2;
+TOLERANCE = 0.2;

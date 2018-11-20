@@ -148,15 +148,6 @@ var pcb = module.exports = {
     },
     {
       name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK'
-    },
-    {
-      name: 'ARM_1_+5V_NO_CONNECT'
-    },
-    {
-      name: 'ARM_3_+5V_NO_CONNECT'
-    },
-    {
-      name: 'OUTPUT_+5V_NO_CONNECT'
     }
   ],
   net_classes: [
@@ -173,10 +164,7 @@ var pcb = module.exports = {
         'ARM_1_DATA_TO_ARM_2_DATA',
         'ARM_1_CLOCK_TO_ARM_2_CLOCK',
         'ARM_3_DATA_TO_OUTPUT_DATA',
-        'ARM_3_CLOCK_TO_OUTPUT_CLOCK',
-        'ARM_1_+5V_NO_CONNECT',
-        'ARM_3_+5V_NO_CONNECT',
-        'OUTPUT_+5V_NO_CONNECT'
+        'ARM_3_CLOCK_TO_OUTPUT_CLOCK'
       ]
     },
     {
@@ -198,8 +186,8 @@ var pcb = module.exports = {
     {
       component: H3,
       at: {
-        x: CENTER.x - (1/2) * HEADER_PITCH,
-        y: CENTER.y,
+        x: CENTER.x,
+        y: CENTER.y - HEADER_PITCH,
         angle: (1/4) * 360
       },
       graphics: {
@@ -219,9 +207,9 @@ var pcb = module.exports = {
     {
       component: H2,
       at: {
-        x: CENTER.x + 2 * HEADER_PITCH,
-        y: CENTER.y,
-        angle: -(1/4) * 360 + 90
+        x: CENTER.x,
+        y: CENTER.y + HEADER_PITCH,
+        angle: (1/4) * 360
       },
       graphics: {
         reference: {
@@ -241,7 +229,7 @@ var pcb = module.exports = {
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4) * 2 * Math.PI),
-        angle: -(1/4) * 360
+        angle: (1/4) * 360
       },
       graphics: {
         reference: {
@@ -256,7 +244,7 @@ var pcb = module.exports = {
         { net: { name: 'GND' } },
         { net: { name: 'ARM_1_DATA_TO_ARM_2_DATA' } },
         { net: { name: 'ARM_1_CLOCK_TO_ARM_2_CLOCK' } },
-        { net: { name: 'ARM_1_+5V_NO_CONNECT' } }
+        { net: { name: '+5V' } }
       ]
     },
     {
@@ -265,7 +253,7 @@ var pcb = module.exports = {
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 1/3) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4 + 1/3) * 2 * Math.PI),
-        angle: (-1/4 + 1/3) * 360 + 180
+        angle: (1/4 + 1/3) * 360 + 180
       },
       graphics: {
         reference: {
@@ -287,7 +275,7 @@ var pcb = module.exports = {
       at: {
         x: CENTER.x + HEADER_RADIUS * Math.cos(-(1/4 + 2/3) * 2 * Math.PI),
         y: CENTER.y + HEADER_RADIUS * Math.sin(-(1/4 + 2/3) * 2 * Math.PI),
-        angle: (-1/4 + 2/3) * 360
+        angle: (1/4 + 2/3) * 360
       },
       graphics: {
         reference: {
@@ -302,7 +290,7 @@ var pcb = module.exports = {
         { net: { name: 'GND' } },
         { net: { name: 'ARM_3_DATA_TO_OUTPUT_DATA' } },
         { net: { name: 'ARM_3_CLOCK_TO_OUTPUT_CLOCK' } },
-        { net: { name: 'ARM_3_+5V_NO_CONNECT' } }
+        { net: { name: '+5V' } }
       ]
     },
     {
@@ -418,91 +406,115 @@ const ARM_3 = pcb.modules[4]
 
 pcb.tracks = [
   // ARM_1 TO ARM_2
-  ...range(1, H4.pads.length - 1).map(index => {
-    const net = OUTPUT.pads[index].net
-    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
-
-    return {
-      start: pad_at(ARM_1, index),
-      end: add(
-        pad_at(ARM_1, index),
-        { x: 0, y: HEADER_RADIUS / 4 }
-      ),
-      width: net_class.trace_width,
-      layer: 'F.Cu',
-      net
-    }
-  }),
-  ...range(1, H4.pads.length - 1).map(index => {
-    const net = OUTPUT.pads[index].net
-    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
-
-    return {
-      start: add(
-        pad_at(ARM_1, index),
-        { x: 0, y: HEADER_RADIUS / 4 }
-      ),
-      end: add(
-        pad_at(OUTPUT, 0),
-        {
-          x: - (1/2) * HEADER_PITCH - (1/2) * HEADER_PITCH * (index - 1),
-          y: - HEADER_PITCH
-        }
-      ),
-      width: net_class.trace_width,
-      layer: 'F.Cu',
-      net
-    }
-  }),
-  ...range(1, H4.pads.length - 1).map(index => {
-    const net = OUTPUT.pads[index].net
-    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
-
-    return {
-      start: add(
-        pad_at(OUTPUT, 0),
-        {
-          x: - (1/2) * HEADER_PITCH - (1/2) * HEADER_PITCH * (index - 1),
-          y: - HEADER_PITCH
-        }
-      ),
-      end: pad_at(ARM_2, index),
-      width: net_class.trace_width,
-      layer: 'F.Cu',
-      net
-    }
-  }),
+  // pin 2
+  {
+    start: pad_at(ARM_1, 1),
+    end: add(
+      pad_at(ARM_1, 1),
+      { x: 0, y: HEADER_PITCH }
+    ),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[1].net
+  },
+  {
+    start: add(
+      pad_at(ARM_1, 1),
+      { x: 0, y: HEADER_PITCH }
+    ),
+    end: {
+      x: pad_at(OUTPUT, 0).x - HEADER_PITCH,
+      y: pad_at(ARM_1, 1).y + HEADER_PITCH,
+    },
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[1].net
+  },
+  {
+    start: {
+      x: pad_at(OUTPUT, 0).x - HEADER_PITCH,
+      y: pad_at(ARM_1, 1).y + HEADER_PITCH,
+    },
+    end: {
+      x: pad_at(OUTPUT, 0).x - HEADER_PITCH,
+      y: pad_at(ARM_2, 1).y,
+    },
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[1].net
+  },
+  {
+    start: {
+      x: pad_at(OUTPUT, 0).x - HEADER_PITCH,
+      y: pad_at(ARM_2, 1).y,
+    },
+    end: pad_at(ARM_2, 1),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[1].net
+  },
+  // pin 3
+  {
+    start: pad_at(ARM_1, 2),
+    end: add(
+      pad_at(ARM_1, 2),
+      { x: 0, y: (4/3) * HEADER_PITCH }
+    ),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[2].net
+  },
+  {
+    start: add(
+      pad_at(ARM_1, 2),
+      { x: 0, y: (4/3) * HEADER_PITCH }
+    ),
+    end: {
+      x: pad_at(OUTPUT, 0).x - (2/3) * HEADER_PITCH,
+      y: pad_at(ARM_1, 2).y + (4/3) * HEADER_PITCH,
+    },
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[2].net
+  },
+  {
+    start: {
+      x: pad_at(OUTPUT, 0).x - (2/3) * HEADER_PITCH,
+      y: pad_at(ARM_1, 2).y + (4/3) * HEADER_PITCH,
+    },
+    end: {
+      x: pad_at(OUTPUT, 0).x - (2/3) * HEADER_PITCH,
+      y: pad_at(ARM_2, 2).y,
+    },
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[2].net
+  },
+  {
+    start: {
+      x: pad_at(OUTPUT, 0).x - (2/3) * HEADER_PITCH,
+      y: pad_at(ARM_2, 2).y,
+    },
+    end: pad_at(ARM_2, 2),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_1.pads[2].net
+  },
   // ARM 3 TO OUTPUT
-  ...range(1, H4.pads.length - 1).map(index => {
-    const net = ARM_2.pads[index].net
-    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
-
-    return {
-      start: pad_at(ARM_3, index),
-      end: {
-        x: pad_at(OUTPUT, index).x,
-        y: pad_at(ARM_3, index).y
-      },
-      width: net_class.trace_width,
-      layer: 'F.Cu',
-      net
-    }
-  }),
-  ...range(1, H4.pads.length - 1).map(index => {
-    const net = ARM_2.pads[index].net
-    const net_class = pcb.net_classes.find(net_class => net_class.add_net.includes(net.name))
-
-    return {
-      start: {
-        x: pad_at(OUTPUT, index).x,
-        y: pad_at(ARM_3, index).y
-      },
-      end: pad_at(OUTPUT, index),
-      width: net_class.trace_width,
-      layer: 'F.Cu',
-      net
-    }
-  })
+  {
+    start: pad_at(ARM_3, 1),
+    end: pad_at(OUTPUT, 1),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'F.Cu',
+    net: ARM_3.pads[1].net
+  },
+  {
+    start: pad_at(ARM_3, 2),
+    end: pad_at(OUTPUT, 2),
+    width: DEFAULT_NET_CLASS.trace_width,
+    layer: 'B.Cu',
+    net: ARM_3.pads[2].net
+  }
 ]
 
 function pad_at (module, index) {

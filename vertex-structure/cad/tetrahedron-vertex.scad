@@ -13,10 +13,11 @@ BOTTOM_BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOTTOM_BOLT_SIZE] / 2;
 BOTTOM_BOLTS_RADIUS = 10; // same as angle bolts distance
 BOTTOM_BED_RADIUS = BOTTOM_BOLTS_RADIUS + 5;
 BOTTOM_BED_SIDES = EDGES_PER_VERTEX * 2;
-BOTTOM_BED_LENGTH_Z = 3;
+BOTTOM_BED_LENGTH_Z = 3.2 + BOTTOM_BOLT_CAP_HEIGHT;
 
 TOP_BOLT_SIZE = 3;
 TOP_BOLT_LENGTH = 5;
+
 TOP_BED_RADIUS = TOP_BOLT_SIZE + 2;
 TOP_BED_SIDES = EDGES_PER_VERTEX * 2;
 TOP_BED_LENGTH_Z = 3;
@@ -24,6 +25,7 @@ TOP_BED_LENGTH_Z = 3;
 main();
 
 module main () {
+  echo(bottom_bolt_cap_height = BOTTOM_BOLT_CAP_HEIGHT);
   vertex_bed();
 }
 
@@ -58,6 +60,16 @@ module bottom_bolts () {
       size = BOTTOM_BOLT_SIZE,
       length = BOTTOM_BOLT_LENGTH,
       tolerance = XY_TOLERANCE
+    );
+    translate(
+      [
+        0,
+        0,
+        BOTTOM_BED_LENGTH_Z - BOTTOM_BOLT_CAP_HEIGHT + 2 * INFINITESIMAL
+      ]
+    )
+    nut_hole(
+      size = BOTTOM_BOLT_SIZE
     );
   }
 }

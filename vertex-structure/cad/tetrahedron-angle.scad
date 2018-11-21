@@ -31,7 +31,7 @@ EDGE_CONNECTOR_MARGIN = 1;
 EDGE_CONNECTOR_OFFSET = 10;
 EDGE_CONNECTOR_BOLT_SIZE = BOLT_SIZE;
 
-VERTEX_BOLTS_DISTANCE = EDGE_BOLTS_DISTANCE;
+VERTEX_BOLTS_DISTANCE = 10;
 VERTEX_CONNECTOR_THICKNESS = EDGE_CONNECTOR_THICKNESS;
 VERTEX_CONNECTOR_LENGTH = EDGE_CONNECTOR_LENGTH;
 VERTEX_CONNECTOR_MARGIN = EDGE_CONNECTOR_MARGIN;
@@ -111,6 +111,7 @@ module connector (
   height = distance + 2 * bolt_size + 2 * margin;
   
   // translate([(-1/2) * length + offset, 0, 0])
+  translate([0, 0, (1/2) * height])
   translate([(1/2) * (length - offset), 0, 0])
   // triangle
   rotate(a = [(1/4) * ROT, (0/8) * ROT, (4/8) * ROT])

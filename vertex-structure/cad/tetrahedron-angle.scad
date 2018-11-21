@@ -4,6 +4,9 @@ include <nuts-and-bolts.scad>
 
 echo(version=version());
 
+SHAPE_TRIANGLE = 0;
+SHAPE_SQUARE = 1;
+
 HEADER_PITCH = 2.54;
 HEADER_NUM_PINS = 4;
 HEADER_LENGTH_X = HEADER_PITCH * HEADER_NUM_PINS + XY_TOLERANCE;
@@ -83,17 +86,15 @@ module edge_connector_negative () {
 }
 
 module vertex_connector () {
-  length = VERTEX_CONNECTOR_LENGTH;
-  distance = VERTEX_BOLTS_DISTANCE;
-  bolt_size = VERTEX_CONNECTOR_BOLT_SIZE;
-  thickness = VERTEX_CONNECTOR_THICKNESS;
-  margin = VERTEX_CONNECTOR_MARGIN;
-  offset = VERTEX_CONNECTOR_OFFSET;
-  
-  width = length + bolt_size + 2 * margin + offset;
-  height = distance + 2 * bolt_size + 2 * margin;
-  
-  cube([width, thickness, height]);
+  connector(
+    shape = SHAPE_SQUARE,
+    length = VERTEX_CONNECTOR_LENGTH,
+    distance = VERTEX_BOLTS_DISTANCE,
+    bolt_size = VERTEX_CONNECTOR_BOLT_SIZE,
+    thickness = VERTEX_CONNECTOR_THICKNESS,
+    margin = VERTEX_CONNECTOR_MARGIN,
+    offset = VERTEX_CONNECTOR_OFFSET
+  );
 }
 
 module vertex_connector_negative () {
@@ -103,6 +104,7 @@ module vertex_connector_negative () {
 }
 
 module connector (
+  shape = SHAPE_TRIANGLE,
   length,
   distance,
   bolt_size = 4,
@@ -119,12 +121,25 @@ module connector (
   // triangle
   rotate(a = [(1/4) * ROT, (0/8) * ROT, (4/8) * ROT])
   difference () {
-    right_triangle(
-      a = width,
-      b = height,
-      corner_radius = bolt_size,
-      height = thickness
-    );
+    if (shape == SHAPE_TRIANGLE) {
+      right_triangle(
+        size = [
+          width,
+          height,
+          thickness
+        ],
+        radius = bolt_size
+      );
+    } else if (shape == SHAPE_SQUARE) {
+      rounded_box(
+        size = [
+          width,
+          height,
+          thickness
+        ],
+        radius = bolt_size
+      );
+    }
     
     translate([
       BOLT_SIZE,

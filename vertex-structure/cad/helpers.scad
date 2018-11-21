@@ -70,18 +70,44 @@ module for_each_radial (
 }
 
 // https://www.youtube.com/watch?v=c1LKQaFIPNA
-module right_triangle (a, b, corner_radius, height) {
-  translate([(-1/2) * a, (-1/2) * b, (-1/2) * height])
-  linear_extrude(height = height)
-  translate([corner_radius, 0])
+module right_triangle (size, radius = 0.1) {
+  adjacent = size[0];
+  opposite = size[1];
+  depth = size[2];
+
+  translate([(-1/2) * adjacent, (-1/2) * opposite, (-1/2) * depth])
+  linear_extrude(height = depth)
+  translate([radius, 0])
   hull () {
-    circle(r = corner_radius);
+    circle(r = radius);
 
-    translate([a - corner_radius * 2, 0])
-    circle(r = corner_radius);
+    translate([adjacent - radius * 2, 0])
+    circle(r = radius);
 
-    translate([0, b - corner_radius * 2])
-    circle(r = corner_radius);
+    translate([0, opposite - radius * 2])
+    circle(r = radius);
+  }
+}
+
+module rounded_box (size, radius) {
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+  translate([(-1/2) * width, (-1/2) * height, (-1/2) * depth])
+  linear_extrude(height = depth)
+  translate([radius, 0])
+  hull () {
+    circle(r = radius);
+
+    translate([width - radius * 2, 0])
+    circle(r = radius);
+
+    translate([0, height - radius * 2])
+    circle(r = radius);
+
+    translate([width - radius, height - radius * 2])
+    circle(r = radius);
   }
 }
 

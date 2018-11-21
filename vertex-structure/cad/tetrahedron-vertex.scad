@@ -10,17 +10,16 @@ BOTTOM_BOLT_SIZE = 4;
 BOTTOM_BOLT_LENGTH = INFINITY;
 BOTTOM_BOLT_CAP_HEIGHT = METRIC_NUT_THICKNESS[BOTTOM_BOLT_SIZE];
 BOTTOM_BOLT_CAP_RADIUS = METRIC_NUT_AC_WIDTHS[BOTTOM_BOLT_SIZE] / 2;
-BOTTOM_BOLTS_RADIUS = 18;
-BOTTOM_BED_RADIUS = BOTTOM_BOLTS_RADIUS + 7;
+BOTTOM_BOLTS_RADIUS = 10; // same as angle bolts distance
+BOTTOM_BED_RADIUS = BOTTOM_BOLTS_RADIUS + 5;
 BOTTOM_BED_SIDES = EDGES_PER_VERTEX * 2;
-BOTTOM_BED_LENGTH_Z = 6;
+BOTTOM_BED_LENGTH_Z = 3;
 
 TOP_BOLT_SIZE = 3;
-TOP_BOLT_LENGTH = 10;
-TOP_BOLTS_RADIUS = 6;
-TOP_BED_RADIUS = TOP_BOLTS_RADIUS + 7;
+TOP_BOLT_LENGTH = 5;
+TOP_BED_RADIUS = TOP_BOLT_SIZE + 2;
 TOP_BED_SIDES = EDGES_PER_VERTEX * 2;
-TOP_BED_LENGTH_Z = 6;
+TOP_BED_LENGTH_Z = 3;
 
 main();
 
@@ -74,16 +73,9 @@ module top_bed () {
 module top_bolts () {
   translate([0, 0, BOTTOM_BED_LENGTH_Z + TOP_BED_LENGTH_Z + INFINITESIMAL])
   rotate([0, (1/2) * ROT])
-  for_each_radial(
-    start_step = 0,
-    num_steps = 2,
-    step_length = 3,
-    radius = TOP_BOLTS_RADIUS
-  ) {
-    bolt_hole(
-      size = TOP_BOLT_SIZE,
-      length = TOP_BOLT_LENGTH,
-      tolerance = XY_TOLERANCE
-    );
-  }
+  bolt_hole(
+    size = TOP_BOLT_SIZE,
+    length = TOP_BOLT_LENGTH,
+    tolerance = XY_TOLERANCE
+  );
 }

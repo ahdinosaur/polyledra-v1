@@ -14,25 +14,35 @@ EDGE_BOLT_TOLERANCE = (3/4) * TOLERANCE;
 
 EDGE_SIDES = 3;
 EDGE_BOLTS_RADIUS = 30;
-EDGE_OUTER_RADIUS = EDGE_BOLTS_RADIUS + 8;
+EDGE_OUTER_RADIUS = EDGE_BOLTS_RADIUS + 4;
+EDGE_INNER_RADIUS = EDGE_OUTER_RADIUS - EDGE_BOLT_SIZE * 2 - 10;
 EDGE_MARGIN = 2;
-EDGE_DEPTH = 5;
+EDGE_DEPTH = 8;
 EDGE_CORNER_RADIUS = EDGE_BOLT_SIZE;
 
 VERTEX_BOLT_SIZE = 4;
 VERTEX_BOLT_LENGTH = INFINITY;
 VERTEX_BOLT_TOLERANCE = TOLERANCE;
 
-VERTEX_SIDES = EDGES_PER_VERTEX * 2;
-VERTEX_OUTER_RADIUS = EDGES_RADIUS + 16;
-VERTEX_INNER_RADIUS = VERTEX_OUTER_RADIUS - 10;
-VERTEX_DEPTH = 5;
-VERTEX_DEPTH_OFFSET = -5;
+VERTEX_SIDES = EDGES_PER_VERTEX;
+VERTEX_OUTER_RADIUS = EDGES_RADIUS + 4;
+VERTEX_INNER_RADIUS = VERTEX_OUTER_RADIUS - EDGE_BOLT_SIZE * 2 - 5;
+VERTEX_DEPTH = 10;
+VERTEX_DEPTH_OFFSET = 5;
 VERTEX_CORNER_RADIUS = VERTEX_BOLT_SIZE;
 
 MAX_Z = VERTEX_DEPTH_OFFSET + (VERTEX_DEPTH / 2);
 
-rotate([0, 180, 0])
+/*
+HEADER_NUM_PINS = 4;
+HEADER_PITCH = 2.54;
+HEADER_X_LENGTH = HEADER_PITCH * (HEADER_NUM_PINS * + 0.4) + 0.25;
+HEADER_Y_LENGTH = 2.4;
+HEADER_Z_LENGTH = 8.5;
+HEADER_Y_OFFSET = 2;
+*/
+
+// rotate([0, 180, 0])
 main();
 
 module main () {
@@ -50,15 +60,8 @@ module main () {
           edge_plate();
         }
       };
-
+      
       vertex_gap();
-      for_each_radial(
-          num_steps = EDGES_PER_VERTEX,
-          radius = EDGES_RADIUS
-        ) {
-        rotate(a = [0, EDGE_ANGLE])
-        edge_bolts();
-      }
     }
   }
 }
@@ -66,7 +69,7 @@ module main () {
 module vertex_plate () {
   difference () {
     // polygon
-    rotate((1 / 4) * EDGES_PER_VERTEX * ROT)
+    rotate((1 / 2) * EDGES_PER_VERTEX * ROT)
     translate([0, 0, VERTEX_DEPTH_OFFSET])
     difference () {
       rounded_polygon(
@@ -91,7 +94,7 @@ module vertex_plate () {
 }
 
 module vertex_gap () {
-  rotate((1 / 4) * EDGES_PER_VERTEX * ROT)
+  rotate((1 / 2) * EDGES_PER_VERTEX * ROT)
   translate([0, 0, VERTEX_DEPTH_OFFSET])
   // minus inner polygon
   translate([0, 0, INFINITESIMAL])
@@ -112,22 +115,28 @@ module edge_plate () {
       radius = EDGE_OUTER_RADIUS,
       corner_radius = EDGE_CORNER_RADIUS
     );
-  }
-}
-
-module edge_bolts () {
-  // minus bolts
-  rotate(a = [0, 0, (1 / 2 * EDGES_PER_VERTEX) * ROT])
-  for_each_radial(
-    start_step = 1,
-    num_steps = EDGES_PER_VERTEX,
-    radius = EDGE_BOLTS_RADIUS
-  ) {
-    translate([0, 0, - (1/2) * EDGE_BOLT_LENGTH])
-    bolt_hole(
-      size = EDGE_BOLT_SIZE,
-      length = EDGE_BOLT_LENGTH,
-      tolerance = EDGE_BOLT_TOLERANCE
+    
+    // minus inner polygon
+    translate([0, 0, INFINITESIMAL])
+    rounded_polygon(
+      num_sides = EDGE_SIDES,
+      depth = EDGE_DEPTH + 3 * INFINITESIMAL,
+      radius = EDGE_INNER_RADIUS,
+      corner_radius = EDGE_CORNER_RADIUS
     );
+
+    // minus bolts
+    for_each_radial(
+      start_step = 1,
+      num_steps = EDGES_PER_VERTEX,
+      radius = EDGE_BOLTS_RADIUS
+    ) {
+      translate([0, 0, - (1/2) * EDGE_BOLT_LENGTH])
+      bolt_hole(
+        size = EDGE_BOLT_SIZE,
+        length = EDGE_BOLT_LENGTH,
+        tolerance = EDGE_BOLT_TOLERANCE
+      );
+    }
   }
 }

@@ -26,8 +26,8 @@ VERTEX_BOLT_TOLERANCE = TOLERANCE;
 
 VERTEX_SIDES = EDGES_PER_VERTEX;
 VERTEX_OUTER_RADIUS = EDGES_RADIUS + 4;
-// VERTEX_INNER_RADIUS = VERTEX_OUTER_RADIUS - EDGE_BOLT_SIZE * 2 - 5;
-VERTEX_DEPTH = 8;
+VERTEX_INNER_RADIUS = VERTEX_OUTER_RADIUS - EDGE_BOLT_SIZE * 2 - 5;
+VERTEX_DEPTH = 10;
 VERTEX_DEPTH_OFFSET = 5;
 VERTEX_CORNER_RADIUS = VERTEX_BOLT_SIZE;
 
@@ -49,10 +49,20 @@ module main () {
   intersection () {
     below_z(z = MAX_Z);
     
-    union () {
-      vertex_plate();
-      edge_plates();
-    };
+    difference () {
+      union () {
+        vertex_plate();
+        for_each_radial(
+          num_steps = EDGES_PER_VERTEX,
+          radius = EDGES_RADIUS
+        ) {
+          rotate(a = [0, EDGE_ANGLE])
+          edge_plate();
+        }
+      };
+      
+      vertex_gap();
+    }
   }
 }
 
@@ -68,17 +78,6 @@ module vertex_plate () {
         radius = VERTEX_OUTER_RADIUS,
         corner_radius = VERTEX_CORNER_RADIUS
       );
-      
-      /*
-      // minus inner polygon
-      translate([0, 0, INFINITESIMAL])
-      rounded_polygon(
-        num_sides = VERTEX_SIDES,
-        depth = VERTEX_DEPTH + 3 * INFINITESIMAL,
-        radius = VERTEX_INNER_RADIUS,
-        corner_radius = VERTEX_CORNER_RADIUS
-      );
-      */
     }
     
     // subtract the space that would interfere with the edge connectors
@@ -94,16 +93,18 @@ module vertex_plate () {
   }
 }
 
-module edge_plates () {
-  for_each_radial(
-    num_steps = EDGES_PER_VERTEX,
-    radius = EDGES_RADIUS
-  ) {
-    rotate(a = [0, EDGE_ANGLE])
-    edge_plate();
-  }
+module vertex_gap () {
+  rotate((1 / 2) * EDGES_PER_VERTEX * ROT)
+  translate([0, 0, VERTEX_DEPTH_OFFSET])
+  // minus inner polygon
+  translate([0, 0, INFINITESIMAL])
+  rounded_polygon(
+    num_sides = VERTEX_SIDES,
+    depth = VERTEX_DEPTH + 3 * INFINITESIMAL,
+    radius = VERTEX_INNER_RADIUS,
+    corner_radius = VERTEX_CORNER_RADIUS
+  );
 }
-
 module edge_plate () {
   rotate(a = [0, 0, (1 / 2 * EDGES_PER_VERTEX) * ROT])
   difference () {

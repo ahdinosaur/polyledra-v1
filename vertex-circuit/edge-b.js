@@ -7,129 +7,19 @@ const {
   CUT_RADIUS
 } = require('./constants')
 
+const add = require('./lib/add')
+const Pcb = require('./lib/pcb')
+const pad_at = require('./lib/pad_at')
+const range = require('./lib/range')
+const rotate = require('./lib/rotate')
+
 const H4 = require('./components/h4')
 const H3 = require('./components/h3')
 const H2 = require('./components/h2')
 const M3 = require('./components/m3')
 
-var pcb = module.exports = {
-  general: {
-    page: 'A4',
-    title: 'Polyledra Edge',
-    area: [
-      104.572999,
-      74.854999,
-      178.510001,
-      123.265001
-    ],
-    thickness: 1.6,
-    setup: {
-      last_trace_width: 0.254,
-      user_trace_width: [
-        0.1524,
-        0.254,
-        0.3302,
-        0.508,
-        0.762,
-        1.27
-      ],
-      trace_clearance: 0.254,
-      zone_clearance: 0.508,
-      zone_45_only: 'no',
-      trace_min: 0.1524,
-      segment_width: 0.1524,
-      edge_width: 0.1524,
-      via_size: 0.6858,
-      via_drill: 0.3302,
-      via_min_size: 0.6858,
-      via_min_drill: 0.3302,
-      user_via: [
-        [
-          0.6858,
-          0.3302
-        ],
-        [
-          0.762,
-          0.4064
-        ],
-        [
-          0.8636,
-          0.508
-        ]
-      ],
-      uvia_size: 0.6858,
-      uvia_drill: 0.3302,
-      uvias_allowed: 'no',
-      uvia_min_size: 0,
-      uvia_min_drill: 0,
-      pcb_text_width: 0.1524,
-      pcb_text_size: [
-        1.016,
-        1.016
-      ],
-      mod_edge_width: 0.1524,
-      mod_text_size: [
-        1.016,
-        1.016
-      ],
-      mod_text_width: 0.1524,
-      pad_size: [
-        1.524,
-        1.524
-      ],
-      pad_drill: 0.762,
-      pad_to_mask_clearance: 0.0762,
-      solder_mask_min_width: 0.1016,
-      pad_to_paste_clearance: -0.0762,
-      aux_axis_origin: [
-        0,
-        0
-      ],
-      visible_elements: 'FFFEDF7D',
-      pcbplotparams: {
-        layerselection: '0x310fc_80000001',
-        usegerberextensions: 'true',
-        excludeedgelayer: 'true',
-        linewidth: 0.1,
-        plotframeref: 'false',
-        viasonmask: 'false',
-        mode: 1,
-        useauxorigin: 'false',
-        hpglpennumber: 1,
-        hpglpenspeed: 20,
-        hpglpendiameter: 15,
-        hpglpenoverlay: 2,
-        psnegative: 'false',
-        psa4output: 'false',
-        plotreference: 'true',
-        plotvalue: 'true',
-        plotinvisibletext: 'false',
-        padsonsilk: 'false',
-        subtractmaskfromsilk: 'false',
-        outputformat: 1,
-        mirror: 'false',
-        drillshape: 0,
-        scaleselection: 1,
-        outputdirectory: 'gerbers'
-      }
-    },
-  },
-  layers: {
-    '0': [ 'F.Cu', 'signal' ],
-    '31': [ 'B.Cu', 'signal' ],
-    '34': [ 'B.Paste', 'user' ],
-    '35': [ 'F.Paste', 'user' ],
-    '36': [ 'B.SilkS', 'user' ],
-    '37': [ 'F.SilkS', 'user' ],
-    '38': [ 'B.Mask', 'user' ],
-    '39': [ 'F.Mask', 'user' ],
-    '40': [ 'Dwgs.User', 'user' ],
-    '44': [ 'Edge.Cuts', 'user' ],
-    '46': [ 'B.CrtYd', 'user' ],
-    '47': [ 'F.CrtYd', 'user' ],
-    '48': [ 'B.Fab', 'user' ],
-    '49': [ 'F.Fab', 'user' ]
-  },
+var pcb = module.exports = Pcb({
+  title: 'Polyledra Edge',
   nets: [
     {
       name: '+5V'
@@ -233,8 +123,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J3',
-          at: { x: 2.3495, y: -0.3175 }
+          content: 'J3'
         },
         value: {
           content: 'ARM_1_IN'
@@ -257,7 +146,8 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J4'
+          content: 'J4',
+          at: { x: 2.3495, y: -0.3175 }
         },
         value: {
           content: 'ARM_2_OUT'
@@ -279,8 +169,7 @@ var pcb = module.exports = {
       },
       graphics: {
         reference: {
-          content: 'J5',
-          at: { x: 2.3495, y: -0.3175 }
+          content: 'J5'
         },
         value: {
           content: 'ARM_3_IN'
@@ -392,7 +281,7 @@ var pcb = module.exports = {
       }
     }
   ]
-}
+})
 
 const DEFAULT_NET_CLASS = pcb.net_classes[0]
 const POWER_NET_CLASS = pcb.net_classes[1]
@@ -516,57 +405,3 @@ pcb.tracks = [
     net: ARM_3.pads[2].net
   }
 ]
-
-function pad_at (module, index) {
-  const component_pad = module.component.pads[index]
-  const component_at = component_pad.at
-  const module_at = module.at
-  const center = { x: 0, y: 0 }
-  const angle = module.at.angle || 0
-  const rotated_component_at = rotate(component_at, center, angle)
-  const value = add(rotated_component_at, module_at)
-  return value
-}
-
-function add (a, b) {
-  return {
-    x: a.x + b.x,
-    y: a.y + b.y
-  }
-}
-
-function range (...args) {
-  var start = 0
-  var end = 1
-  if (args.length === 2) {
-    [start, end] = args
-  } else {
-    [end] = args
-  }
-  var keys = [...Array(end - start).keys()]
-  return keys.map(index => index + start)
-}
-
-// https://stackoverflow.com/a/2259502
-function rotate (point, center, angle) {
-  var s = Math.sin(angle * (2 * Math.PI / 360))
-  var c = Math.cos(angle * (2 * Math.PI / 360))
-
-  // translate point back to origin:
-  var centered = {
-    x: point.x - center.x,
-    y: point.y - center.y
-  }
-
-  // rotate point
-  var next_point = {
-    x: centered.x * c + centered.y * s,
-    y: -centered.x * s + centered.y * c,
-  }
-
-  // translate point back:
-  return {
-    x: next_point.x + center.x,
-    y: next_point.y + center.y,
-  }
-}

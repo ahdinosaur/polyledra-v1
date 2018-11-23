@@ -52,9 +52,9 @@ SIDE_BOLT_SIZE = OUTER_BOLT_SIZE + 1;
 SIDE_ACCESS_SIZE = EDGE_CONNECTOR_SIDE_LENGTH / 2;
 SIDE_ACCESS_HOLE_SIZE = SIDE_ACCESS_SIZE - 2;
 
-main();
-
-module main () {
+if ($main != 1) edge();
+  
+module edge () {
   echo(
     inner_bolts_radius=INNER_BOLTS_RADIUS,
     inner_bolt_length=INNER_BOLT_LENGTH,
@@ -65,10 +65,7 @@ module main () {
     edge_connector_radius=EDGE_CONNECTOR_RADIUS,
     sides_radius = SIDES_RADIUS
   );
-  edge();
-}
-
-module edge () {
+  
   difference () {
     union () {
       body();

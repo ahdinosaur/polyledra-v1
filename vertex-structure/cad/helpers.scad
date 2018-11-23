@@ -47,7 +47,7 @@ module for_each_radial (
   end_step,
   num_steps,
   step_length = 1,
-  radius,
+  radius = 1,
   radial_offset = 0,
   rotation_offset = 0
 ) {
@@ -89,7 +89,27 @@ module right_triangle (size, radius = 0.1) {
   }
 }
 
-module rounded_box (size, radius) {
+module triangle (size, radius = 0.1) {
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+  translate([0, (-1/2) * height, (-1/2) * depth])
+  linear_extrude(height = depth)
+  translate([radius, 0])
+  hull () {
+    translate([0, height - radius * 2, 0])
+    circle(r = radius);
+
+    translate([(-1/2) * width - radius * 2, 0])
+    circle(r = radius);
+
+    translate([(1/2) * width - radius * 2, 0])
+    circle(r = radius);
+  }
+}
+
+module rounded_box (size, radius = 0.1) {
   width = size[0];
   height = size[1];
   depth = size[2];
@@ -108,6 +128,19 @@ module rounded_box (size, radius) {
 
     translate([width - radius, height - radius * 2])
     circle(r = radius);
+  }
+}
+
+module rounded_polygon (num_sides = 3, radius = 1, depth = 1, corner_radius = 0.1) {
+  translate([0, 0, (-1/2) * depth])
+  linear_extrude(height = depth)
+  hull () {
+    for_each_radial(
+      num_steps = num_sides,
+      radius = radius
+    ) {
+      circle(r = corner_radius);
+    }
   }
 }
 

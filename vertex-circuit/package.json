@@ -1,0 +1,18 @@
+{
+  "name": "edge",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "npm run pcb && kicad ./index.pro",
+    "pcb:edge-a": "jseda pcb ./edge-a ./edge-a.kicad_pcb",
+    "pcb:edge-b": "jseda pcb ./edge-b ./edge-b.kicad_pcb",
+    "pcb:tetrahedron-vertex": "jseda pcb ./tetrahedron-vertex ./tetrahedron-vertex.kicad_pcb",
+    "pcb": "npm-run-all -p pcb:*"
+  },
+  "dependencies": {
+    "jseda": "^2.0.2"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
+}

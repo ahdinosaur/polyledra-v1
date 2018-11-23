@@ -7,10 +7,10 @@ const {
   CUT_RADIUS
 } = require('./constants')
 
-const H4 = require('./h4')
-const H3 = require('./h3')
-const H2 = require('./h2')
-const M3 = require('./m3')
+const H4 = require('./components/h4')
+const H3 = require('./components/h3')
+const H2 = require('./components/h2')
+const M3 = require('./components/m3')
 
 var pcb = module.exports = {
   general: {

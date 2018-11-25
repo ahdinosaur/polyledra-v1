@@ -26,6 +26,9 @@ function polygon_side_length (circumradius, sides) =
 function polygon_inradius (circumradius, sides) =
   circumradius / sec(180 / sides);
 
+function polygon_inner_angle (sides) =
+  (sides - 2) * (1/2 * ROT) / sides;
+
 // http://forum.openscad.org/test-if-variable-is-defined-td2994.html
 function defined(a) = str(a) != "undef"; 
 
@@ -49,15 +52,23 @@ module for_each_radial (
   step_length = 1,
   radius = 1,
   radial_offset = 0,
-  rotation_offset = 0
+  rotation_offset = 0,
+  direction = "out"
 ) {
   end_step_value = defined(end_step) ? end_step - 1 : num_steps - 1;
   
   for (step_index = [start_step : end_step_value]) {
     index = step_index * step_length;
-    angle = index * (ROT / num_steps);
-    radial = angle + radial_offset;
-    rotation = angle + rotation_offset;
+    step_angle = ROT / num_steps;
+    index_angle = index * step_angle;
+    /*
+    radial_step_angle = ROT / num_steps;
+    rotation_step_angle = direction == "in"
+      ? polygon_inner_angle(sides = num_steps)
+      : (ROT / num_steps);
+    */
+    radial = index_angle + radial_offset;
+    rotation = index_angle + rotation_offset;
 
     translate([
       radius * cos(radial),
@@ -141,6 +152,59 @@ module rounded_polygon (num_sides = 3, radius = 1, depth = 1, corner_radius = 0.
     ) {
       circle(r = corner_radius);
     }
+  }
+}
+
+module torus (radius, tube_radius, convexity = 10) {
+  rotate_extrude(
+    convexity = convexity,
+    $fa = MIN_ARC_FRAGMENT_ANGLE,
+    $fs = MIN_ARC_FRAGMENT_SIZE
+  )
+  translate([radius + tube_radius, 0, 0])
+  circle(
+    tube_radius,
+    $fa = MIN_ARC_FRAGMENT_ANGLE,
+    $fs = MIN_ARC_FRAGMENT_SIZE
+  );
+}
+
+module polygon_ring (radius, num_sides, tube_radius) {
+  inner_angle = (num_sides - 2) * (1/2 * ROT) / num_sides;
+  side_length = polygon_side_length(circumradius = radius, sides = num_sides);
+
+  for_each_radial(
+    radius = polygon_inradius(circumradius = radius, sides = num_sides),
+    num_steps = num_sides,
+    rotation_offset = (1/4) * ROT
+  ) {
+    translate([-(1/2) * side_length, 0, 0])
+    hull () {
+      sphere(
+        tube_radius,
+        center = true,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+      
+      translate([side_length, 0, 0])
+      sphere(
+        tube_radius,
+        center = true,
+        $fa = MIN_ARC_FRAGMENT_ANGLE,
+        $fs = MIN_ARC_FRAGMENT_SIZE
+      );
+    }
+      
+    /*
+    rotate([0, (1/4) * ROT, inner_angle])
+    linear_extrude(height = radius)
+    circle(
+      tube_radius,
+      $fa = MIN_ARC_FRAGMENT_ANGLE,
+      $fs = MIN_ARC_FRAGMENT_SIZE
+    );
+    */
   }
 }
 

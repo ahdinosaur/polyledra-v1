@@ -10,15 +10,25 @@ include <constants.scad>
 
 // if gon.sides == 1, then torus
 
+translate([70, 0])
 ogon_side(
-  radius = 10,
+  side="a",
+  radius = 20,
+  num_sides = 6,
+  tube_radius = 2,
+  sprue_radius = 1
+);
+
+ogon_side(
+  side="b",
+  radius = 20,
   num_sides = 6,
   tube_radius = 2,
   sprue_radius = 1
 );
 
 module ogon_side(
-  side = "a",
+  side = "b",
   radius,
   num_sides,
   margin = 1

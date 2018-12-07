@@ -13,6 +13,7 @@ const range = require('./lib/range')
 
 const H2 = require('./components/h2')
 const M4 = require('./components/m4-pad')
+const Cap = require('./components/cap-radial-D8.0mm-P3.50mm.js')
 
 var pcb = module.exports = Pcb({
   title: 'Tetrahedron Vertex',
@@ -158,6 +159,25 @@ var pcb = module.exports = Pcb({
         },
       },
       pads: [
+        { net: { name: '+5V' } }
+      ]
+    },
+    {
+      component: Cap,
+      at: {
+        x: CENTER.x,
+        y: CENTER.y
+      },
+      graphics: {
+        reference: {
+          content: 'C1'
+        },
+        value: {
+          content: '1000uF Electrolytic Capacitor'
+        },
+      },
+      pads: [
+        { net: { name: 'GND' } },
         { net: { name: '+5V' } }
       ]
     }

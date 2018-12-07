@@ -18,12 +18,12 @@ module.exports = {
       {
         type: 'text',
         id: 'reference',
-        content: 'REF**',
-        at: {
+        content: reference.content || 'REF**',
+        at: reference.at || {
           x: 1.75,
           y: -5.31
         },
-        layer: 'F.SilkS',
+        layer: reference.layer || 'F.SilkS',
         effects: {
           font: {
             size: {
@@ -37,12 +37,12 @@ module.exports = {
       {
         type: 'text',
         id: 'value',
-        content: 'CP_Radial_D8.0mm_P3.50mm',
-        at: {
+        content: value.content || 'VALUE**',
+        at: value.at || {
           x: 1.75,
           y: 5.31
         },
-        layer: 'F.Fab',
+        layer: value.layer || 'F.Fab',
         effects: {
           font: {
             size: {

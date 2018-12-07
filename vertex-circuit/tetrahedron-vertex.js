@@ -7,6 +7,7 @@ const {
 } = require('./constants')
 
 const SCREW_RADIUS = 7;
+const CAP_OFFSET_Y = -SCREW_RADIUS
 
 const Pcb = require('./lib/pcb')
 const range = require('./lib/range')
@@ -165,8 +166,10 @@ var pcb = module.exports = Pcb({
     {
       component: Cap,
       at: {
-        x: CENTER.x,
-        y: CENTER.y
+        // -1.75 because Cap component is not yet centered,
+        // so need to offset based on half the diameter.
+        x: CENTER.x - 1.75,
+        y: CENTER.y - CAP_OFFSET_Y
       },
       graphics: {
         reference: {

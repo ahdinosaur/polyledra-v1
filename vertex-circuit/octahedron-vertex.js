@@ -200,8 +200,8 @@ var pcb = module.exports = Pcb({
         },
       },
       pads: [
-        { net: { name: 'GND' } },
-        { net: { name: '+5V' } }
+        { net: { name: '+5V' } },
+        { net: { name: 'GND' } }
       ]
     }
   ],

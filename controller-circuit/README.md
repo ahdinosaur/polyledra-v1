@@ -4,15 +4,15 @@ a [pocketbeagle](https://github.com/beagleboard/pocketbeagle)
 
 ## design
 
-- 1x rotary encoder (eQEP)
-  - with reset button
-- param selector buttons (+ and -)
-- mode selector buttons (+ and -)
-- brightness potentiometer
+- 6x mode buttons
 - apa102 spi out
+- power in
 
 nice to have:
 
+- 1x rotary encoder (eQEP)
+  - with reset button
+- brightness potentiometer
 - microphone sensitivity potentiometer
 - microphone in
 - audio jack in

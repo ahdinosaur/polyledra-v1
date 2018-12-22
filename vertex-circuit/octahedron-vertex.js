@@ -162,7 +162,7 @@ var pcb = module.exports = Pcb({
         },
       },
       pads: [
-        { net: { name: 'GND' } }
+        { net: { name: 'GND' }, zone_connect: 'solid' }
       ]
     },
     {
@@ -180,7 +180,7 @@ var pcb = module.exports = Pcb({
         },
       },
       pads: [
-        { net: { name: '+5V' } }
+        { net: { name: '+5V' }, zone_connect: 'solid' }
       ]
     },
     {

@@ -1,14 +1,12 @@
 include <polyhedra.scad>
 include <helpers.scad>
-include <edge.scad>
-include <tetrahedron-vertex.scad>
+include <edge-lib.scad>
+include <tetrahedron-vertex-lib.scad>
 
-SPACE = 30;
+SPACE = 50;
 LENGTH = 500;
 OFFSET = 20;
 RADIUS = 20;
-
-$main = 1;
 
 main();
 
@@ -23,11 +21,11 @@ module main () {
       tetrahedron_vertex();
       
       for_each_radial(
-        num_steps = EDGES_PER_VERTEX,
-        radius = EDGES_RADIUS
+        num_steps = EDGES_PER_TETRAHEDRON_VERTEX,
+        radius = TETRAHEDRON_VERTEX_EDGES_RADIUS
       ) {
-        rotate(a = [0, EDGE_ANGLE])
-        translate([0, 0, EDGE_DEPTH / 2])
+        rotate(a = [0, TETRAHEDRON_VERTEX_EDGE_ANGLE])
+        translate([0, 0, EDGE_LENGTH_Z / 2])
         edge();
       }
     }
@@ -51,7 +49,7 @@ module main () {
         
         union () {
           circle(
-            r = CHANNEL_LENGTH_SIDE,
+            r = CHANNEL_SIDE_LENGTH,
             $fa = MIN_ARC_FRAGMENT_ANGLE,
             $fs = MIN_ARC_FRAGMENT_SIZE
           );

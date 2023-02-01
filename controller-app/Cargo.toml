@@ -5,18 +5,22 @@ authors = ["Michael Williams <michael.williams@enspiral.com>"]
 
 [features]
 gl = ["glfw", "kiss3d"]
-hal = ["linux-embedded-hal"]
+hal = ["spidev", "sysfs_gpio"]
 
 [dependencies]
-clap-verbosity-flag = "0.1"
+clap-log-flag = "0.2"
+clap-verbosity-flag = "0.2"
 ezing = "0.1"
 fps_clock = "2.0"
 glfw = { version = "0.19", optional = true }
 kiss3d = { version = "0.13", optional = true }
-linux-embedded-hal = { version = "0.1", optional = true }
+lazy_static = "1.0"
 log = "0.4"
 modulo = "0.1"
 nalgebra = "0.14"
 noise = "0.5"
+panic_monitor = "0.2"
 rand = "0.4"
+spidev = { version = "0.3", optional = true }
 structopt = "0.2"
+sysfs_gpio = { version = "0.5", optional = true }

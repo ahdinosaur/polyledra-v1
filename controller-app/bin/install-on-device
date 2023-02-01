@@ -1,0 +1,106 @@
+#!/bin/bash
+
+TARGET="armv7-unknown-linux-gnueabihf"
+IS_RELEASE=true
+
+APP_USER=debian
+APP_HOST=192.168.6.2
+APP_NAME=polyledra
+APP_DIR="/home/${APP_USER}/${APP_NAME}"
+APP_SERVICE="${APP_NAME}.service"
+APP_SSH="${APP_USER}@${APP_HOST}"
+
+# https://stackoverflow.com/a/90441
+set -e
+set -o pipefail
+
+CROSS_ARGS="build --target ${TARGET} --features hal"
+MODE="debug"
+
+# https://serverfault.com/a/764403
+function quiet_ssh {
+    local connection="$1"
+    local commands="$2"
+    if [ -z "${commands}" ]; then
+        commands=`cat`
+    fi
+    ssh -T "${connection}" "${commands}"
+}
+
+if [ ${IS_RELEASE} = true ]
+then
+  CROSS_ARGS="${CROSS_ARGS} --release"
+  MODE="release"
+fi
+
+cross ${CROSS_ARGS}
+
+quiet_ssh ${APP_SSH} <<EOF
+mkdir -p ${APP_NAME}
+systemctl --user is-active --quiet ${APP_SERVICE} && \
+  systemctl --user stop ${APP_SERVICE} ||
+    true
+EOF
+
+
+# fix "scp: /home/debian/chandeledra/chandeledra: Text file busy"
+sleep 1
+
+scp "target/${TARGET}/${MODE}/controller-app" "${APP_SSH}:${APP_DIR}/${APP_NAME}"
+
+# [Service]
+# WatchdogSec=60
+
+quiet_ssh ${APP_SSH} <<EOF
+tee ${APP_DIR}/${APP_SERVICE} > /dev/null <<EOOF
+[Unit]
+Description=${APP_NAME}
+AssertPathExists=${APP_DIR}
+StartLimitIntervalSec=0
+
+[Service]
+WorkingDirectory=${APP_DIR}
+ExecStart=${APP_DIR}/${APP_NAME}.sh
+Restart=always
+RestartSec=1
+EnvironmentFile=${APP_DIR}/${APP_NAME}.env
+KillMode=control-group
+
+[Install]
+WantedBy=default.target
+EOOF
+
+tee ${APP_DIR}/${APP_NAME}.sh > /dev/null <<EOOF
+#!/bin/bash
+
+export SPIDEV=/dev/spidev1.0
+
+while [ ! -e "\\\${SPIDEV}" ] || [ ! -w "\\\${SPIDEV}" ]
+do
+  sleep 0.1
+done
+
+if [[ "\\\${DEVICE}" == "pocketbeagle" ]]
+then
+  echo pocket
+  config-pin P1.29 gpio_input
+  config-pin P1.31 gpio_input
+  config-pin P1.33 gpio_input
+  config-pin P1.35 gpio_input
+else
+  echo "unknown device: \\\${DEVICE}"
+  exit 1
+fi
+
+exec ./${APP_NAME} -vv
+EOOF
+
+chmod +x ${APP_DIR}/${APP_NAME}.sh
+EOF
+
+# https://serverfault.com/a/841150
+quiet_ssh ${APP_SSH} <<EOF
+systemctl --user enable ${APP_DIR}/${APP_SERVICE} || exit -1
+systemctl --user start ${APP_SERVICE}
+systemctl --user status ${APP_SERVICE}
+EOF

@@ -6,14 +6,14 @@
 
 ```shell
 # download
-wget https://rcn-ee.com/rootfs/bb.org/testing/2018-06-03/stretch-console/bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
+wget https://rcn-ee.com/rootfs/bb.org/testing/2018-12-10/stretch-console/bone-debian-9.6-console-armhf-2018-12-10-1gb.img.xz
 
 # verify hash
-sha256sum bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
-# 1a1675e105b0a1cf3295faacdd3f6c5ab02276627599b8e95f5c3f324deaf1b8  bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz
+sha256sum bone-debian-9.6-console-armhf-2018-12-10-1gb.img.xz 
+# ce975a7e71c80ddab8bf486c79b1bdd2b0dcac2b433a316c5308ddcdf9533dee  bone-debian-9.6-console-armhf-2018-12-10-1gb.img.xz
 
 # write to sd card
-xzcat bone-debian-9.4-console-armhf-2018-06-03-1gb.img.xz | sudo dd of=/dev/sdX
+xzcat bone-debian-9.6-console-armhf-2018-12-10-1gb.img.xz | sudo dd of=/dev/sdX
 ```
 
 ## setup PocketBeagle
@@ -37,6 +37,47 @@ and run
 sudo loginctl enable-linger debian
 ```
 
+---
+
+create environment file
+
+```
+nano ~/polyledra/polyledra.env
+```
+
+```
+PIXEL_DENSITY=30
+EDGE_LENGTH=1
+NUM_ARMS=3
+FPS=60
+
+DEVICE=pocketbeagle
+
+MODE_PIN_1=59
+MODE_PIN_2=58
+MODE_PIN_4=57
+MODE_PIN_8=60
+
+BRIGHTNESS_PIN_1=117
+BRIGHTNESS_PIN_2=114
+BRIGHTNESS_PIN_4=111
+BRIGHTNESS_PIN_8=88
+```
+
+---
+
+disable usb mass storage file
+
+```
+nano /opt/scripts/boot/default/bb-boot
+```
+
+uncomment
+
+```
+USB_IMAGE_FILE_DISABLED=yes
+```
+
 ## install chandeledra
 
 ```shell
@@ -44,6 +85,31 @@ sudo loginctl enable-linger debian
 ```
 
 (if `GLIBC` version error, run `cargo clean`: https://github.com/japaric/cross/issues/39)
+
+## maintenance
+
+to check service
+
+```shell
+systemctl --user status chandeledra
+```
+
+to enable logs
+
+```shell
+sudo nano /etc/systemd/journald.conf 
+```
+
+```
+[Journal]
+Storage=persistent
+```
+
+to view logs
+
+```
+journalctl --user -u chandeledra
+```
 
 ---
 

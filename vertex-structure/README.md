@@ -1,11 +1,11 @@
-# chandeledra vertex structure
+# polyledra vertex structure
 
 ## usage
 
 install openscad
 
 ```
-openscad cad/tetrahedron-vertex-structure.scad
+openscad cad/tetrahedron.scad
 ```
 
 ![tetrahedron vertex openscad](./images/tetrahedron-structure-openscad.png)
@@ -48,3 +48,19 @@ rotate around the pole = longitude
 
 phi = 35.26439
 ```
+
+## octahedron
+
+```
+2a^2 = 1
+a = sqrt(1/2)
+
+sin(phi) = (a/1) = a = sqrt(1/2)
+phi = sin^-1(sqrt(1/2))
+
+phi = 45
+```
+
+## license
+
+Copyright (c) Michael Williams

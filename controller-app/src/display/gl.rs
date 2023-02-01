@@ -7,6 +7,8 @@ use kiss3d::light::Light;
 use std::sync::mpsc::{Sender};
 
 use na::{Point3};
+use std::error;
+use std::marker;
 use std::process;
 
 use color;
@@ -21,20 +23,20 @@ pub struct GlDisplay {
 }
 
 impl Display for GlDisplay {
-    fn new (control_tx: Sender<control::Control>) -> Self {
+    fn new (control_tx: Sender<control::Control>) -> Result<Self, Box<dyn error::Error>> where Self: marker::Sized {
         let mut window = Window::new("pixelctl");
         let shape = shape::Shape::none();
 
         window.set_light(Light::StickToCamera);
 
-        GlDisplay {
+        Ok(GlDisplay {
             window: window,
             shape: shape,
             control_tx: control_tx
-        }
+        })
     }
 
-    fn display (&mut self, display_message: &DisplayMessage) {
+    fn display (&mut self, display_message: &DisplayMessage) -> Result<(), Box<dyn error::Error>> {
         let control_tx = &self.control_tx;
         let window = &mut self.window;
 
@@ -64,13 +66,15 @@ impl Display for GlDisplay {
                     event.inhibited = true; // override the default keyboard handler
 
                     match code {
-                        Key::Left => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev)).unwrap(),
-                        Key::Right => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next)).unwrap(),
+                        Key::Left => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev))?,
+                        Key::Right => control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next))?,
                         _ => {}
                     }
                 },
                 _ => {}
             }
         }
+
+        Ok(())
     }
 }

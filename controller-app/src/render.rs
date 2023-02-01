@@ -26,10 +26,10 @@ pub struct RenderService {
 }
 */
 
-pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<RenderMessage> {
+pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> (Sender<RenderMessage>, thread::JoinHandle<()>) {
     let (render_tx, render_rx) = channel::<RenderMessage>();
 
-    thread::spawn(move|| {
+    let render_handle = thread::spawn(move || {
         let mut time = 0.0;
         let shape = shape::Shape::none();
         let mut scene_manager = scene::SceneManager::new(shape);
@@ -80,7 +80,8 @@ pub fn create_render_tx(display_tx: Sender<display::DisplayMessage>) -> Sender<R
             }
         }
     });
-    return render_tx;
+
+    (render_tx, render_handle)
 }
 
 fn render (display_tx: &Sender<display::DisplayMessage>, scene_manager: &mut scene::SceneManager, time: control::Time) {

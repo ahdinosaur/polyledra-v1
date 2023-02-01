@@ -20,8 +20,8 @@ pub fn create_control_channel() -> (Sender<Control>, Receiver<Control>) {
     return channel();
 }
 
-pub fn connect_clock(fps: u32, control_tx: Sender<Control>) {
-    thread::spawn(move|| {
+pub fn connect_clock(fps: u32, control_tx: Sender<Control>) -> thread::JoinHandle<()> {
+    let clock_handle = thread::spawn(move || {
         let mut fps_clock = fps_clock::FpsClock::new(fps);
         let mut nanosecs_since_start = 0.0;
         let mut nanosecs_since_last_tick;
@@ -32,4 +32,6 @@ pub fn connect_clock(fps: u32, control_tx: Sender<Control>) {
             control_tx.send(clock_time).unwrap();
         }
     });
+
+    clock_handle
 }

@@ -1,14 +1,16 @@
-extern crate linux_embedded_hal as hal;
 extern crate nalgebra as na;
 
+use std::env;
+use std::error;
 use std::u64;
 use std::io::Write;
 use std::sync::mpsc::{Sender};
 use std::thread;
 use std::time::{Instant, Duration};
 
-use hal::spidev::{self, Spidev, SpidevOptions};
-use hal::sysfs_gpio::{self, Pin, Direction};
+#[macro_use] use lazy_static;
+use spidev::{self, Spidev, SpidevOptions};
+use sysfs_gpio::{self, Pin, Direction};
 
 use color;
 use control;
@@ -16,69 +18,83 @@ use display::{Display, DisplayMessage};
 use scene;
 use shape;
 
-static BUTTON_PIN_1: u64 = 27;
-static BUTTON_PIN_2: u64 = 65;
+lazy_static! {
+    static ref MODE_PIN_1: u64 = env::var("MODE_PIN_1").unwrap().parse::<u64>().unwrap();
+    static ref MODE_PIN_2: u64 = env::var("MODE_PIN_2").unwrap().parse::<u64>().unwrap();
+    static ref MODE_PIN_4: u64 = env::var("MODE_PIN_4").unwrap().parse::<u64>().unwrap();
+    static ref MODE_PIN_8: u64 = env::var("MODE_PIN_8").unwrap().parse::<u64>().unwrap();
 
-static DEFAULT_BRIGHTNESS: u8 = 6;
+    static ref BRIGHTNESS_PIN_1: u64 = env::var("BRIGHTNESS_PIN_1").unwrap().parse::<u64>().unwrap();
+    static ref BRIGHTNESS_PIN_2: u64 = env::var("BRIGHTNESS_PIN_2").unwrap().parse::<u64>().unwrap();
+    static ref BRIGHTNESS_PIN_4: u64 = env::var("BRIGHTNESS_PIN_4").unwrap().parse::<u64>().unwrap();
+    static ref BRIGHTNESS_PIN_8: u64 = env::var("BRIGHTNESS_PIN_8").unwrap().parse::<u64>().unwrap();
+}
+
+static DEFAULT_BRIGHTNESS: u8 = 10;
 
 pub struct HalDisplay {
     spidev: Spidev,
     spidev_options: SpidevOptions,
-    /*
-    next_button_pin: Pin,
-    prev_button_pin: Pin,
-    next_button_press_instant: Option<Instant>,
-    prev_button_press_instant: Option<Instant>,
-    */
-    button_pin_1: Pin,
-    button_pin_2: Pin,
+    mode_pin_1: Pin,
+    mode_pin_2: Pin,
+    mode_pin_4: Pin,
+    mode_pin_8: Pin,
+    brightness_pin_1: Pin,
+    brightness_pin_2: Pin,
+    brightness_pin_4: Pin,
+    brightness_pin_8: Pin,
     brightness: u8,
     current_scene_index: usize,
     control_tx: Sender<control::Control>
 }
 
 impl Display for HalDisplay {
-    fn new (control_tx: Sender<control::Control>) -> Self {
-        let mut spidev = Spidev::open("/dev/spidev0.0").unwrap();
+    fn new (control_tx: Sender<control::Control>) -> Result<Self, Box<dyn error::Error>> {
+        let spidev_path = env::var("SPIDEV")?;
+        let mut spidev = Spidev::open(spidev_path)?;
         let spidev_options = SpidevOptions::new()
             .bits_per_word(8)
             .max_speed_hz(8_000_000)
             .mode(spidev::SPI_MODE_0)
             .build();
-        spidev.configure(&spidev_options).unwrap();
+        spidev.configure(&spidev_options)?;
 
-        /*
-        let next_button_pin = Pin::new(NEXT_BUTTON_PIN);
-        next_button_pin.set_direction(Direction::In);
+        let mode_pin_1 = Pin::new(*MODE_PIN_1);
+        let mode_pin_2 = Pin::new(*MODE_PIN_2);
+        let mode_pin_4 = Pin::new(*MODE_PIN_4);
+        let mode_pin_8 = Pin::new(*MODE_PIN_8);
+        mode_pin_1.set_direction(Direction::In)?;
+        mode_pin_2.set_direction(Direction::In)?;
+        mode_pin_4.set_direction(Direction::In)?;
+        mode_pin_8.set_direction(Direction::In)?;
 
-        let prev_button_pin = Pin::new(PREV_BUTTON_PIN);
-        prev_button_pin.set_direction(Direction::In);
-        */
+        let brightness_pin_1 = Pin::new(*BRIGHTNESS_PIN_1);
+        let brightness_pin_2 = Pin::new(*BRIGHTNESS_PIN_2);
+        let brightness_pin_4 = Pin::new(*BRIGHTNESS_PIN_4);
+        let brightness_pin_8 = Pin::new(*BRIGHTNESS_PIN_8);
+        brightness_pin_1.set_direction(Direction::In)?;
+        brightness_pin_2.set_direction(Direction::In)?;
+        brightness_pin_4.set_direction(Direction::In)?;
+        brightness_pin_8.set_direction(Direction::In)?;
 
-        let button_pin_1 = Pin::new(BUTTON_PIN_1);
-        button_pin_1.set_direction(Direction::In).unwrap();
-
-        let button_pin_2 = Pin::new(BUTTON_PIN_2);
-        button_pin_2.set_direction(Direction::In).unwrap();
-
-        HalDisplay {
+        Ok(HalDisplay {
             spidev,
             spidev_options,
-            /*
-            next_button_pin,
-            prev_button_pin,
-            next_button_press_instant: None,
-            prev_button_press_instant: None,
-            */
-            button_pin_1,
-            button_pin_2,
+            mode_pin_1,
+            mode_pin_2,
+            mode_pin_4,
+            mode_pin_8,
+            brightness_pin_1,
+            brightness_pin_2,
+            brightness_pin_4,
+            brightness_pin_8,
             brightness: DEFAULT_BRIGHTNESS,
             current_scene_index: scene::DEFAULT_SCENE_INDEX,
             control_tx
-        }
+        })
     }
 
-    fn display (&mut self, display_message: &DisplayMessage) {
+    fn display (&mut self, display_message: &DisplayMessage) -> Result<(), Box<dyn error::Error>> {
         let control_tx = &self.control_tx;
         let spidev = &mut self.spidev;
         let brightness = self.brightness;
@@ -86,7 +102,7 @@ impl Display for HalDisplay {
         match display_message {
             &DisplayMessage::Pixels(ref pixels) => {
                 let mut buffer = pixels_to_apa102_buffer(pixels, Some(brightness));
-                spidev.write(&mut buffer).unwrap();
+                spidev.write(&mut buffer)?;
             }
             &DisplayMessage::Shape(_) => {}
         }
@@ -97,54 +113,40 @@ impl Display for HalDisplay {
         }
         */
 
+        // mode switch
 
-        // TODO generalize
-        // if next button is pushed, switch to next mode
-        /*
-        let next_button_value = self.next_button_pin.get_value().unwrap_or(0);
-        let next_button_press_ns = self.next_button_press_instant.map_or(u64::MAX, |instant| duration_to_nanos(instant.elapsed()));
-        if next_button_value == 1 && next_button_press_ns > 300_000_000 {
-            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Next)).unwrap();
-            self.next_button_press_instant = Some(Instant::now());
-        }
+        let mode_1_value = self.mode_pin_1.get_value().unwrap_or(0);
+        let mode_2_value = self.mode_pin_2.get_value().unwrap_or(0);
+        let mode_4_value = self.mode_pin_4.get_value().unwrap_or(0);
+        let mode_8_value = self.mode_pin_8.get_value().unwrap_or(0);
+        debug!("mode_1_value: {}", mode_1_value);
+        debug!("mode_2_value: {}", mode_2_value);
+        debug!("mode_4_value: {}", mode_4_value);
+        debug!("mode_8_value: {}", mode_8_value);
 
-        // TODO generalize
-        // if prev button is pushed, switch to next mode
-        let prev_button_value = self.prev_button_pin.get_value().unwrap_or(0);
-        let prev_button_press_ns = self.prev_button_press_instant.map_or(u64::MAX, |instant| duration_to_nanos(instant.elapsed()));
-        if prev_button_value == 1 && prev_button_press_ns > 300_000_000 {
-            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Prev)).unwrap();
-            self.prev_button_press_instant = Some(Instant::now());
-        }
-        */
-
-        let button_1_value = self.button_pin_1.get_value().unwrap_or(0);
-        let button_2_value = self.button_pin_2.get_value().unwrap_or(0);
-
-        let next_scene_index = (button_1_value + 2 * button_2_value) as usize;
+        let next_scene_index = (scene::NUM_SCENES - 1).min((mode_1_value + 2 * mode_2_value + 4 * mode_4_value + 8 * mode_8_value) as usize);
         let current_scene_index = self.current_scene_index;
 
         if next_scene_index != current_scene_index {
-            if next_scene_index == 0 {
-                // rainbow
-                self.brightness = DEFAULT_BRIGHTNESS;
-            } else if next_scene_index == 1 {
-                // walk
-                self.brightness = 20;
-            } else if next_scene_index == 2 {
-                // noise
-                self.brightness = DEFAULT_BRIGHTNESS;
-            } else if next_scene_index == 3 {
-                // noise
-                self.brightness = DEFAULT_BRIGHTNESS;
-            }
-
             self.current_scene_index = next_scene_index;
-            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Set(next_scene_index))).unwrap();
+            control_tx.send(control::Control::ChangeMode(control::ChangeMode::Set(next_scene_index)))?;
         }
 
-        // TODO get rotary encoder input as params
-        
+        // brightness switch
+
+        let brightness_1_value = self.brightness_pin_1.get_value().unwrap_or(0);
+        let brightness_2_value = self.brightness_pin_2.get_value().unwrap_or(0);
+        let brightness_4_value = self.brightness_pin_4.get_value().unwrap_or(0);
+        let brightness_8_value = self.brightness_pin_8.get_value().unwrap_or(0);
+        debug!("brightness_1_value: {}", brightness_1_value);
+        debug!("brightness_2_value: {}", brightness_2_value);
+        debug!("brightness_4_value: {}", brightness_4_value);
+        debug!("brightness_8_value: {}", brightness_8_value);
+
+        let next_brightness = 1 + ((brightness_1_value + 2 * brightness_2_value + 4 * brightness_4_value + 8 * brightness_8_value) * 2);
+        self.brightness = next_brightness;
+
+        Ok(())
     }
 }
 

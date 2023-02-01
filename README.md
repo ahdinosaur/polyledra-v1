@@ -1,4 +1,4 @@
-# chandeledra
+# polyledra-v1
 
 [light-emitting](https://en.wikipedia.org/wiki/Light-emitting_diode) [polyhedron](https://en.wikipedia.org/wiki/Polyhedron) [chandeliers](https://en.wikipedia.org/wiki/Chandelier)
 
@@ -29,7 +29,7 @@ i then continued to spend the rest of the festival obsessing about the shape, le
 
 ## installations
 
-if you are playing with `chandeledra`, i'd love to hear about it!
+if you are playing with `polyledra`, i'd love to hear about it!
 
 - https://twitter.com/ahdinosaur/status/962158033764691968
 

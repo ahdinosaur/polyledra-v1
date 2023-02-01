@@ -26,12 +26,17 @@ mod walk;
 pub use self::spark::Spark;
 mod spark;
 
-use noise::{OpenSimplex, Fbm};
+use noise::{Billow, Fbm, HybridMulti, OpenSimplex, Perlin, Value};
 pub use self::glow::Glow;
-type SimplexGlow = glow::Glow<OpenSimplex>;
+type BillowGlow = glow::Glow<Billow>;
 type FractalGlow = glow::Glow<Fbm>;
+type HybridGlow = glow::Glow<HybridMulti>;
+type SimplexGlow = glow::Glow<OpenSimplex>;
+type PerlinGlow = glow::Glow<Perlin>;
+type ValueGlow = glow::Glow<Value>;
 mod glow;
 
+pub static NUM_SCENES: usize = 9;
 pub static DEFAULT_SCENE_INDEX : usize = 0;
 
 pub struct SceneManager {
@@ -43,13 +48,17 @@ impl SceneManager {
     pub fn new(shape: shape::Shape) -> SceneManager {
         let scene_shape = Rc::new(shape);
         let scenes: Vec<Box<Scene>> = vec![
-            //Box::new(test::Test::new(scene_shape.clone())),
-            //Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
+            // Box::new(test::Test::new(scene_shape.clone())),
+            // Box::new(rainbow::RainbowLine::new(scene_shape.clone())),
             Box::new(rainbow::Rainbow::new(scene_shape.clone())),
             Box::new(walk::Walk::new(scene_shape.clone())),
-            //Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
+            Box::new(spark::Spark::new(scene_shape.clone())), // pulse?
             Box::new(SimplexGlow::new(scene_shape.clone())),
+            Box::new(PerlinGlow::new(scene_shape.clone())),
+            Box::new(ValueGlow::new(scene_shape.clone())),
             Box::new(FractalGlow::new(scene_shape.clone())),
+            Box::new(BillowGlow::new(scene_shape.clone())),
+            Box::new(HybridGlow::new(scene_shape.clone())),
             // TODO twinkle
             // TODO ripple
             // TODO orbit (turn on closest shape point)
